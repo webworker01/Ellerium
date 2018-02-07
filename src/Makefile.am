@@ -60,15 +60,15 @@ else
 LIBBITCOIN_CONSENSUS=
 endif
 
-bin_PROGRELP =
+bin_PROGRAMS =
 TESTS =
 
 if BUILD_BITCOIND
-  bin_PROGRELP += elleriumd
+  bin_PROGRAMS += elleriumd
 endif
 
 if BUILD_BITCOIN_UTILS
-  bin_PROGRELP += ellerium-cli ellerium-tx
+  bin_PROGRAMS += ellerium-cli ellerium-tx
 endif
 
 .PHONY: FORCE
@@ -102,7 +102,7 @@ BITCOIN_CORE_H = \
   obfuscation-relay.h \
   db.h \
   eccryptoverify.h \
-  ecwrapper.h \
+  ecwrapper.h \  
   init.h \
   kernel.h \
   swifttx.h \
@@ -257,7 +257,7 @@ crypto_libbitcoin_crypto_a_SOURCES = \
   crypto/common.h \
   crypto/scrypt.cpp \
   crypto/scrypt.h \
-  crypto/hmac_sha256.cpp \
+  crypto/hmac_sha256.cpp \  
   crypto/hmac_sha256.h \
   crypto/hmac_sha512.cpp \
   crypto/hmac_sha512.h \
@@ -421,7 +421,8 @@ ellerium_cli_LDADD = \
   $(SSL_LIBS) \
   $(CRYPTO_LIBS)
 
-ellerium_cli_SOURCES = ellerium-cli.cpp
+ellerium_cli_SOURCES = \
+  ellerium-cli.cpp
 
 ellerium_cli_CPPFLAGS = $(BITCOIN_INCLUDES)
 #

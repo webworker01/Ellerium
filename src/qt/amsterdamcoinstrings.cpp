@@ -74,10 +74,10 @@ QT_TRANSLATE_NOOP("ellerium-core", ""
 "Execute command when the best block changes (%s in cmd is replaced by block "
 "hash)"),
 QT_TRANSLATE_NOOP("ellerium-core", ""
-"Fees (in ELP/Kb) smaller than this are considered zero fee for relaying "
+"Fees (in AMS/Kb) smaller than this are considered zero fee for relaying "
 "(default: %s)"),
 QT_TRANSLATE_NOOP("ellerium-core", ""
-"Fees (in ELP/Kb) smaller than this are considered zero fee for transaction "
+"Fees (in AMS/Kb) smaller than this are considered zero fee for transaction "
 "creation (default: %s)"),
 QT_TRANSLATE_NOOP("ellerium-core", ""
 "Flush database activity from memory pool to disk log every <n> megabytes "
@@ -165,10 +165,10 @@ QT_TRANSLATE_NOOP("ellerium-core", ""
 "Unable to locate enough Obfuscation denominated funds for this transaction."),
 QT_TRANSLATE_NOOP("ellerium-core", ""
 "Unable to locate enough Obfuscation non-denominated funds for this "
-"transaction that are not equal 10000 ELP."),
+"transaction that are not equal 10000 AMS."),
 QT_TRANSLATE_NOOP("ellerium-core", ""
 "Unable to locate enough funds for this transaction that are not equal 10000 "
-"ELP."),
+"AMS."),
 QT_TRANSLATE_NOOP("ellerium-core", ""
 "Use separate SOCKS5 proxy to reach peers via Tor hidden services (default: "
 "%s)"),
@@ -264,7 +264,7 @@ QT_TRANSLATE_NOOP("ellerium-core", "Error: Wallet locked, unable to create trans
 QT_TRANSLATE_NOOP("ellerium-core", "Error: You already have pending entries in the Obfuscation pool"),
 QT_TRANSLATE_NOOP("ellerium-core", "Failed to listen on any port. Use -listen=0 if you want this."),
 QT_TRANSLATE_NOOP("ellerium-core", "Failed to read block"),
-QT_TRANSLATE_NOOP("ellerium-core", "Fee (in ELP/kB) to add to transactions you send (default: %s)"),
+QT_TRANSLATE_NOOP("ellerium-core", "Fee (in AMS/kB) to add to transactions you send (default: %s)"),
 QT_TRANSLATE_NOOP("ellerium-core", "Finalizing transaction."),
 QT_TRANSLATE_NOOP("ellerium-core", "Force safe mode (default: %u)"),
 QT_TRANSLATE_NOOP("ellerium-core", "Found enough users, signing ( waiting %s )"),
@@ -295,7 +295,7 @@ QT_TRANSLATE_NOOP("ellerium-core", "Invalid netmask specified in -whitelist: '%s
 QT_TRANSLATE_NOOP("ellerium-core", "Invalid port detected in masternode.conf"),
 QT_TRANSLATE_NOOP("ellerium-core", "Invalid private key."),
 QT_TRANSLATE_NOOP("ellerium-core", "Invalid script detected."),
-QT_TRANSLATE_NOOP("ellerium-core", "Keep N ELP anonymized (default: %u)"),
+QT_TRANSLATE_NOOP("ellerium-core", "Keep N AMS anonymized (default: %u)"),
 QT_TRANSLATE_NOOP("ellerium-core", "Keep at most <n> unconnectable transactions in memory (default: %u)"),
 QT_TRANSLATE_NOOP("ellerium-core", "Last Obfuscation was too recent."),
 QT_TRANSLATE_NOOP("ellerium-core", "Last successful Obfuscation action was too recent."),

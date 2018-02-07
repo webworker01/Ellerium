@@ -91,7 +91,7 @@ GLOBAL sph_haval256_5_context   z_haval;
 #define ZJH (memcpy(&ctx_jh, &z_jh, sizeof(z_jh)))
 #define ZKECCAK (memcpy(&ctx_keccak, &z_keccak, sizeof(z_keccak)))
 #define ZSKEIN (memcpy(&ctx_skein, &z_skein, sizeof(z_skein)))
-#define ZHELPI (memcpy(&ctx_hamsi, &z_hamsi, sizeof(z_hamsi)))
+#define ZHAMSI (memcpy(&ctx_hamsi, &z_hamsi, sizeof(z_hamsi)))
 #define ZFUGUE (memcpy(&ctx_fugue, &z_fugue, sizeof(z_fugue)))
 #define ZSHABAL (memcpy(&ctx_shabal, &z_shabal, sizeof(z_shabal)))
 #define ZWHIRLPOOL (memcpy(&ctx_whirlpool, &z_whirlpool, sizeof(z_whirlpool)))

@@ -39,12 +39,12 @@
 extern "C"{
 #endif
 
-#if SPH_SMALL_FOOTPRINT && !defined SPH_SMALL_FOOTPRINT_HELPI
-#define SPH_SMALL_FOOTPRINT_HELPI   1
+#if SPH_SMALL_FOOTPRINT && !defined SPH_SMALL_FOOTPRINT_HAMSI
+#define SPH_SMALL_FOOTPRINT_HAMSI   1
 #endif
 
 /*
- * The SPH_HELPI_EXPAND_* define how many input bits we handle in one
+ * The SPH_HAMSI_EXPAND_* define how many input bits we handle in one
  * table lookup during message expansion (1 to 8, inclusive). If we note
  * w the number of bits per message word (w=32 for Hamsi-224/256, w=64
  * for Hamsi-384/512), r the size of a "row" in 32-bit words (r=8 for
@@ -96,16 +96,16 @@ extern "C"{
  * thus avoiding any data-dependent table access pattern.
  */
 
-#if !defined SPH_HELPI_EXPAND_SMALL
-#if SPH_SMALL_FOOTPRINT_HELPI
-#define SPH_HELPI_EXPAND_SMALL  4
+#if !defined SPH_HAMSI_EXPAND_SMALL
+#if SPH_SMALL_FOOTPRINT_HAMSI
+#define SPH_HAMSI_EXPAND_SMALL  4
 #else
-#define SPH_HELPI_EXPAND_SMALL  8
+#define SPH_HAMSI_EXPAND_SMALL  8
 #endif
 #endif
 
-#if !defined SPH_HELPI_EXPAND_BIG
-#define SPH_HELPI_EXPAND_BIG    8
+#if !defined SPH_HAMSI_EXPAND_BIG
+#define SPH_HAMSI_EXPAND_BIG    8
 #endif
 
 #ifdef _MSC_VER
@@ -555,7 +555,7 @@ hamsi_small_close(sph_hamsi_small_context *sc,
 		L(s19, s1A, s1C, s1F); \
 	} while (0)
 
-#if SPH_SMALL_FOOTPRINT_HELPI
+#if SPH_SMALL_FOOTPRINT_HAMSI
 
 #define P_BIG   do { \
 		unsigned r; \

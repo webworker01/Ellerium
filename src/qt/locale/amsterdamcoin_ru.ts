@@ -160,7 +160,7 @@
         <translation>Подтверждение шифрования кошелька</translation>
     </message>
     <message>
-        <source>Ellerium will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your ELPs from being stolen by malware infecting your computer.</source>
+        <source>Ellerium will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your AMSs from being stolen by malware infecting your computer.</source>
         <translation>Ellerium сейчас закроется, чтобы завершить процесс шифрования. Помните, что шифрование вашего кошелька не может полностью защитить ваши Ellerium от кражи с использованием вредоносного ПО.</translation>
     </message>
     <message>
@@ -1380,32 +1380,32 @@ Please check the address and try again.</source>
         <translation>Выберите уровень конфиденциальности.</translation>
     </message>
     <message>
-        <source>Use 2 separate masternodes to mix funds up to 10000 ELP</source>
-        <translation>Используйте 2 разные мастерноды для смешивания средств до 10000 ELP</translation>
+        <source>Use 2 separate masternodes to mix funds up to 10000 AMS</source>
+        <translation>Используйте 2 разные мастерноды для смешивания средств до 10000 AMS</translation>
     </message>
     <message>
-        <source>Use 8 separate masternodes to mix funds up to 10000 ELP</source>
-        <translation>Используйте 8 разных мастернод для смешивания средств до 10000 ELP</translation>
+        <source>Use 8 separate masternodes to mix funds up to 10000 AMS</source>
+        <translation>Используйте 8 разных мастернод для смешивания средств до 10000 AMS</translation>
     </message>
     <message>
         <source>Use 16 separate masternodes</source>
         <translation>Используйте 16 разных мастернод</translation>
     </message>
     <message>
-        <source>This option is the quickest and will cost about ~0.025 ELP to anonymize 10000 ELP</source>
-        <translation>Этот вариант является самым быстрым и будет стоить порядка ~0.025 ELP для анонимизации 10000 ELP</translation>
+        <source>This option is the quickest and will cost about ~0.025 AMS to anonymize 10000 AMS</source>
+        <translation>Этот вариант является самым быстрым и будет стоить порядка ~0.025 AMS для анонимизации 10000 AMS</translation>
     </message>
     <message>
-        <source>This option is moderately fast and will cost about 0.05 ELP to anonymize 10000 ELP</source>
-        <translation>Это средний по скорости вариант и он будет стоить около 0.05 ELP для анонимизации 10000 ELP</translation>
+        <source>This option is moderately fast and will cost about 0.05 AMS to anonymize 10000 AMS</source>
+        <translation>Это средний по скорости вариант и он будет стоить около 0.05 AMS для анонимизации 10000 AMS</translation>
     </message>
     <message>
         <source>This is the slowest and most secure option. Using maximum anonymity will cost</source>
         <translation>Это самый медленный и безопасный вариант. Максимальная анонимность стоит</translation>
     </message>
     <message>
-        <source>0.1 ELP per 10000 ELP you anonymize.</source>
-        <translation>0.1 ELP за 10000 ELP которые вы собираетесь анонимизировать.</translation>
+        <source>0.1 AMS per 10000 AMS you anonymize.</source>
+        <translation>0.1 AMS за 10000 AMS которые вы собираетесь анонимизировать.</translation>
     </message>
     <message>
         <source>Obfuscation Configuration</source>

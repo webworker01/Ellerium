@@ -33,7 +33,7 @@ class TxViewDelegate : public QAbstractItemDelegate
 {
     Q_OBJECT
 public:
-    TxViewDelegate() : QAbstractItemDelegate(), unit(BitcoinUnits::ELP)
+    TxViewDelegate() : QAbstractItemDelegate(), unit(BitcoinUnits::AMS)
     {
     }
 
@@ -271,7 +271,7 @@ void OverviewPage::setWalletModel(WalletModel* model)
         connect(model, SIGNAL(notifyWatchonlyChanged(bool)), this, SLOT(updateWatchOnlyLabels(bool)));
     }
 
-    // update the display unit, to not use the default ("ELP")
+    // update the display unit, to not use the default ("AMS")
     updateDisplayUnit();
 }
 
