@@ -1640,7 +1640,7 @@ int64_t GetMasternodePayment(int nHeight, int64_t blockValue, int nMasternodeCou
 	if (nHeight == 0)
 		return 0;
 
-    if (nHeight <= Params().LAST_POW_BLOCK()) {
+    if (nHeight < Params().LAST_POW_BLOCK() && nHeight > 0) {
         ret = blockValue / (100 / 60);
     } else if (nHeight > Params().LAST_POW_BLOCK()) {
         int64_t nMoneySupply = chainActive.Tip()->nMoneySupply;
