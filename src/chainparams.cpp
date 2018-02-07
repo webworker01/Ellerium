@@ -49,8 +49,8 @@ static Checkpoints::MapCheckpoints mapCheckpoints =
 
 static const Checkpoints::CCheckpointData data = {
     &mapCheckpoints,
-    1512554966, // * UNIX timestamp of last checkpoint block
-    295000,    // * total number of transactions between genesis and last checkpoint
+    1518000370, // * UNIX timestamp of last checkpoint block
+    0,    // * total number of transactions between genesis and last checkpoint
                 //   (the tx=... number in the SetBestChain debug.log lines)
     2000        // * estimated number of transactions per day after checkpoint
 };
@@ -58,14 +58,14 @@ static Checkpoints::MapCheckpoints mapCheckpointsTestnet =
     boost::assign::map_list_of(0, uint256("0x001"));
 static const Checkpoints::CCheckpointData dataTestnet = {
     &mapCheckpointsTestnet,
-    1454124731,
+    1518000371,
     0,
     250};
 static Checkpoints::MapCheckpoints mapCheckpointsRegtest =
     boost::assign::map_list_of(0, uint256("0x001"));
 static const Checkpoints::CCheckpointData dataRegtest = {
     &mapCheckpointsRegtest,
-    1454124731,
+    1518000372,
     0,
     100};
 class CMainParams : public CChainParams
@@ -84,7 +84,7 @@ public:
         pchMessageStart[1] = 0x22;
         pchMessageStart[2] = 0x00;
         pchMessageStart[3] = 0xaa;
-        vAlertPubKey = ParseHex("04d6d976efad463fa258e3699e9c3fea60d5168a065abb5829a77448d25e0acbee58bb8f5be56491624b9a48611a8c456a592d45f48ea9c9f0bdc30904534be285");
+        vAlertPubKey = ParseHex("04b66038e7348889a0dd247d3a3a0290b4aea7edd77650c8573a48e1a9173619b1abd860aba27003a7a308d20fd59a98c17751bfd0af45372f3844cfe981e083f9");
         nDefaultPort = 6110;
         bnProofOfWorkLimit = ~uint256(0) >> 20; // Ellerium starting difficulty is 1 / 2^12
         nSubsidyHalvingInterval = 210000;
@@ -101,17 +101,17 @@ public:
         txNew.vout.resize(1);
         txNew.vin[0].scriptSig = CScript() << 486604799 << CScriptNum(4) << vector<unsigned char>((const unsigned char*)pszTimestamp, (const unsigned char*)pszTimestamp + strlen(pszTimestamp));
         txNew.vout[0].nValue = 0 * COIN;
-        txNew.vout[0].scriptPubKey = CScript() << ParseHex("0421fb0665876637d9d79d03a24f383393838fb9e3340858a6d5a70b079f4af57cfff3ca00310be5300d532adf6261ba98ac70d24d943a6be333bec6d7a6d93013") << OP_CHECKSIG;
+        txNew.vout[0].scriptPubKey = CScript() << ParseHex("049f01a2ef4ccd684c94e487783ad4c4edc5efb4dc671923ed0f0076768e740355dc0f626837d101bdd6f44e95ca24f5c1e13df567aeeccc87130ee9da70740776") << OP_CHECKSIG;
         genesis.vtx.push_back(txNew);
         genesis.hashPrevBlock = 0;
         genesis.hashMerkleRoot = genesis.BuildMerkleTree();
         genesis.nVersion = 1;
-        genesis.nTime = 1500685200;
+        genesis.nTime = 1518000370;
         genesis.nBits = 0x1e0ffff0;
-        genesis.nNonce = 1402465;
+        genesis.nNonce = 20897306;
         hashGenesisBlock = genesis.GetHash();
         assert(hashGenesisBlock == uint256("0x0000016c5074e3a3d7df0c9b9cdc38ef6a72be36c4a3a0233a564533120957f5"));
-        assert(genesis.hashMerkleRoot == uint256("0xcdf9a0f882351aa571e3f647ef82858c08b5eb4f1847df68787f15cc42c36529"));
+        assert(genesis.hashMerkleRoot == uint256("0xb65d20871693857fd3bd47b169d49a2642066381f6aaa61d0acc47611fc13a88"));
 
         //vSeeds.push_back(CDNSSeedData("nl-1.ellerium.com", "nl-1.ellerium.com"));
 
@@ -123,6 +123,7 @@ public:
         //  BIP44 coin type is 'TBD'
         base58Prefixes[EXT_COIN_TYPE] = boost::assign::list_of(0x13)(0x00)(0x00)(0x80).convert_to_container<std::vector<unsigned char> >();
         convertSeed6(vFixedSeeds, pnSeed6_main, ARRAYLEN(pnSeed6_main));
+
         fRequireRPCPassword = true;
         fMiningRequiresPeers = true;
         fAllowMinDifficultyBlocks = false;
@@ -133,10 +134,10 @@ public:
         fTestnetToBeDeprecatedFieldRPC = false;
         fHeadersFirstSyncingActive = false;
         nPoolMaxTransactions = 3;
-        strSporkKey = "04d6d976efad463fa258e3699e9c3fea60d5168a065abb5829a77448d25e0acbee58bb8f5be56491624b9a48611a8c456a592d45f48ea9c9f0bdc30904534be285";
+        strSporkKey = "04c1989282128680bc694ba36f15f0b09ee880782b3ff3de64b699a4499cbfd9d7e2d32ffe58f3cfeb5e5831906cefe2ed50d6fcdabb18c3a844235ab62e7a77d2";
 
         strObfuscationPoolDummyAddress = "AWSbBnzmNkjDVaYHX7vkL1MqD96pRYWtZo";
-        nStartMasternodePayments = 1403728576; //Wed, 25 Jun 2014 20:36:16 GMT
+        nStartMasternodePayments = 1518000370; //Wed, 25 Jun 2014 20:36:16 GMT
     }
     const Checkpoints::CCheckpointData& Checkpoints() const
     {
@@ -158,7 +159,7 @@ public:
         pchMessageStart[1] = 0x76;
         pchMessageStart[2] = 0x65;
         pchMessageStart[3] = 0xba;
-        vAlertPubKey = ParseHex("000010e83b2703ccf322f7dbd62dd5855ac7c10bd055814ce121ba32607d573b8810c02c0582aed05b4deb9c4b77b26d92428c61256cd42774babea0a073b2ed0c9");
+        vAlertPubKey = ParseHex("041f65de5d203cc46fc0f376525c2e883916d7e6b71d446016afd39cc91bdb8246eeac2563fbd3f97c059ce804e708d739c7c5d942d78640002b47bb2c2c06d935");
         nDefaultPort = 6210;
         nMinerThreads = 0;
         nTargetTimespan = 1 * 60; // Ellerium: 1 day
@@ -166,16 +167,16 @@ public:
         nLastPOWBlock = 200;
         nMaturity = 15;
         //! Modify the testnet genesis block so the timestamp is valid for a later start.
-        genesis.nTime = 1454124731;
-        genesis.nNonce = 2402015;
+        genesis.nTime = 1518000371;
+        genesis.nNonce = 21800777;
         hashGenesisBlock = genesis.GetHash();
-        //assert(hashGenesisBlock == uint256("0x0000041e482b9b9691d98eefb48473405c0b8ec31b76df3797c74a78680ef818"));
+
+        assert(hashGenesisBlock == uint256("0x0000001cade8761bd0fb7b7112173fea3c4bcaf2af7a4d4c1fca39e1a0dc7c7c"));
+
         vFixedSeeds.clear();
         vSeeds.clear();
-        vSeeds.push_back(CDNSSeedData("fuzzbawls.pw", "ellerium-testnet.seed.fuzzbawls.pw"));
-        vSeeds.push_back(CDNSSeedData("fuzzbawls.pw", "ellerium-testnet.seed2.fuzzbawls.pw"));
-        vSeeds.push_back(CDNSSeedData("s3v3nh4cks.ddns.net", "s3v3nh4cks.ddns.net"));
-        vSeeds.push_back(CDNSSeedData("88.198.192.110", "88.198.192.110"));
+        //vSeeds.push_back(CDNSSeedData("fuzzbawls.pw", "ellerium-testnet.seed.fuzzbawls.pw"));
+
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1, 139); // Testnet ellerium addresses start with 'x' or 'y'
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1, 19);  // Testnet ellerium script addresses start with '8' or '9'
         base58Prefixes[SECRET_KEY] = std::vector<unsigned char>(1, 239);     // Testnet private keys start with '9' or 'c' (Bitcoin defaults)
@@ -194,9 +195,9 @@ public:
         fMineBlocksOnDemand = false;
         fTestnetToBeDeprecatedFieldRPC = true;
         nPoolMaxTransactions = 2;
-        strSporkKey = "04348C2F50F90267E64FACC65BFDC9D0EB147D090872FB97ABAE92E9A36E6CA60983E28E741F8E7277B11A7479B626AC115BA31463AC48178A5075C5A9319D4A38";
+        strSporkKey = "04d0872ddb88e90aa617c3b740376a1018b72600b88657c4d61fdba7b2818de938d10606e9323e67f027781a5876263a21aa7c041a7d6c2c965663e8471a0213ce";
         strObfuscationPoolDummyAddress = "y57cqfGRkekRyDRNeJiLtYVEbvhXrNbmox";
-        nStartMasternodePayments = 1420837558; //Fri, 09 Jan 2015 21:05:58 GMT
+        nStartMasternodePayments = 1518000371; //Fri, 09 Jan 2015 21:05:58 GMT
     }
     const Checkpoints::CCheckpointData& Checkpoints() const
     {
@@ -214,7 +215,6 @@ public:
     {
         networkID = CBaseChainParams::REGTEST;
         strNetworkID = "regtest";
-        strNetworkID = "regtest";
         pchMessageStart[0] = 0xa1;
         pchMessageStart[1] = 0xcf;
         pchMessageStart[2] = 0x7e;
@@ -224,12 +224,12 @@ public:
         nTargetTimespan = 24 * 60 * 60; // Ellerium: 1 day
         nTargetSpacing = 1 * 60;        // Ellerium: 1 minutes
         bnProofOfWorkLimit = ~uint256(0) >> 1;
-        genesis.nTime = 1454124731;
+        genesis.nTime = 1518000372;
         genesis.nBits = 0x207fffff;
-        genesis.nNonce = 12345;
+        genesis.nNonce = 20542302;
         hashGenesisBlock = genesis.GetHash();
         nDefaultPort = 6310;
-        //assert(hashGenesisBlock == uint256("0x4f023a2120d9127b21bbad01724fdb79b519f593f2a85b60d3d79160ec5f29df"));
+        assert(hashGenesisBlock == uint256("0x240d5f85d19d393348f8d1a8324a69c84a2d755fc8507ef8519619cd87c87782"));
         vFixedSeeds.clear(); //! Testnet mode doesn't have any fixed seeds.
         vSeeds.clear();      //! Testnet mode doesn't have any DNS seeds.
         fRequireRPCPassword = false;
