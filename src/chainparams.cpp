@@ -110,7 +110,7 @@ public:
         genesis.nBits = 0x1e0ffff0;
         genesis.nNonce = 20897306;
         hashGenesisBlock = genesis.GetHash();
-        assert(hashGenesisBlock == uint256("0x0000016c5074e3a3d7df0c9b9cdc38ef6a72be36c4a3a0233a564533120957f5"));
+        assert(hashGenesisBlock == uint256("0x00000026bf85c659a81c7e76d3a619e450d6ef2b2e76d39a68c0f29e8e2ae997"));
         assert(genesis.hashMerkleRoot == uint256("0xb65d20871693857fd3bd47b169d49a2642066381f6aaa61d0acc47611fc13a88"));
 
         //vSeeds.push_back(CDNSSeedData("nl-1.ellerium.com", "nl-1.ellerium.com"));
