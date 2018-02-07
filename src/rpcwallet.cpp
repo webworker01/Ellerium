@@ -2236,7 +2236,7 @@ Value multisend(const Array& parELP, bool fHelp)
     CBitcoinAddress address(strAddress);
     if (!address.IsValid())
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid ELP address");
-    if (boost::lexical_cast<int>(parELP[1].get_str()) < 0)
+    if (boost::lexical_cast<int>(params[1].get_str()) < 0)
         throw JSONRPCError(RPC_INVALID_PARAMETER, "Invalid parameter, expected valid percentage");
     if (pwalletMain->IsLocked())
         throw JSONRPCError(RPC_WALLET_UNLOCK_NEEDED, "Error: Please enter the wallet passphrase with walletpassphrase first.");
