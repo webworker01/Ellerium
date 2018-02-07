@@ -322,7 +322,7 @@ bool CMasternode::IsValidNetAddr()
 {
     // TODO: regtest is fine with any addresses for now,
     // should probably be a bit smarter if one day we start to implement tests for this
-    return Params().NetworkID() == CBaseChainParams::REGTEST ||
+    return ParELP().NetworkID() == CBaseChainParELP::REGTEST ||
            (IsReachable(addr) && addr.IsRoutable());
 }
 
@@ -414,8 +414,8 @@ bool CMasternodeBroadcast::Create(std::string strService, std::string strKeyMast
     }
 
     CService service = CService(strService);
-    int mainnetDefaultPort = Params(CBaseChainParams::MAIN).GetDefaultPort();
-    if (Params().NetworkID() == CBaseChainParams::MAIN) {
+    int mainnetDefaultPort = ParELP(CBaseChainParELP::MAIN).GetDefaultPort();
+    if (ParELP().NetworkID() == CBaseChainParELP::MAIN) {
         if (service.GetPort() != mainnetDefaultPort) {
             strErrorRet = strprintf("Invalid port %u for masternode %s, only %d is supported on mainnet.", service.GetPort(), strService, mainnetDefaultPort);
             LogPrintf("CMasternodeBroadcast::Create -- %s\n", strErrorRet);
@@ -516,7 +516,7 @@ bool CMasternodeBroadcast::CheckAndUpdate(int& nDos)
         return false;
     }
 
-    if (Params().NetworkID() == CBaseChainParams::MAIN) {
+    if (ParELP().NetworkID() == CBaseChainParELP::MAIN) {
         if (addr.GetPort() != 50020) return false;
     } else if (addr.GetPort() == 50020)
         return false;
@@ -629,7 +629,7 @@ bool CMasternodeBroadcast::CheckInputsAndAdd(int& nDoS)
     }
 
     bool isLocal = addr.IsRFC1918() || addr.IsLocal();
-    if (Params().NetworkID() == CBaseChainParams::REGTEST) isLocal = false;
+    if (ParELP().NetworkID() == CBaseChainParELP::REGTEST) isLocal = false;
 
     if (!isLocal) Relay();
 

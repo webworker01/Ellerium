@@ -6,7 +6,7 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "bitcoinunits.h"
-#include "chainparams.h"
+#include "chainparELP.h"
 #include "primitives/transaction.h"
 
 #include <QSettings>
@@ -54,7 +54,7 @@ QString BitcoinUnits::id(int unit)
 
 QString BitcoinUnits::name(int unit)
 {
-    if (Params().NetworkID() == CBaseChainParams::MAIN) {
+    if (ParELP().NetworkID() == CBaseChainParELP::MAIN) {
         switch (unit) {
         case ELP:
             return QString("ELP");
@@ -81,7 +81,7 @@ QString BitcoinUnits::name(int unit)
 
 QString BitcoinUnits::description(int unit)
 {
-    if (Params().NetworkID() == CBaseChainParams::MAIN) {
+    if (ParELP().NetworkID() == CBaseChainParELP::MAIN) {
         switch (unit) {
         case ELP:
             return QString("ELP");

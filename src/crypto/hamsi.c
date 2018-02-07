@@ -1,6 +1,6 @@
-/* $Id: hamsi.c 251 2010-10-19 14:31:51Z tp $ */
+/* $Id: hELPi.c 251 2010-10-19 14:31:51Z tp $ */
 /*
- * Hamsi implementation.
+ * HELPi implementation.
  *
  * ==========================(LICENSE BEGIN)============================
  *
@@ -33,7 +33,7 @@
 #include <stddef.h>
 #include <string.h>
 
-#include "sph_hamsi.h"
+#include "sph_hELPi.h"
 
 #ifdef __cplusplus
 extern "C"{
@@ -46,9 +46,9 @@ extern "C"{
 /*
  * The SPH_HELPI_EXPAND_* define how many input bits we handle in one
  * table lookup during message expansion (1 to 8, inclusive). If we note
- * w the number of bits per message word (w=32 for Hamsi-224/256, w=64
- * for Hamsi-384/512), r the size of a "row" in 32-bit words (r=8 for
- * Hamsi-224/256, r=16 for Hamsi-384/512), and n the expansion level,
+ * w the number of bits per message word (w=32 for HELPi-224/256, w=64
+ * for HELPi-384/512), r the size of a "row" in 32-bit words (r=8 for
+ * HELPi-224/256, r=16 for HELPi-384/512), and n the expansion level,
  * then we will get t tables (where t=ceil(w/n)) of individual size
  * 2^n*r*4 (in bytes). The last table may be shorter (e.g. with w=32 and
  * n=5, there are 7 tables, but the last one uses only two bits on
@@ -57,15 +57,15 @@ extern "C"{
  * Also, we read t rows of r words from RAM. Words in a given row are
  * concatenated in RAM in that order, so most of the cost is about
  * reading the first row word; comparatively, cache misses are thus
- * less expensive with Hamsi-512 (r=16) than with Hamsi-256 (r=8).
+ * less expensive with HELPi-512 (r=16) than with HELPi-256 (r=8).
  *
  * When n=1, tables are "special" in that we omit the first entry of
  * each table (which always contains 0), so that total table size is
  * halved.
  *
  * We thus have the following (size1 is the cumulative table size of
- * Hamsi-224/256; size2 is for Hamsi-384/512; similarly, t1 and t2
- * are for Hamsi-224/256 and Hamsi-384/512, respectively).
+ * HELPi-224/256; size2 is for HELPi-384/512; similarly, t1 and t2
+ * are for HELPi-224/256 and HELPi-384/512, respectively).
  *
  *   n      size1      size2    t1    t2
  * ---------------------------------------
@@ -112,7 +112,7 @@ extern "C"{
 #pragma warning (disable: 4146)
 #endif
 
-#include "hamsi_helper.c"
+#include "hELPi_helper.c"
 
 static const sph_u32 IV224[] = {
 	SPH_C32(0xc3967a67), SPH_C32(0xc3bc6c20), SPH_C32(0x4bc3bcc3),
@@ -121,9 +121,9 @@ static const sph_u32 IV224[] = {
 };
 
 /*
- * This version is the one used in the Hamsi submission package for
+ * This version is the one used in the HELPi submission package for
  * round 2 of the SHA-3 competition; the UTF-8 encoding is wrong and
- * shall soon be corrected in the official Hamsi specification.
+ * shall soon be corrected in the official HELPi specification.
  *
 static const sph_u32 IV224[] = {
 	SPH_C32(0x3c967a67), SPH_C32(0x3cbc6c20), SPH_C32(0xb4c343c3),
@@ -317,7 +317,7 @@ static const sph_u32 alpha_f[] = {
 	} while (0)
 
 static void
-hamsi_small(sph_hamsi_small_context *sc, const unsigned char *buf, size_t num)
+hELPi_small(sph_hELPi_small_context *sc, const unsigned char *buf, size_t num)
 {
 	DECL_STATE_SMALL
 #if !SPH_64
@@ -346,7 +346,7 @@ hamsi_small(sph_hamsi_small_context *sc, const unsigned char *buf, size_t num)
 }
 
 static void
-hamsi_small_final(sph_hamsi_small_context *sc, const unsigned char *buf)
+hELPi_small_final(sph_hELPi_small_context *sc, const unsigned char *buf)
 {
 	sph_u32 m0, m1, m2, m3, m4, m5, m6, m7;
 	DECL_STATE_SMALL
@@ -359,7 +359,7 @@ hamsi_small_final(sph_hamsi_small_context *sc, const unsigned char *buf)
 }
 
 static void
-hamsi_small_init(sph_hamsi_small_context *sc, const sph_u32 *iv)
+hELPi_small_init(sph_hELPi_small_context *sc, const sph_u32 *iv)
 {
 	sc->partial_len = 0;
 	memcpy(sc->h, iv, sizeof sc->h);
@@ -371,7 +371,7 @@ hamsi_small_init(sph_hamsi_small_context *sc, const sph_u32 *iv)
 }
 
 static void
-hamsi_small_core(sph_hamsi_small_context *sc, const void *data, size_t len)
+hELPi_small_core(sph_hELPi_small_context *sc, const void *data, size_t len)
 {
 	if (sc->partial_len != 0) {
 		size_t mlen;
@@ -385,12 +385,12 @@ hamsi_small_core(sph_hamsi_small_context *sc, const void *data, size_t len)
 			memcpy(sc->partial + sc->partial_len, data, mlen);
 			len -= mlen;
 			data = (const unsigned char *)data + mlen;
-			hamsi_small(sc, sc->partial, 1);
+			hELPi_small(sc, sc->partial, 1);
 			sc->partial_len = 0;
 		}
 	}
 
-	hamsi_small(sc, data, (len >> 2));
+	hELPi_small(sc, data, (len >> 2));
 	data = (const unsigned char *)data + (len & ~(size_t)3);
 	len &= (size_t)3;
 	memcpy(sc->partial, data, len);
@@ -398,7 +398,7 @@ hamsi_small_core(sph_hamsi_small_context *sc, const void *data, size_t len)
 }
 
 static void
-hamsi_small_close(sph_hamsi_small_context *sc,
+hELPi_small_close(sph_hELPi_small_context *sc,
 	unsigned ub, unsigned n, void *dst, size_t out_size_w32)
 {
 	unsigned char pad[12];
@@ -418,8 +418,8 @@ hamsi_small_close(sph_hamsi_small_context *sc,
 	pad[ptr ++] = ((ub & -z) | z) & 0xFF;
 	while (ptr < 4)
 		pad[ptr ++] = 0;
-	hamsi_small(sc, pad, 2);
-	hamsi_small_final(sc, pad + 8);
+	hELPi_small(sc, pad, 2);
+	hELPi_small_final(sc, pad + 8);
 	out = dst;
 	for (u = 0; u < out_size_w32; u ++)
 		sph_enc32be(out + (u << 2), sc->h[u]);
@@ -618,7 +618,7 @@ hamsi_small_close(sph_hamsi_small_context *sc,
 	} while (0)
 
 static void
-hamsi_big(sph_hamsi_big_context *sc, const unsigned char *buf, size_t num)
+hELPi_big(sph_hELPi_big_context *sc, const unsigned char *buf, size_t num)
 {
 	DECL_STATE_BIG
 #if !SPH_64
@@ -648,7 +648,7 @@ hamsi_big(sph_hamsi_big_context *sc, const unsigned char *buf, size_t num)
 }
 
 static void
-hamsi_big_final(sph_hamsi_big_context *sc, const unsigned char *buf)
+hELPi_big_final(sph_hELPi_big_context *sc, const unsigned char *buf)
 {
 	sph_u32 m0, m1, m2, m3, m4, m5, m6, m7;
 	sph_u32 m8, m9, mA, mB, mC, mD, mE, mF;
@@ -662,7 +662,7 @@ hamsi_big_final(sph_hamsi_big_context *sc, const unsigned char *buf)
 }
 
 static void
-hamsi_big_init(sph_hamsi_big_context *sc, const sph_u32 *iv)
+hELPi_big_init(sph_hELPi_big_context *sc, const sph_u32 *iv)
 {
 	sc->partial_len = 0;
 	memcpy(sc->h, iv, sizeof sc->h);
@@ -674,7 +674,7 @@ hamsi_big_init(sph_hamsi_big_context *sc, const sph_u32 *iv)
 }
 
 static void
-hamsi_big_core(sph_hamsi_big_context *sc, const void *data, size_t len)
+hELPi_big_core(sph_hELPi_big_context *sc, const void *data, size_t len)
 {
 	if (sc->partial_len != 0) {
 		size_t mlen;
@@ -688,12 +688,12 @@ hamsi_big_core(sph_hamsi_big_context *sc, const void *data, size_t len)
 			memcpy(sc->partial + sc->partial_len, data, mlen);
 			len -= mlen;
 			data = (const unsigned char *)data + mlen;
-			hamsi_big(sc, sc->partial, 1);
+			hELPi_big(sc, sc->partial, 1);
 			sc->partial_len = 0;
 		}
 	}
 
-	hamsi_big(sc, data, (len >> 3));
+	hELPi_big(sc, data, (len >> 3));
 	data = (const unsigned char *)data + (len & ~(size_t)7);
 	len &= (size_t)7;
 	memcpy(sc->partial, data, len);
@@ -701,7 +701,7 @@ hamsi_big_core(sph_hamsi_big_context *sc, const void *data, size_t len)
 }
 
 static void
-hamsi_big_close(sph_hamsi_big_context *sc,
+hELPi_big_close(sph_hELPi_big_context *sc,
 	unsigned ub, unsigned n, void *dst, size_t out_size_w32)
 {
 	unsigned char pad[8];
@@ -720,8 +720,8 @@ hamsi_big_close(sph_hamsi_big_context *sc,
 	sc->partial[ptr ++] = ((ub & -z) | z) & 0xFF;
 	while (ptr < 8)
 		sc->partial[ptr ++] = 0;
-	hamsi_big(sc, sc->partial, 1);
-	hamsi_big_final(sc, pad);
+	hELPi_big(sc, sc->partial, 1);
+	hELPi_big_final(sc, pad);
 	out = dst;
 	if (out_size_w32 == 12) {
 		sph_enc32be(out +  0, sc->h[ 0]);
@@ -742,124 +742,124 @@ hamsi_big_close(sph_hamsi_big_context *sc,
 	}
 }
 
-/* see sph_hamsi.h */
+/* see sph_hELPi.h */
 void
-sph_hamsi224_init(void *cc)
+sph_hELPi224_init(void *cc)
 {
-	hamsi_small_init(cc, IV224);
+	hELPi_small_init(cc, IV224);
 }
 
-/* see sph_hamsi.h */
+/* see sph_hELPi.h */
 void
-sph_hamsi224(void *cc, const void *data, size_t len)
+sph_hELPi224(void *cc, const void *data, size_t len)
 {
-	hamsi_small_core(cc, data, len);
+	hELPi_small_core(cc, data, len);
 }
 
-/* see sph_hamsi.h */
+/* see sph_hELPi.h */
 void
-sph_hamsi224_close(void *cc, void *dst)
+sph_hELPi224_close(void *cc, void *dst)
 {
-	hamsi_small_close(cc, 0, 0, dst, 7);
-	hamsi_small_init(cc, IV224);
+	hELPi_small_close(cc, 0, 0, dst, 7);
+	hELPi_small_init(cc, IV224);
 }
 
-/* see sph_hamsi.h */
+/* see sph_hELPi.h */
 void
-sph_hamsi224_addbits_and_close(void *cc, unsigned ub, unsigned n, void *dst)
+sph_hELPi224_addbits_and_close(void *cc, unsigned ub, unsigned n, void *dst)
 {
-	hamsi_small_close(cc, ub, n, dst, 7);
-	hamsi_small_init(cc, IV224);
+	hELPi_small_close(cc, ub, n, dst, 7);
+	hELPi_small_init(cc, IV224);
 }
 
-/* see sph_hamsi.h */
+/* see sph_hELPi.h */
 void
-sph_hamsi256_init(void *cc)
+sph_hELPi256_init(void *cc)
 {
-	hamsi_small_init(cc, IV256);
+	hELPi_small_init(cc, IV256);
 }
 
-/* see sph_hamsi.h */
+/* see sph_hELPi.h */
 void
-sph_hamsi256(void *cc, const void *data, size_t len)
+sph_hELPi256(void *cc, const void *data, size_t len)
 {
-	hamsi_small_core(cc, data, len);
+	hELPi_small_core(cc, data, len);
 }
 
-/* see sph_hamsi.h */
+/* see sph_hELPi.h */
 void
-sph_hamsi256_close(void *cc, void *dst)
+sph_hELPi256_close(void *cc, void *dst)
 {
-	hamsi_small_close(cc, 0, 0, dst, 8);
-	hamsi_small_init(cc, IV256);
+	hELPi_small_close(cc, 0, 0, dst, 8);
+	hELPi_small_init(cc, IV256);
 }
 
-/* see sph_hamsi.h */
+/* see sph_hELPi.h */
 void
-sph_hamsi256_addbits_and_close(void *cc, unsigned ub, unsigned n, void *dst)
+sph_hELPi256_addbits_and_close(void *cc, unsigned ub, unsigned n, void *dst)
 {
-	hamsi_small_close(cc, ub, n, dst, 8);
-	hamsi_small_init(cc, IV256);
+	hELPi_small_close(cc, ub, n, dst, 8);
+	hELPi_small_init(cc, IV256);
 }
 
-/* see sph_hamsi.h */
+/* see sph_hELPi.h */
 void
-sph_hamsi384_init(void *cc)
+sph_hELPi384_init(void *cc)
 {
-	hamsi_big_init(cc, IV384);
+	hELPi_big_init(cc, IV384);
 }
 
-/* see sph_hamsi.h */
+/* see sph_hELPi.h */
 void
-sph_hamsi384(void *cc, const void *data, size_t len)
+sph_hELPi384(void *cc, const void *data, size_t len)
 {
-	hamsi_big_core(cc, data, len);
+	hELPi_big_core(cc, data, len);
 }
 
-/* see sph_hamsi.h */
+/* see sph_hELPi.h */
 void
-sph_hamsi384_close(void *cc, void *dst)
+sph_hELPi384_close(void *cc, void *dst)
 {
-	hamsi_big_close(cc, 0, 0, dst, 12);
-	hamsi_big_init(cc, IV384);
+	hELPi_big_close(cc, 0, 0, dst, 12);
+	hELPi_big_init(cc, IV384);
 }
 
-/* see sph_hamsi.h */
+/* see sph_hELPi.h */
 void
-sph_hamsi384_addbits_and_close(void *cc, unsigned ub, unsigned n, void *dst)
+sph_hELPi384_addbits_and_close(void *cc, unsigned ub, unsigned n, void *dst)
 {
-	hamsi_big_close(cc, ub, n, dst, 12);
-	hamsi_big_init(cc, IV384);
+	hELPi_big_close(cc, ub, n, dst, 12);
+	hELPi_big_init(cc, IV384);
 }
 
-/* see sph_hamsi.h */
+/* see sph_hELPi.h */
 void
-sph_hamsi512_init(void *cc)
+sph_hELPi512_init(void *cc)
 {
-	hamsi_big_init(cc, IV512);
+	hELPi_big_init(cc, IV512);
 }
 
-/* see sph_hamsi.h */
+/* see sph_hELPi.h */
 void
-sph_hamsi512(void *cc, const void *data, size_t len)
+sph_hELPi512(void *cc, const void *data, size_t len)
 {
-	hamsi_big_core(cc, data, len);
+	hELPi_big_core(cc, data, len);
 }
 
-/* see sph_hamsi.h */
+/* see sph_hELPi.h */
 void
-sph_hamsi512_close(void *cc, void *dst)
+sph_hELPi512_close(void *cc, void *dst)
 {
-	hamsi_big_close(cc, 0, 0, dst, 16);
-	hamsi_big_init(cc, IV512);
+	hELPi_big_close(cc, 0, 0, dst, 16);
+	hELPi_big_init(cc, IV512);
 }
 
-/* see sph_hamsi.h */
+/* see sph_hELPi.h */
 void
-sph_hamsi512_addbits_and_close(void *cc, unsigned ub, unsigned n, void *dst)
+sph_hELPi512_addbits_and_close(void *cc, unsigned ub, unsigned n, void *dst)
 {
-	hamsi_big_close(cc, ub, n, dst, 16);
-	hamsi_big_init(cc, IV512);
+	hELPi_big_close(cc, ub, n, dst, 16);
+	hELPi_big_init(cc, IV512);
 }
 
 #ifdef __cplusplus

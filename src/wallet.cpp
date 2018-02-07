@@ -1576,7 +1576,7 @@ bool CWallet::SelectStakeCoins(std::set<std::pair<const CWalletTx*, unsigned int
             continue;
 
         //check that it is matured
-        if (out.nDepth < (out.tx->IsCoinStake() ? Params().COINBASE_MATURITY() : 10))
+        if (out.nDepth < (out.tx->IsCoinStake() ? ParELP().COINBASE_MATURITY() : 10))
             continue;
 
         //add to our stake set
@@ -3602,7 +3602,7 @@ int CMerkleTx::GetBlocksToMaturity() const
 {
     if (!(IsCoinBase() || IsCoinStake()))
         return 0;
-    return max(0, (Params().COINBASE_MATURITY() + 1) - GetDepthInMainChain());
+    return max(0, (ParELP().COINBASE_MATURITY() + 1) - GetDepthInMainChain());
 }
 
 

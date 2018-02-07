@@ -14,7 +14,7 @@
 #ifndef BITCOIN_BASE58_H
 #define BITCOIN_BASE58_H
 
-#include "chainparams.h"
+#include "chainparELP.h"
 #include "key.h"
 #include "pubkey.h"
 #include "script/script.h"
@@ -113,7 +113,7 @@ public:
     bool Set(const CScriptID& id);
     bool Set(const CTxDestination& dest);
     bool IsValid() const;
-    bool IsValid(const CChainParams& params) const;
+    bool IsValid(const CChainParELP& parELP) const;
 
     CBitcoinAddress() {}
     CBitcoinAddress(const CTxDestination& dest) { Set(dest); }
@@ -141,7 +141,7 @@ public:
     CBitcoinSecret() {}
 };
 
-template <typename K, int Size, CChainParams::Base58Type Type>
+template <typename K, int Size, CChainParELP::Base58Type Type>
 class CBitcoinExtKeyBase : public CBase58Data
 {
 public:
@@ -149,7 +149,7 @@ public:
     {
         unsigned char vch[Size];
         key.Encode(vch);
-        SetData(Params().Base58Prefix(Type), vch, vch + Size);
+        SetData(ParELP().Base58Prefix(Type), vch, vch + Size);
     }
 
     K GetKey()
@@ -167,7 +167,7 @@ public:
     CBitcoinExtKeyBase() {}
 };
 
-typedef CBitcoinExtKeyBase<CExtKey, 74, CChainParams::EXT_SECRET_KEY> CBitcoinExtKey;
-typedef CBitcoinExtKeyBase<CExtPubKey, 74, CChainParams::EXT_PUBLIC_KEY> CBitcoinExtPubKey;
+typedef CBitcoinExtKeyBase<CExtKey, 74, CChainParELP::EXT_SECRET_KEY> CBitcoinExtKey;
+typedef CBitcoinExtKeyBase<CExtPubKey, 74, CChainParELP::EXT_PUBLIC_KEY> CBitcoinExtPubKey;
 
 #endif // BITCOIN_BASE58_H

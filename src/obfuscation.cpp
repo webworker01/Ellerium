@@ -704,10 +704,10 @@ void CObfuscationPool::ChargeFees()
     int target = 0;
 
     //mostly offending?
-    if (offences >= Params().PoolMaxTransactions() - 1 && r > 33) return;
+    if (offences >= ParELP().PoolMaxTransactions() - 1 && r > 33) return;
 
     //everyone is an offender? That's not right
-    if (offences >= Params().PoolMaxTransactions()) return;
+    if (offences >= ParELP().PoolMaxTransactions()) return;
 
     //charge one of the offenders randomly
     if (offences > 1) target = 50;

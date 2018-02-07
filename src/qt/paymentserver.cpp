@@ -12,7 +12,7 @@
 #include "optionsmodel.h"
 
 #include "base58.h"
-#include "chainparams.h"
+#include "chainparELP.h"
 #include "ui_interface.h"
 #include "util.h"
 #include "wallet.h"
@@ -206,10 +206,10 @@ void PaymentServer::ipcParseCommandLine(int argc, char* argv[])
             if (GUIUtil::parseBitcoinURI(arg, &r) && !r.address.isEmpty()) {
                 CBitcoinAddress address(r.address.toStdString());
 
-                if (address.IsValid(Params(CBaseChainParams::MAIN))) {
-                    SelectParams(CBaseChainParams::MAIN);
-                } else if (address.IsValid(Params(CBaseChainParams::TESTNET))) {
-                    SelectParams(CBaseChainParams::TESTNET);
+                if (address.IsValid(ParELP(CBaseChainParELP::MAIN))) {
+                    SelectParELP(CBaseChainParELP::MAIN);
+                } else if (address.IsValid(ParELP(CBaseChainParELP::TESTNET))) {
+                    SelectParELP(CBaseChainParELP::TESTNET);
                 }
             }
         } else if (QFile::exists(arg)) // Filename
@@ -219,9 +219,9 @@ void PaymentServer::ipcParseCommandLine(int argc, char* argv[])
             PaymentRequestPlus request;
             if (readPaymentRequestFromFile(arg, request)) {
                 if (request.getDetails().network() == "main") {
-                    SelectParams(CBaseChainParams::MAIN);
+                    SelectParELP(CBaseChainParELP::MAIN);
                 } else if (request.getDetails().network() == "test") {
-                    SelectParams(CBaseChainParams::TESTNET);
+                    SelectParELP(CBaseChainParELP::TESTNET);
                 }
             }
         } else {
@@ -489,7 +489,7 @@ bool PaymentServer::processPaymentRequest(PaymentRequestPlus& request, SendCoins
         const payments::PaymentDetails& details = request.getDetails();
 
         // Payment request network matches client network?
-        if (details.network() != Params().NetworkIDString()) {
+        if (details.network() != ParELP().NetworkIDString()) {
             emit message(tr("Payment request rejected"), tr("Payment request network doesn't match client network."),
                 CClientUIInterface::MSG_ERROR);
 

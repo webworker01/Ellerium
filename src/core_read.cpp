@@ -8,7 +8,7 @@
 #include "primitives/transaction.h"
 #include "script/script.h"
 #include "serialize.h"
-#include "streams.h"
+#include "streELP.h"
 #include "univalue/univalue.h"
 #include "util.h"
 #include "utilstrencodings.h"

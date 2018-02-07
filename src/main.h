@@ -15,7 +15,7 @@
 
 #include "amount.h"
 #include "chain.h"
-#include "chainparams.h"
+#include "chainparELP.h"
 #include "coins.h"
 #include "net.h"
 #include "pow.h"

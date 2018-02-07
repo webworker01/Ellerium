@@ -6,7 +6,7 @@
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include "chainparamsbase.h"
+#include "chainparELPbase.h"
 #include "clientversion.h"
 #include "rpcclient.h"
 #include "rpcprotocol.h"
@@ -71,7 +71,7 @@ static bool AppInitRPC(int argc, char* argv[])
         std::string strUsage = _("Ellerium Core RPC client version") + " " + FormatFullVersion() + "\n";
         if (!mapArgs.count("-version")) {
             strUsage += "\n" + _("Usage:") + "\n" +
-                        "  ellerium-cli [options] <command> [params]  " + _("Send command to Ellerium Core") + "\n" +
+                        "  ellerium-cli [options] <command> [parELP]  " + _("Send command to Ellerium Core") + "\n" +
                         "  ellerium-cli [options] help                " + _("List commands") + "\n" +
                         "  ellerium-cli [options] help <command>      " + _("Get help for a command") + "\n";
 
@@ -91,15 +91,15 @@ static bool AppInitRPC(int argc, char* argv[])
         fprintf(stderr, "Error reading configuration file: %s\n", e.what());
         return false;
     }
-    // Check for -testnet or -regtest parameter (BaseParams() calls are only valid after this clause)
-    if (!SelectBaseParamsFromCommandLine()) {
+    // Check for -testnet or -regtest parameter (BaseParELP() calls are only valid after this clause)
+    if (!SelectBaseParELPFromCommandLine()) {
         fprintf(stderr, "Error: Invalid combination of -regtest and -testnet.\n");
         return false;
     }
     return true;
 }
 
-Object CallRPC(const string& strMethod, const Array& params)
+Object CallRPC(const string& strMethod, const Array& parELP)
 {
     if (mapArgs["-rpcuser"] == "" && mapArgs["-rpcpassword"] == "")
         throw runtime_error(strprintf(
@@ -114,9 +114,9 @@ Object CallRPC(const string& strMethod, const Array& params)
     context.set_options(ssl::context::no_sslv2 | ssl::context::no_sslv3);
     asio::ssl::stream<asio::ip::tcp::socket> sslStream(io_service, context);
     SSLIOStreamDevice<asio::ip::tcp> d(sslStream, fUseSSL);
-    iostreams::stream<SSLIOStreamDevice<asio::ip::tcp> > stream(d);
+    iostreELP::stream<SSLIOStreamDevice<asio::ip::tcp> > stream(d);
 
-    const bool fConnected = d.connect(GetArg("-rpcconnect", "127.0.0.1"), GetArg("-rpcport", itostr(BaseParams().RPCPort())));
+    const bool fConnected = d.connect(GetArg("-rpcconnect", "127.0.0.1"), GetArg("-rpcport", itostr(BaseParELP().RPCPort())));
     if (!fConnected)
         throw CConnectionFailed("couldn't connect to server");
 
@@ -126,7 +126,7 @@ Object CallRPC(const string& strMethod, const Array& params)
     mapRequestHeaders["Authorization"] = string("Basic ") + strUserPass64;
 
     // Send request
-    string strRequest = JSONRPCRequest(strMethod, params, 1);
+    string strRequest = JSONRPCRequest(strMethod, parELP, 1);
     string strPost = HTTPPost(strRequest, mapRequestHeaders);
     stream << strPost << std::flush;
 
@@ -174,14 +174,14 @@ int CommandLineRPC(int argc, char* argv[])
         string strMethod = argv[1];
 
         // Parameters default to strings
-        std::vector<std::string> strParams(&argv[2], &argv[argc]);
-        Array params = RPCConvertValues(strMethod, strParams);
+        std::vector<std::string> strParELP(&argv[2], &argv[argc]);
+        Array parELP = RPCConvertValues(strMethod, strParELP);
 
         // Execute and handle connection failures with -rpcwait
         const bool fWait = GetBoolArg("-rpcwait", false);
         do {
             try {
-                const Object reply = CallRPC(strMethod, params);
+                const Object reply = CallRPC(strMethod, parELP);
 
                 // Parse reply
                 const Value& result = find_value(reply, "result");

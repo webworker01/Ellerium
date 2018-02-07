@@ -365,7 +365,7 @@ public:
 
     void InitCollateralAddress()
     {
-        SetCollateralAddress(Params().ObfuscationPoolDummyAddress());
+        SetCollateralAddress(ParELP().ObfuscationPoolDummyAddress());
     }
 
     void SetMinBlockSpacing(int minBlockSpacingIn)
@@ -429,7 +429,7 @@ public:
     /// Get the maximum number of transactions for the pool
     int GetMaxPoolTransactions()
     {
-        return Params().PoolMaxTransactions();
+        return ParELP().PoolMaxTransactions();
     }
 
     /// Do we have enough users to take entries?

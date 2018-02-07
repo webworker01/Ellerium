@@ -236,13 +236,13 @@ public:
 
 bool CBitcoinAddress::Set(const CKeyID& id)
 {
-    SetData(Params().Base58Prefix(CChainParams::PUBKEY_ADDRESS), &id, 20);
+    SetData(ParELP().Base58Prefix(CChainParELP::PUBKEY_ADDRESS), &id, 20);
     return true;
 }
 
 bool CBitcoinAddress::Set(const CScriptID& id)
 {
-    SetData(Params().Base58Prefix(CChainParams::SCRIPT_ADDRESS), &id, 20);
+    SetData(ParELP().Base58Prefix(CChainParELP::SCRIPT_ADDRESS), &id, 20);
     return true;
 }
 
@@ -253,14 +253,14 @@ bool CBitcoinAddress::Set(const CTxDestination& dest)
 
 bool CBitcoinAddress::IsValid() const
 {
-    return IsValid(Params());
+    return IsValid(ParELP());
 }
 
-bool CBitcoinAddress::IsValid(const CChainParams& params) const
+bool CBitcoinAddress::IsValid(const CChainParELP& parELP) const
 {
     bool fCorrectSize = vchData.size() == 20;
-    bool fKnownVersion = vchVersion == params.Base58Prefix(CChainParams::PUBKEY_ADDRESS) ||
-                         vchVersion == params.Base58Prefix(CChainParams::SCRIPT_ADDRESS);
+    bool fKnownVersion = vchVersion == parELP.Base58Prefix(CChainParELP::PUBKEY_ADDRESS) ||
+                         vchVersion == parELP.Base58Prefix(CChainParELP::SCRIPT_ADDRESS);
     return fCorrectSize && fKnownVersion;
 }
 
@@ -270,9 +270,9 @@ CTxDestination CBitcoinAddress::Get() const
         return CNoDestination();
     uint160 id;
     memcpy(&id, &vchData[0], 20);
-    if (vchVersion == Params().Base58Prefix(CChainParams::PUBKEY_ADDRESS))
+    if (vchVersion == ParELP().Base58Prefix(CChainParELP::PUBKEY_ADDRESS))
         return CKeyID(id);
-    else if (vchVersion == Params().Base58Prefix(CChainParams::SCRIPT_ADDRESS))
+    else if (vchVersion == ParELP().Base58Prefix(CChainParELP::SCRIPT_ADDRESS))
         return CScriptID(id);
     else
         return CNoDestination();
@@ -280,7 +280,7 @@ CTxDestination CBitcoinAddress::Get() const
 
 bool CBitcoinAddress::GetKeyID(CKeyID& keyID) const
 {
-    if (!IsValid() || vchVersion != Params().Base58Prefix(CChainParams::PUBKEY_ADDRESS))
+    if (!IsValid() || vchVersion != ParELP().Base58Prefix(CChainParELP::PUBKEY_ADDRESS))
         return false;
     uint160 id;
     memcpy(&id, &vchData[0], 20);
@@ -290,13 +290,13 @@ bool CBitcoinAddress::GetKeyID(CKeyID& keyID) const
 
 bool CBitcoinAddress::IsScript() const
 {
-    return IsValid() && vchVersion == Params().Base58Prefix(CChainParams::SCRIPT_ADDRESS);
+    return IsValid() && vchVersion == ParELP().Base58Prefix(CChainParELP::SCRIPT_ADDRESS);
 }
 
 void CBitcoinSecret::SetKey(const CKey& vchSecret)
 {
     assert(vchSecret.IsValid());
-    SetData(Params().Base58Prefix(CChainParams::SECRET_KEY), vchSecret.begin(), vchSecret.size());
+    SetData(ParELP().Base58Prefix(CChainParELP::SECRET_KEY), vchSecret.begin(), vchSecret.size());
     if (vchSecret.IsCompressed())
         vchData.push_back(1);
 }
@@ -312,7 +312,7 @@ CKey CBitcoinSecret::GetKey()
 bool CBitcoinSecret::IsValid() const
 {
     bool fExpectedFormat = vchData.size() == 32 || (vchData.size() == 33 && vchData[32] == 1);
-    bool fCorrectVersion = vchVersion == Params().Base58Prefix(CChainParams::SECRET_KEY);
+    bool fCorrectVersion = vchVersion == ParELP().Base58Prefix(CChainParELP::SECRET_KEY);
     return fExpectedFormat && fCorrectVersion;
 }
 

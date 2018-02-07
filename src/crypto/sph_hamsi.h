@@ -1,6 +1,6 @@
-/* $Id: sph_hamsi.h 216 2010-06-08 09:46:57Z tp $ */
+/* $Id: sph_hELPi.h 216 2010-06-08 09:46:57Z tp $ */
 /**
- * Hamsi interface. This code implements Hamsi with the recommended
+ * HELPi interface. This code implements HELPi with the recommended
  * parameters for SHA-3, with outputs of 224, 256, 384 and 512 bits.
  *
  * ==========================(LICENSE BEGIN)============================
@@ -28,7 +28,7 @@
  *
  * ===========================(LICENSE END)=============================
  *
- * @file     sph_hamsi.h
+ * @file     sph_hELPi.h
  * @author   Thomas Pornin <thomas.pornin@cryptolog.com>
  */
 
@@ -43,32 +43,32 @@ extern "C"{
 #endif
 
 /**
- * Output size (in bits) for Hamsi-224.
+ * Output size (in bits) for HELPi-224.
  */
-#define SPH_SIZE_hamsi224   224
+#define SPH_SIZE_hELPi224   224
 
 /**
- * Output size (in bits) for Hamsi-256.
+ * Output size (in bits) for HELPi-256.
  */
-#define SPH_SIZE_hamsi256   256
+#define SPH_SIZE_hELPi256   256
 
 /**
- * Output size (in bits) for Hamsi-384.
+ * Output size (in bits) for HELPi-384.
  */
-#define SPH_SIZE_hamsi384   384
+#define SPH_SIZE_hELPi384   384
 
 /**
- * Output size (in bits) for Hamsi-512.
+ * Output size (in bits) for HELPi-512.
  */
-#define SPH_SIZE_hamsi512   512
+#define SPH_SIZE_hELPi512   512
 
 /**
- * This structure is a context for Hamsi-224 and Hamsi-256 computations:
+ * This structure is a context for HELPi-224 and HELPi-256 computations:
  * it contains the intermediate values and some data from the last
- * entered block. Once a Hamsi computation has been performed, the
+ * entered block. Once a HELPi computation has been performed, the
  * context can be reused for another computation.
  *
- * The contents of this structure are private. A running Hamsi
+ * The contents of this structure are private. A running HELPi
  * computation can be cloned by copying the context (e.g. with a simple
  * <code>memcpy()</code>).
  */
@@ -83,27 +83,27 @@ typedef struct {
 	sph_u32 count_high, count_low;
 #endif
 #endif
-} sph_hamsi_small_context;
+} sph_hELPi_small_context;
 
 /**
- * This structure is a context for Hamsi-224 computations. It is
- * identical to the common <code>sph_hamsi_small_context</code>.
+ * This structure is a context for HELPi-224 computations. It is
+ * identical to the common <code>sph_hELPi_small_context</code>.
  */
-typedef sph_hamsi_small_context sph_hamsi224_context;
+typedef sph_hELPi_small_context sph_hELPi224_context;
 
 /**
- * This structure is a context for Hamsi-256 computations. It is
- * identical to the common <code>sph_hamsi_small_context</code>.
+ * This structure is a context for HELPi-256 computations. It is
+ * identical to the common <code>sph_hELPi_small_context</code>.
  */
-typedef sph_hamsi_small_context sph_hamsi256_context;
+typedef sph_hELPi_small_context sph_hELPi256_context;
 
 /**
- * This structure is a context for Hamsi-384 and Hamsi-512 computations:
+ * This structure is a context for HELPi-384 and HELPi-512 computations:
  * it contains the intermediate values and some data from the last
- * entered block. Once a Hamsi computation has been performed, the
+ * entered block. Once a HELPi computation has been performed, the
  * context can be reused for another computation.
  *
- * The contents of this structure are private. A running Hamsi
+ * The contents of this structure are private. A running HELPi
  * computation can be cloned by copying the context (e.g. with a simple
  * <code>memcpy()</code>).
  */
@@ -118,48 +118,48 @@ typedef struct {
 	sph_u32 count_high, count_low;
 #endif
 #endif
-} sph_hamsi_big_context;
+} sph_hELPi_big_context;
 
 /**
- * This structure is a context for Hamsi-384 computations. It is
- * identical to the common <code>sph_hamsi_small_context</code>.
+ * This structure is a context for HELPi-384 computations. It is
+ * identical to the common <code>sph_hELPi_small_context</code>.
  */
-typedef sph_hamsi_big_context sph_hamsi384_context;
+typedef sph_hELPi_big_context sph_hELPi384_context;
 
 /**
- * This structure is a context for Hamsi-512 computations. It is
- * identical to the common <code>sph_hamsi_small_context</code>.
+ * This structure is a context for HELPi-512 computations. It is
+ * identical to the common <code>sph_hELPi_small_context</code>.
  */
-typedef sph_hamsi_big_context sph_hamsi512_context;
+typedef sph_hELPi_big_context sph_hELPi512_context;
 
 /**
- * Initialize a Hamsi-224 context. This process performs no memory allocation.
+ * Initialize a HELPi-224 context. This process performs no memory allocation.
  *
- * @param cc   the Hamsi-224 context (pointer to a
- *             <code>sph_hamsi224_context</code>)
+ * @param cc   the HELPi-224 context (pointer to a
+ *             <code>sph_hELPi224_context</code>)
  */
-void sph_hamsi224_init(void *cc);
+void sph_hELPi224_init(void *cc);
 
 /**
  * Process some data bytes. It is acceptable that <code>len</code> is zero
  * (in which case this function does nothing).
  *
- * @param cc     the Hamsi-224 context
+ * @param cc     the HELPi-224 context
  * @param data   the input data
  * @param len    the input data length (in bytes)
  */
-void sph_hamsi224(void *cc, const void *data, size_t len);
+void sph_hELPi224(void *cc, const void *data, size_t len);
 
 /**
- * Terminate the current Hamsi-224 computation and output the result into
+ * Terminate the current HELPi-224 computation and output the result into
  * the provided buffer. The destination buffer must be wide enough to
  * accomodate the result (28 bytes). The context is automatically
  * reinitialized.
  *
- * @param cc    the Hamsi-224 context
+ * @param cc    the HELPi-224 context
  * @param dst   the destination buffer
  */
-void sph_hamsi224_close(void *cc, void *dst);
+void sph_hELPi224_close(void *cc, void *dst);
 
 /**
  * Add a few additional bits (0 to 7) to the current computation, then
@@ -169,42 +169,42 @@ void sph_hamsi224_close(void *cc, void *dst);
  * numbered 7 downto 8-n (this is the big-endian convention at the byte
  * level). The context is automatically reinitialized.
  *
- * @param cc    the Hamsi-224 context
+ * @param cc    the HELPi-224 context
  * @param ub    the extra bits
  * @param n     the number of extra bits (0 to 7)
  * @param dst   the destination buffer
  */
-void sph_hamsi224_addbits_and_close(
+void sph_hELPi224_addbits_and_close(
 	void *cc, unsigned ub, unsigned n, void *dst);
 
 /**
- * Initialize a Hamsi-256 context. This process performs no memory allocation.
+ * Initialize a HELPi-256 context. This process performs no memory allocation.
  *
- * @param cc   the Hamsi-256 context (pointer to a
- *             <code>sph_hamsi256_context</code>)
+ * @param cc   the HELPi-256 context (pointer to a
+ *             <code>sph_hELPi256_context</code>)
  */
-void sph_hamsi256_init(void *cc);
+void sph_hELPi256_init(void *cc);
 
 /**
  * Process some data bytes. It is acceptable that <code>len</code> is zero
  * (in which case this function does nothing).
  *
- * @param cc     the Hamsi-256 context
+ * @param cc     the HELPi-256 context
  * @param data   the input data
  * @param len    the input data length (in bytes)
  */
-void sph_hamsi256(void *cc, const void *data, size_t len);
+void sph_hELPi256(void *cc, const void *data, size_t len);
 
 /**
- * Terminate the current Hamsi-256 computation and output the result into
+ * Terminate the current HELPi-256 computation and output the result into
  * the provided buffer. The destination buffer must be wide enough to
  * accomodate the result (32 bytes). The context is automatically
  * reinitialized.
  *
- * @param cc    the Hamsi-256 context
+ * @param cc    the HELPi-256 context
  * @param dst   the destination buffer
  */
-void sph_hamsi256_close(void *cc, void *dst);
+void sph_hELPi256_close(void *cc, void *dst);
 
 /**
  * Add a few additional bits (0 to 7) to the current computation, then
@@ -214,42 +214,42 @@ void sph_hamsi256_close(void *cc, void *dst);
  * numbered 7 downto 8-n (this is the big-endian convention at the byte
  * level). The context is automatically reinitialized.
  *
- * @param cc    the Hamsi-256 context
+ * @param cc    the HELPi-256 context
  * @param ub    the extra bits
  * @param n     the number of extra bits (0 to 7)
  * @param dst   the destination buffer
  */
-void sph_hamsi256_addbits_and_close(
+void sph_hELPi256_addbits_and_close(
 	void *cc, unsigned ub, unsigned n, void *dst);
 
 /**
- * Initialize a Hamsi-384 context. This process performs no memory allocation.
+ * Initialize a HELPi-384 context. This process performs no memory allocation.
  *
- * @param cc   the Hamsi-384 context (pointer to a
- *             <code>sph_hamsi384_context</code>)
+ * @param cc   the HELPi-384 context (pointer to a
+ *             <code>sph_hELPi384_context</code>)
  */
-void sph_hamsi384_init(void *cc);
+void sph_hELPi384_init(void *cc);
 
 /**
  * Process some data bytes. It is acceptable that <code>len</code> is zero
  * (in which case this function does nothing).
  *
- * @param cc     the Hamsi-384 context
+ * @param cc     the HELPi-384 context
  * @param data   the input data
  * @param len    the input data length (in bytes)
  */
-void sph_hamsi384(void *cc, const void *data, size_t len);
+void sph_hELPi384(void *cc, const void *data, size_t len);
 
 /**
- * Terminate the current Hamsi-384 computation and output the result into
+ * Terminate the current HELPi-384 computation and output the result into
  * the provided buffer. The destination buffer must be wide enough to
  * accomodate the result (48 bytes). The context is automatically
  * reinitialized.
  *
- * @param cc    the Hamsi-384 context
+ * @param cc    the HELPi-384 context
  * @param dst   the destination buffer
  */
-void sph_hamsi384_close(void *cc, void *dst);
+void sph_hELPi384_close(void *cc, void *dst);
 
 /**
  * Add a few additional bits (0 to 7) to the current computation, then
@@ -259,42 +259,42 @@ void sph_hamsi384_close(void *cc, void *dst);
  * numbered 7 downto 8-n (this is the big-endian convention at the byte
  * level). The context is automatically reinitialized.
  *
- * @param cc    the Hamsi-384 context
+ * @param cc    the HELPi-384 context
  * @param ub    the extra bits
  * @param n     the number of extra bits (0 to 7)
  * @param dst   the destination buffer
  */
-void sph_hamsi384_addbits_and_close(
+void sph_hELPi384_addbits_and_close(
 	void *cc, unsigned ub, unsigned n, void *dst);
 
 /**
- * Initialize a Hamsi-512 context. This process performs no memory allocation.
+ * Initialize a HELPi-512 context. This process performs no memory allocation.
  *
- * @param cc   the Hamsi-512 context (pointer to a
- *             <code>sph_hamsi512_context</code>)
+ * @param cc   the HELPi-512 context (pointer to a
+ *             <code>sph_hELPi512_context</code>)
  */
-void sph_hamsi512_init(void *cc);
+void sph_hELPi512_init(void *cc);
 
 /**
  * Process some data bytes. It is acceptable that <code>len</code> is zero
  * (in which case this function does nothing).
  *
- * @param cc     the Hamsi-512 context
+ * @param cc     the HELPi-512 context
  * @param data   the input data
  * @param len    the input data length (in bytes)
  */
-void sph_hamsi512(void *cc, const void *data, size_t len);
+void sph_hELPi512(void *cc, const void *data, size_t len);
 
 /**
- * Terminate the current Hamsi-512 computation and output the result into
+ * Terminate the current HELPi-512 computation and output the result into
  * the provided buffer. The destination buffer must be wide enough to
  * accomodate the result (64 bytes). The context is automatically
  * reinitialized.
  *
- * @param cc    the Hamsi-512 context
+ * @param cc    the HELPi-512 context
  * @param dst   the destination buffer
  */
-void sph_hamsi512_close(void *cc, void *dst);
+void sph_hELPi512_close(void *cc, void *dst);
 
 /**
  * Add a few additional bits (0 to 7) to the current computation, then
@@ -304,12 +304,12 @@ void sph_hamsi512_close(void *cc, void *dst);
  * numbered 7 downto 8-n (this is the big-endian convention at the byte
  * level). The context is automatically reinitialized.
  *
- * @param cc    the Hamsi-512 context
+ * @param cc    the HELPi-512 context
  * @param ub    the extra bits
  * @param n     the number of extra bits (0 to 7)
  * @param dst   the destination buffer
  */
-void sph_hamsi512_addbits_and_close(
+void sph_hELPi512_addbits_and_close(
 	void *cc, unsigned ub, unsigned n, void *dst);
 
 

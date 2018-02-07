@@ -1,6 +1,6 @@
 #include "blockexplorer.h"
 #include "bitcoinunits.h"
-#include "chainparams.h"
+#include "chainparELP.h"
 #include "clientmodel.h"
 #include "core_io.h"
 #include "main.h"

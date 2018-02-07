@@ -7,7 +7,7 @@
 
 #include "clientversion.h"
 #include "serialize.h"
-#include "streams.h"
+#include "streELP.h"
 #include "util.h"
 #include "version.h"
 

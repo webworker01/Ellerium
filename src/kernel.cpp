@@ -14,7 +14,7 @@
 
 using namespace std;
 
-bool fTestNet = false; //Params().NetworkID() == CBaseChainParams::TESTNET;
+bool fTestNet = false; //ParELP().NetworkID() == CBaseChainParELP::TESTNET;
 
 // Modifier interval: time to elapse before new modifier is computed
 // Set to 3-hour for production network and 20-minute for test network
@@ -95,7 +95,7 @@ static bool SelectBlockFromCandidates(
 
         //if the lowest block height (vSortedByTimestamp[0]) is >= switch height, use new modifier calc
         if (fFirstRun){
-            fModifierV2 = pindex->nHeight >= Params().ModifierUpgradeBlock();
+            fModifierV2 = pindex->nHeight >= ParELP().ModifierUpgradeBlock();
             fFirstRun = false;
         }
 
@@ -410,7 +410,7 @@ bool CheckCoinStakeTimestamp(int64_t nTimeBlock, int64_t nTimeTx)
 // Get stake modifier checksum
 unsigned int GetStakeModifierChecksum(const CBlockIndex* pindex)
 {
-    assert(pindex->pprev || pindex->GetBlockHash() == Params().HashGenesisBlock());
+    assert(pindex->pprev || pindex->GetBlockHash() == ParELP().HashGenesisBlock());
     // Hash previous checksum with flags, hashProofOfStake and nStakeModifier
     CDataStream ss(SER_GETHASH, 0);
     if (pindex->pprev)

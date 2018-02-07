@@ -24,7 +24,7 @@ when running as a daemon.  If the configuration file does not exist or this
 setting is not set, elleriumd will shutdown promptly after startup.
 
 This password does not have to be remembered or typed as it is mostly used
-as a fixed token that elleriumd and client programs read from the configuration
+as a fixed token that elleriumd and client progrELP read from the configuration
 file, however it is recommended that a strong and secure password be used
 as this password is security critical to securing the wallet should the
 wallet be enabled.

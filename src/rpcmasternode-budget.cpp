@@ -19,11 +19,11 @@
 using namespace json_spirit;
 using namespace std;
 
-Value mnbudget(const Array& params, bool fHelp)
+Value mnbudget(const Array& parELP, bool fHelp)
 {
     string strCommand;
-    if (params.size() >= 1)
-        strCommand = params[0].get_str();
+    if (parELP.size() >= 1)
+        strCommand = parELP[0].get_str();
 
     if (fHelp ||
         (strCommand != "vote-many" && strCommand != "prepare" && strCommand != "submit" && strCommand != "vote" && strCommand != "getvotes" && strCommand != "getinfo" && strCommand != "show" && strCommand != "projection" && strCommand != "check" && strCommand != "nextblock"))
@@ -58,25 +58,25 @@ Value mnbudget(const Array& params, bool fHelp)
         std::vector<CMasternodeConfig::CMasternodeEntry> mnEntries;
         mnEntries = masternodeConfig.getEntries();
 
-        if (params.size() != 7)
+        if (parELP.size() != 7)
             throw runtime_error("Correct usage is 'mnbudget prepare proposal-name url payment_count block_start ellerium_address monthly_payment_ellerium'");
 
-        std::string strProposalName = params[1].get_str();
+        std::string strProposalName = parELP[1].get_str();
         if (strProposalName.size() > 20)
             return "Invalid proposal name, limit of 20 characters.";
 
-        std::string strURL = params[2].get_str();
+        std::string strURL = parELP[2].get_str();
         if (strURL.size() > 64)
             return "Invalid url, limit of 64 characters.";
 
-        int nPaymentCount = params[3].get_int();
+        int nPaymentCount = parELP[3].get_int();
         if (nPaymentCount < 1)
             return "Invalid payment count, must be more than zero.";
 
         //set block min
         if (pindexPrev != NULL) nBlockMin = pindexPrev->nHeight - GetBudgetPaymentCycleBlocks() * (nPaymentCount + 1);
 
-        int nBlockStart = params[4].get_int();
+        int nBlockStart = parELP[4].get_int();
         if (nBlockStart % GetBudgetPaymentCycleBlocks() != 0) {
             int nNext = pindexPrev->nHeight - pindexPrev->nHeight % GetBudgetPaymentCycleBlocks() + GetBudgetPaymentCycleBlocks();
             return strprintf("Invalid block start - must be a budget cycle block. Next valid block: %d", nNext);
@@ -90,13 +90,13 @@ Value mnbudget(const Array& params, bool fHelp)
         if (nBlockEnd < pindexPrev->nHeight)
             return "Invalid ending block, starting block + (payment_cycle*payments) must be more than current height.";
 
-        CBitcoinAddress address(params[5].get_str());
+        CBitcoinAddress address(parELP[5].get_str());
         if (!address.IsValid())
             throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid Ellerium address");
 
         // Parse Ellerium address
         CScript scriptPubKey = GetScriptForDestination(address.Get());
-        CAmount nAmount = AmountFromValue(params[6]);
+        CAmount nAmount = AmountFromValue(parELP[6]);
 
         //*************************************************************************
 
@@ -108,10 +108,10 @@ Value mnbudget(const Array& params, bool fHelp)
             return "Proposal is not valid - " + budgetProposalBroadcast.GetHash().ToString() + " - " + strError;
 
         bool useIX = false; //true;
-        // if (params.size() > 7) {
-        //     if(params[7].get_str() != "false" && params[7].get_str() != "true")
+        // if (parELP.size() > 7) {
+        //     if(parELP[7].get_str() != "false" && parELP[7].get_str() != "true")
         //         return "Invalid use_ix, must be true or false";
-        //     useIX = params[7].get_str() == "true" ? true : false;
+        //     useIX = parELP[7].get_str() == "true" ? true : false;
         // }
 
         CWalletTx wtx;
@@ -134,28 +134,28 @@ Value mnbudget(const Array& params, bool fHelp)
         std::vector<CMasternodeConfig::CMasternodeEntry> mnEntries;
         mnEntries = masternodeConfig.getEntries();
 
-        if (params.size() != 8)
+        if (parELP.size() != 8)
             throw runtime_error("Correct usage is 'mnbudget submit proposal-name url payment_count block_start ellerium_address monthly_payment_ellerium fee_tx'");
 
         // Check these inputs the same way we check the vote commands:
         // **********************************************************
 
-        std::string strProposalName = params[1].get_str();
+        std::string strProposalName = parELP[1].get_str();
         if (strProposalName.size() > 20)
             return "Invalid proposal name, limit of 20 characters.";
 
-        std::string strURL = params[2].get_str();
+        std::string strURL = parELP[2].get_str();
         if (strURL.size() > 64)
             return "Invalid url, limit of 64 characters.";
 
-        int nPaymentCount = params[3].get_int();
+        int nPaymentCount = parELP[3].get_int();
         if (nPaymentCount < 1)
             return "Invalid payment count, must be more than zero.";
 
         //set block min
         if (pindexPrev != NULL) nBlockMin = pindexPrev->nHeight - GetBudgetPaymentCycleBlocks() * (nPaymentCount + 1);
 
-        int nBlockStart = params[4].get_int();
+        int nBlockStart = parELP[4].get_int();
         if (nBlockStart % GetBudgetPaymentCycleBlocks() != 0) {
             int nNext = pindexPrev->nHeight - pindexPrev->nHeight % GetBudgetPaymentCycleBlocks() + GetBudgetPaymentCycleBlocks();
             return strprintf("Invalid block start - must be a budget cycle block. Next valid block: %d", nNext);
@@ -169,14 +169,14 @@ Value mnbudget(const Array& params, bool fHelp)
         if (nBlockEnd < pindexPrev->nHeight)
             return "Invalid ending block, starting block + (payment_cycle*payments) must be more than current height.";
 
-        CBitcoinAddress address(params[5].get_str());
+        CBitcoinAddress address(parELP[5].get_str());
         if (!address.IsValid())
             throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid Ellerium address");
 
         // Parse Ellerium address
         CScript scriptPubKey = GetScriptForDestination(address.Get());
-        CAmount nAmount = AmountFromValue(params[6]);
-        uint256 hash = ParseHashV(params[7], "parameter 1");
+        CAmount nAmount = AmountFromValue(parELP[6]);
+        uint256 hash = ParseHashV(parELP[7], "parameter 1");
 
         //create the proposal incase we're the first to make it
         CBudgetProposalBroadcast budgetProposalBroadcast(strProposalName, strURL, nPaymentCount, scriptPubKey, nAmount, nBlockStart, hash);
@@ -206,11 +206,11 @@ Value mnbudget(const Array& params, bool fHelp)
         std::vector<CMasternodeConfig::CMasternodeEntry> mnEntries;
         mnEntries = masternodeConfig.getEntries();
 
-        if (params.size() != 3)
+        if (parELP.size() != 3)
             throw runtime_error("Correct usage is 'mnbudget vote-many proposal-hash yes|no'");
 
-        uint256 hash = ParseHashV(params[1], "parameter 1");
-        std::string strVote = params[2].get_str();
+        uint256 hash = ParseHashV(parELP[1], "parameter 1");
+        std::string strVote = parELP[2].get_str();
 
         if (strVote != "yes" && strVote != "no") return "You can only vote 'yes' or 'no'";
         int nVote = VOTE_ABSTAIN;
@@ -286,11 +286,11 @@ Value mnbudget(const Array& params, bool fHelp)
         std::vector<CMasternodeConfig::CMasternodeEntry> mnEntries;
         mnEntries = masternodeConfig.getEntries();
 
-        if (params.size() != 3)
+        if (parELP.size() != 3)
             throw runtime_error("Correct usage is 'mnbudget vote proposal-hash yes|no'");
 
-        uint256 hash = ParseHashV(params[1], "parameter 1");
-        std::string strVote = params[2].get_str();
+        uint256 hash = ParseHashV(parELP[1], "parameter 1");
+        std::string strVote = parELP[2].get_str();
 
         if (strVote != "yes" && strVote != "no") return "You can only vote 'yes' or 'no'";
         int nVote = VOTE_ABSTAIN;
@@ -366,8 +366,8 @@ Value mnbudget(const Array& params, bool fHelp)
 
     if (strCommand == "show") {
         std::string strShow = "valid";
-        if (params.size() == 2)
-            std::string strProposalName = params[1].get_str();
+        if (parELP.size() == 2)
+            std::string strProposalName = parELP[1].get_str();
 
         Object resultObj;
         int64_t nTotalAllotted = 0;
@@ -413,10 +413,10 @@ Value mnbudget(const Array& params, bool fHelp)
     }
 
     if (strCommand == "getinfo") {
-        if (params.size() != 2)
+        if (parELP.size() != 2)
             throw runtime_error("Correct usage is 'mnbudget getinfo profilename'");
 
-        std::string strProposalName = params[1].get_str();
+        std::string strProposalName = parELP[1].get_str();
 
         CBudgetProposal* pbudgetProposal = budget.FindProposal(strProposalName);
 
@@ -453,10 +453,10 @@ Value mnbudget(const Array& params, bool fHelp)
     }
 
     if (strCommand == "getvotes") {
-        if (params.size() != 2)
+        if (parELP.size() != 2)
             throw runtime_error("Correct usage is 'mnbudget getvotes profilename'");
 
-        std::string strProposalName = params[1].get_str();
+        std::string strProposalName = parELP[1].get_str();
 
         Object obj;
 
@@ -490,27 +490,27 @@ Value mnbudget(const Array& params, bool fHelp)
     return Value::null;
 }
 
-Value mnbudgetvoteraw(const Array& params, bool fHelp)
+Value mnbudgetvoteraw(const Array& parELP, bool fHelp)
 {
-    if (fHelp || params.size() != 6)
+    if (fHelp || parELP.size() != 6)
         throw runtime_error(
             "mnbudgetvoteraw <masternode-tx-hash> <masternode-tx-index> <proposal-hash> <yes|no> <time> <vote-sig>\n"
             "Compile and relay a proposal vote with provided external signature instead of signing vote internally\n");
 
-    uint256 hashMnTx = ParseHashV(params[0], "mn tx hash");
-    int nMnTxIndex = params[1].get_int();
+    uint256 hashMnTx = ParseHashV(parELP[0], "mn tx hash");
+    int nMnTxIndex = parELP[1].get_int();
     CTxIn vin = CTxIn(hashMnTx, nMnTxIndex);
 
-    uint256 hashProposal = ParseHashV(params[2], "Proposal hash");
-    std::string strVote = params[3].get_str();
+    uint256 hashProposal = ParseHashV(parELP[2], "Proposal hash");
+    std::string strVote = parELP[3].get_str();
 
     if (strVote != "yes" && strVote != "no") return "You can only vote 'yes' or 'no'";
     int nVote = VOTE_ABSTAIN;
     if (strVote == "yes") nVote = VOTE_YES;
     if (strVote == "no") nVote = VOTE_NO;
 
-    int64_t nTime = params[4].get_int64();
-    std::string strSig = params[5].get_str();
+    int64_t nTime = parELP[4].get_int64();
+    std::string strSig = parELP[5].get_str();
     bool fInvalid = false;
     vector<unsigned char> vchSig = DecodeBase64(strSig.c_str(), &fInvalid);
 
@@ -540,11 +540,11 @@ Value mnbudgetvoteraw(const Array& params, bool fHelp)
     }
 }
 
-Value mnfinalbudget(const Array& params, bool fHelp)
+Value mnfinalbudget(const Array& parELP, bool fHelp)
 {
     string strCommand;
-    if (params.size() >= 1)
-        strCommand = params[0].get_str();
+    if (parELP.size() >= 1)
+        strCommand = parELP[0].get_str();
 
     if (fHelp ||
         (strCommand != "suggest" && strCommand != "vote-many" && strCommand != "vote" && strCommand != "show" && strCommand != "getvotes"))
@@ -561,10 +561,10 @@ Value mnfinalbudget(const Array& params, bool fHelp)
         std::vector<CMasternodeConfig::CMasternodeEntry> mnEntries;
         mnEntries = masternodeConfig.getEntries();
 
-        if (params.size() != 2)
+        if (parELP.size() != 2)
             throw runtime_error("Correct usage is 'mnfinalbudget vote-many BUDGET_HASH'");
 
-        std::string strHash = params[1].get_str();
+        std::string strHash = parELP[1].get_str();
         uint256 hash(strHash);
 
         int success = 0;
@@ -636,10 +636,10 @@ Value mnfinalbudget(const Array& params, bool fHelp)
         std::vector<CMasternodeConfig::CMasternodeEntry> mnEntries;
         mnEntries = masternodeConfig.getEntries();
 
-        if (params.size() != 2)
+        if (parELP.size() != 2)
             throw runtime_error("Correct usage is 'mnfinalbudget vote BUDGET_HASH'");
 
-        std::string strHash = params[1].get_str();
+        std::string strHash = parELP[1].get_str();
         uint256 hash(strHash);
 
         CPubKey pubKeyMasternode;
@@ -694,10 +694,10 @@ Value mnfinalbudget(const Array& params, bool fHelp)
     }
 
     if (strCommand == "getvotes") {
-        if (params.size() != 2)
+        if (parELP.size() != 2)
             throw runtime_error("Correct usage is 'mnbudget getvotes budget-hash'");
 
-        std::string strHash = params[1].get_str();
+        std::string strHash = parELP[1].get_str();
         uint256 hash(strHash);
 
         Object obj;

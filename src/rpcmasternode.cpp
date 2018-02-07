@@ -51,9 +51,9 @@ void SendMoney(const CTxDestination& address, CAmount nValue, CWalletTx& wtxNew,
         throw JSONRPCError(RPC_WALLET_ERROR, "Error: The transaction was rejected! This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.");
 }
 
-Value obfuscation(const Array& params, bool fHelp)
+Value obfuscation(const Array& parELP, bool fHelp)
 {
-    if (fHelp || params.size() == 0)
+    if (fHelp || parELP.size() == 0)
         throw runtime_error(
             "obfuscation <elleriumaddress> <amount>\n"
             "elleriumaddress, reset, or auto (AutoDenominate)"
@@ -63,31 +63,31 @@ Value obfuscation(const Array& params, bool fHelp)
     if (pwalletMain->IsLocked())
         throw JSONRPCError(RPC_WALLET_UNLOCK_NEEDED, "Error: Please enter the wallet passphrase with walletpassphrase first.");
 
-    if (params[0].get_str() == "auto") {
+    if (parELP[0].get_str() == "auto") {
         if (fMasterNode)
             return "ObfuScation is not supported from masternodes";
 
         return "DoAutomaticDenominating " + (obfuScationPool.DoAutomaticDenominating() ? "successful" : ("failed: " + obfuScationPool.GetStatus()));
     }
 
-    if (params[0].get_str() == "reset") {
+    if (parELP[0].get_str() == "reset") {
         obfuScationPool.Reset();
         return "successfully reset obfuscation";
     }
 
-    if (params.size() != 2)
+    if (parELP.size() != 2)
         throw runtime_error(
             "obfuscation <elleriumaddress> <amount>\n"
             "elleriumaddress, denominate, or auto (AutoDenominate)"
             "<amount> is a real and will be rounded to the next 0.1" +
             HelpRequiringPassphrase());
 
-    CBitcoinAddress address(params[0].get_str());
+    CBitcoinAddress address(parELP[0].get_str());
     if (!address.IsValid())
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid Ellerium address");
 
     // Amount
-    CAmount nAmount = AmountFromValue(params[1]);
+    CAmount nAmount = AmountFromValue(parELP[1]);
 
     // Wallet comments
     CWalletTx wtx;
@@ -100,9 +100,9 @@ Value obfuscation(const Array& params, bool fHelp)
 }
 
 
-Value getpoolinfo(const Array& params, bool fHelp)
+Value getpoolinfo(const Array& parELP, bool fHelp)
 {
-    if (fHelp || params.size() != 0)
+    if (fHelp || parELP.size() != 0)
         throw runtime_error(
             "getpoolinfo\n"
             "Returns an object containing anonymous pool-related information.");
@@ -116,11 +116,11 @@ Value getpoolinfo(const Array& params, bool fHelp)
 }
 
 
-Value masternode(const Array& params, bool fHelp)
+Value masternode(const Array& parELP, bool fHelp)
 {
     string strCommand;
-    if (params.size() >= 1)
-        strCommand = params[0].get_str();
+    if (parELP.size() >= 1)
+        strCommand = parELP[0].get_str();
 
     if (fHelp ||
         (strCommand != "start" && strCommand != "start-alias" && strCommand != "start-many" && strCommand != "start-all" && strCommand != "start-missing" &&
@@ -149,9 +149,9 @@ Value masternode(const Array& params, bool fHelp)
             "  winners      - Print list of masternode winners\n");
 
     if (strCommand == "list") {
-        Array newParams(params.size() - 1);
-        std::copy(params.begin() + 1, params.end(), newParams.begin());
-        return masternodelist(newParams, fHelp);
+        Array newParELP(parELP.size() - 1);
+        std::copy(parELP.begin() + 1, parELP.end(), newParELP.begin());
+        return masternodelist(newParELP, fHelp);
     }
 
     if (strCommand == "budget") {
@@ -160,8 +160,8 @@ Value masternode(const Array& params, bool fHelp)
 
     if (strCommand == "connect") {
         std::string strAddress = "";
-        if (params.size() == 2) {
-            strAddress = params[1].get_str();
+        if (parELP.size() == 2) {
+            strAddress = parELP[1].get_str();
         } else {
             throw runtime_error("Masternode address required\n");
         }
@@ -178,19 +178,19 @@ Value masternode(const Array& params, bool fHelp)
     }
 
     if (strCommand == "count") {
-        if (params.size() > 2) {
+        if (parELP.size() > 2) {
             throw runtime_error("too many parameters\n");
         }
-        if (params.size() == 2) {
+        if (parELP.size() == 2) {
             int nCount = 0;
 
             if (chainActive.Tip())
                 mnodeman.GetNextMasternodeInQueueForPayment(chainActive.Tip()->nHeight, true, nCount);
 
-            if (params[1] == "obf") return mnodeman.CountEnabled(ActiveProtocol());
-            if (params[1] == "enabled") return mnodeman.CountEnabled();
-            if (params[1] == "qualify") return nCount;
-            if (params[1] == "all") return strprintf("Total: %d (OBF Compatible: %d / Enabled: %d / Qualify: %d)",
+            if (parELP[1] == "obf") return mnodeman.CountEnabled(ActiveProtocol());
+            if (parELP[1] == "enabled") return mnodeman.CountEnabled();
+            if (parELP[1] == "qualify") return nCount;
+            if (parELP[1] == "all") return strprintf("Total: %d (OBF Compatible: %d / Enabled: %d / Qualify: %d)",
                 mnodeman.size(),
                 mnodeman.CountEnabled(ActiveProtocol()),
                 mnodeman.CountEnabled(),
@@ -242,8 +242,8 @@ Value masternode(const Array& params, bool fHelp)
             SecureString strWalletPass;
             strWalletPass.reserve(100);
 
-            if (params.size() == 2) {
-                strWalletPass = params[1].get_str().c_str();
+            if (parELP.size() == 2) {
+                strWalletPass = parELP[1].get_str().c_str();
             } else {
                 throw runtime_error("Your wallet is locked, passphrase is required\n");
             }
@@ -263,18 +263,18 @@ Value masternode(const Array& params, bool fHelp)
     }
 
     if (strCommand == "start-alias") {
-        if (params.size() < 2) {
+        if (parELP.size() < 2) {
             throw runtime_error("command needs at least 2 parameters\n");
         }
 
-        std::string alias = params[1].get_str();
+        std::string alias = parELP[1].get_str();
 
         if (pwalletMain->IsLocked()) {
             SecureString strWalletPass;
             strWalletPass.reserve(100);
 
-            if (params.size() == 3) {
-                strWalletPass = params[2].get_str().c_str();
+            if (parELP.size() == 3) {
+                strWalletPass = parELP[2].get_str().c_str();
             } else {
                 throw runtime_error("Your wallet is locked, passphrase is required\n");
             }
@@ -318,8 +318,8 @@ Value masternode(const Array& params, bool fHelp)
             SecureString strWalletPass;
             strWalletPass.reserve(100);
 
-            if (params.size() == 2) {
-                strWalletPass = params[1].get_str().c_str();
+            if (parELP.size() == 2) {
+                strWalletPass = parELP[1].get_str().c_str();
             } else {
                 throw runtime_error("Your wallet is locked, passphrase is required\n");
             }
@@ -445,9 +445,9 @@ Value masternode(const Array& params, bool fHelp)
     if (strCommand == "winners") {
         int nLast = 10;
 
-        if (params.size() >= 2) {
+        if (parELP.size() >= 2) {
             try {
-                nLast = std::stoi(params[1].get_str());
+                nLast = std::stoi(parELP[1].get_str());
             } catch (const std::exception& e) {
                 throw runtime_error("Exception on param 2");
             }
@@ -468,9 +468,9 @@ Value masternode(const Array& params, bool fHelp)
     if (strCommand == "calcscore") {
         int nLast = 10;
 
-        if (params.size() >= 2) {
+        if (parELP.size() >= 2) {
             try {
-                nLast = std::stoi(params[1].get_str());
+                nLast = std::stoi(parELP[1].get_str());
             } catch (const boost::bad_lexical_cast &) {
                 throw runtime_error("Exception on param 2");
             }
@@ -498,13 +498,13 @@ Value masternode(const Array& params, bool fHelp)
     return Value::null;
 }
 
-Value masternodelist(const Array& params, bool fHelp)
+Value masternodelist(const Array& parELP, bool fHelp)
 {
     std::string strMode = "status";
     std::string strFilter = "";
 
-    if (params.size() >= 1) strMode = params[0].get_str();
-    if (params.size() == 2) strFilter = params[1].get_str();
+    if (parELP.size() >= 1) strMode = parELP[0].get_str();
+    if (parELP.size() == 2) strFilter = parELP[1].get_str();
 
     if (fHelp ||
         (strMode != "status" && strMode != "vin" && strMode != "pubkey" && strMode != "lastseen" && strMode != "activeseconds" && strMode != "rank" && strMode != "addr" && strMode != "protocol" && strMode != "full" && strMode != "lastpaid")) {

@@ -7,7 +7,7 @@
 
 #include "version.h"
 #include "main.h"
-#include "streams.h"
+#include "streELP.h"
 #include "util.h"
 
 void zmqError(const char *str)
