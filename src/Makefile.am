@@ -421,8 +421,7 @@ ellerium_cli_LDADD = \
   $(SSL_LIBS) \
   $(CRYPTO_LIBS)
 
-ellerium_cli_SOURCES = \
-  ellerium-cli.cpp
+ellerium_cli_SOURCES = ellerium-cli.cpp
 
 ellerium_cli_CPPFLAGS = $(BITCOIN_INCLUDES)
 #
