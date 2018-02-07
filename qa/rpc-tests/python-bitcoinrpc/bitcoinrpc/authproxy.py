@@ -113,7 +113,7 @@ class AuthServiceProxy(object):
                                  json.dumps(args, default=EncodeDecimal)))
         postdata = json.dumps({'version': '1.1',
                                'method': self.__service_name,
-                               'parELP': args,
+                               'params': args,
                                'id': AuthServiceProxy.__id_count}, default=EncodeDecimal)
         self.__conn.request('POST', self.__url.path, postdata,
                             {'Host': self.__url.hostname,

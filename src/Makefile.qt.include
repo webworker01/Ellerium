@@ -1,4 +1,4 @@
-bin_PROGRELP += qt/ellerium-qt
+bin_PROGRAMS += qt/ellerium-qt
 EXTRA_LIBRARIES += qt/libbitcoinqt.a
 
 # ellerium qt core #

@@ -6,7 +6,7 @@
 
 #include "hash.h"
 #include "serialize.h"
-#include "streELP.h"
+#include "streams.h"
 
 using namespace std;
 

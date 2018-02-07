@@ -8,7 +8,7 @@
 #include "primitives/transaction.h"
 #include "script/script.h"
 #include "script/standard.h"
-#include "streELP.h"
+#include "streams.h"
 
 #include <math.h>
 #include <stdlib.h>

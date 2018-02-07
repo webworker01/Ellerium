@@ -248,7 +248,7 @@ public:
 class CObfuScationSigner
 {
 public:
-    /// Is the inputs associated with this public key? (and there is 100000 ELP - checking if valid masternode)
+    /// Is the inputs associated with this public key? (and there is 100000 AMS - checking if valid masternode)
     bool IsVinAssociatedWithPubkey(CTxIn& vin, CPubKey& pubkey);
     /// Set the private/public key values, returns true if successful
     bool GetKeysFromSecret(std::string strSecret, CKey& keyRet, CPubKey& pubkeyRet);
@@ -365,7 +365,7 @@ public:
 
     void InitCollateralAddress()
     {
-        SetCollateralAddress(ParELP().ObfuscationPoolDummyAddress());
+        SetCollateralAddress(Params().ObfuscationPoolDummyAddress());
     }
 
     void SetMinBlockSpacing(int minBlockSpacingIn)
@@ -429,7 +429,7 @@ public:
     /// Get the maximum number of transactions for the pool
     int GetMaxPoolTransactions()
     {
-        return ParELP().PoolMaxTransactions();
+        return Params().PoolMaxTransactions();
     }
 
     /// Do we have enough users to take entries?

@@ -4,7 +4,7 @@
 
 #include "merkleblock.h"
 #include "serialize.h"
-#include "streELP.h"
+#include "streams.h"
 #include "uint256.h"
 #include "version.h"
 

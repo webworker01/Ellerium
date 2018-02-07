@@ -46,9 +46,9 @@ using namespace std;
  *
  * Or alternatively, create a specific query method for the information.
  **/
-Value getinfo(const Array& parELP, bool fHelp)
+Value getinfo(const Array& params, bool fHelp)
 {
-    if (fHelp || parELP.size() != 0)
+    if (fHelp || params.size() != 0)
         throw runtime_error(
             "getinfo\n"
             "Returns an object containing various state info.\n"
@@ -95,7 +95,7 @@ Value getinfo(const Array& parELP, bool fHelp)
     obj.push_back(Pair("connections", (int)vNodes.size()));
     obj.push_back(Pair("proxy", (proxy.IsValid() ? proxy.ToStringIPPort() : string())));
     obj.push_back(Pair("difficulty", (double)GetDifficulty()));
-    obj.push_back(Pair("testnet", ParELP().TestnetToBeDeprecatedFieldRPC()));
+    obj.push_back(Pair("testnet", Params().TestnetToBeDeprecatedFieldRPC()));
 #ifdef ENABLE_WALLET
     if (pwalletMain) {
         obj.push_back(Pair("keypoololdest", pwalletMain->GetOldestKeyPoolTime()));
@@ -116,14 +116,14 @@ Value getinfo(const Array& parELP, bool fHelp)
     return obj;
 }
 
-Value mnsync(const Array& parELP, bool fHelp)
+Value mnsync(const Array& params, bool fHelp)
 {
-    if (fHelp || parELP.size() != 1)
+    if (fHelp || params.size() != 1)
         throw runtime_error(
             "mnsync [status|reset]\n"
             "Returns the sync status or resets sync.\n");
 
-    std::string strMode = parELP[0].get_str();
+    std::string strMode = params[0].get_str();
 
     if (strMode == "status") {
         Object obj;
@@ -208,30 +208,30 @@ public:
 /*
     Used for updating/reading spork settings on the network
 */
-Value spork(const Array& parELP, bool fHelp)
+Value spork(const Array& params, bool fHelp)
 {
-    if (parELP.size() == 1 && parELP[0].get_str() == "show") {
+    if (params.size() == 1 && params[0].get_str() == "show") {
         Object ret;
         for (int nSporkID = SPORK_START; nSporkID <= SPORK_END; nSporkID++) {
             if (sporkManager.GetSporkNameByID(nSporkID) != "Unknown")
                 ret.push_back(Pair(sporkManager.GetSporkNameByID(nSporkID), GetSporkValue(nSporkID)));
         }
         return ret;
-    } else if (parELP.size() == 1 && parELP[0].get_str() == "active") {
+    } else if (params.size() == 1 && params[0].get_str() == "active") {
         Object ret;
         for (int nSporkID = SPORK_START; nSporkID <= SPORK_END; nSporkID++) {
             if (sporkManager.GetSporkNameByID(nSporkID) != "Unknown")
                 ret.push_back(Pair(sporkManager.GetSporkNameByID(nSporkID), IsSporkActive(nSporkID)));
         }
         return ret;
-    } else if (parELP.size() == 2) {
-        int nSporkID = sporkManager.GetSporkIDByName(parELP[0].get_str());
+    } else if (params.size() == 2) {
+        int nSporkID = sporkManager.GetSporkIDByName(params[0].get_str());
         if (nSporkID == -1) {
             return "Invalid spork name";
         }
 
         // SPORK VALUE
-        int64_t nValue = parELP[1].get_int();
+        int64_t nValue = params[1].get_int();
 
         //broadcast new spork
         if (sporkManager.UpdateSpork(nSporkID, nValue)) {
@@ -249,9 +249,9 @@ Value spork(const Array& parELP, bool fHelp)
         HelpRequiringPassphrase());
 }
 
-Value validateaddress(const Array& parELP, bool fHelp)
+Value validateaddress(const Array& params, bool fHelp)
 {
-    if (fHelp || parELP.size() != 1)
+    if (fHelp || params.size() != 1)
         throw runtime_error(
             "validateaddress \"elleriumaddress\"\n"
             "\nReturn information about the given ellerium address.\n"
@@ -270,7 +270,7 @@ Value validateaddress(const Array& parELP, bool fHelp)
             "\nExamples:\n" +
             HelpExampleCli("validateaddress", "\"1PSSGeFHDnKNxiEyFrD1wcEaHr9hrQDDWc\"") + HelpExampleRpc("validateaddress", "\"1PSSGeFHDnKNxiEyFrD1wcEaHr9hrQDDWc\""));
 
-    CBitcoinAddress address(parELP[0].get_str());
+    CBitcoinAddress address(params[0].get_str());
     bool isValid = address.IsValid();
 
     Object ret;
@@ -297,10 +297,10 @@ Value validateaddress(const Array& parELP, bool fHelp)
 /**
  * Used by addmultisigaddress / createmultisig:
  */
-CScript _createmultisig_redeemScript(const Array& parELP)
+CScript _createmultisig_redeemScript(const Array& params)
 {
-    int nRequired = parELP[0].get_int();
-    const Array& keys = parELP[1].get_array();
+    int nRequired = params[0].get_int();
+    const Array& keys = params[1].get_array();
 
     // Gather public keys
     if (nRequired < 1)
@@ -354,9 +354,9 @@ CScript _createmultisig_redeemScript(const Array& parELP)
     return result;
 }
 
-Value createmultisig(const Array& parELP, bool fHelp)
+Value createmultisig(const Array& params, bool fHelp)
 {
-    if (fHelp || parELP.size() < 2 || parELP.size() > 2) {
+    if (fHelp || params.size() < 2 || params.size() > 2) {
         string msg = "createmultisig nrequired [\"key\",...]\n"
                      "\nCreates a multi-signature address with n signature of m keys required.\n"
                      "It returns a json object with the address and redeemScript.\n"
@@ -383,7 +383,7 @@ Value createmultisig(const Array& parELP, bool fHelp)
     }
 
     // Construct using pay-to-script-hash:
-    CScript inner = _createmultisig_redeemScript(parELP);
+    CScript inner = _createmultisig_redeemScript(params);
     CScriptID innerID(inner);
     CBitcoinAddress address(innerID);
 
@@ -394,9 +394,9 @@ Value createmultisig(const Array& parELP, bool fHelp)
     return result;
 }
 
-Value verifymessage(const Array& parELP, bool fHelp)
+Value verifymessage(const Array& params, bool fHelp)
 {
-    if (fHelp || parELP.size() != 3)
+    if (fHelp || params.size() != 3)
         throw runtime_error(
             "verifymessage \"elleriumaddress\" \"signature\" \"message\"\n"
             "\nVerify a signed message\n"
@@ -413,9 +413,9 @@ Value verifymessage(const Array& parELP, bool fHelp)
             "\nVerify the signature\n" + HelpExampleCli("verifymessage", "\"1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XZ\" \"signature\" \"my message\"") +
             "\nAs json rpc\n" + HelpExampleRpc("verifymessage", "\"1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XZ\", \"signature\", \"my message\""));
 
-    string strAddress = parELP[0].get_str();
-    string strSign = parELP[1].get_str();
-    string strMessage = parELP[2].get_str();
+    string strAddress = params[0].get_str();
+    string strSign = params[1].get_str();
+    string strMessage = params[2].get_str();
 
     CBitcoinAddress addr(strAddress);
     if (!addr.IsValid())
@@ -442,9 +442,9 @@ Value verifymessage(const Array& parELP, bool fHelp)
     return (pubkey.GetID() == keyID);
 }
 
-Value setmocktime(const Array& parELP, bool fHelp)
+Value setmocktime(const Array& params, bool fHelp)
 {
-    if (fHelp || parELP.size() != 1)
+    if (fHelp || params.size() != 1)
         throw runtime_error(
             "setmocktime timestamp\n"
             "\nSet the local time to given timestamp (-regtest only)\n"
@@ -452,19 +452,19 @@ Value setmocktime(const Array& parELP, bool fHelp)
             "1. timestamp  (integer, required) Unix seconds-since-epoch timestamp\n"
             "   Pass 0 to go back to using the system time.");
 
-    if (!ParELP().MineBlocksOnDemand())
+    if (!Params().MineBlocksOnDemand())
         throw runtime_error("setmocktime for regression testing (-regtest mode) only");
 
-    RPCTypeCheck(parELP, boost::assign::list_of(int_type));
-    SetMockTime(parELP[0].get_int64());
+    RPCTypeCheck(params, boost::assign::list_of(int_type));
+    SetMockTime(params[0].get_int64());
 
     return Value::null;
 }
 
 #ifdef ENABLE_WALLET
-Value getstakingstatus(const Array& parELP, bool fHelp)
+Value getstakingstatus(const Array& params, bool fHelp)
 {
-    if (fHelp || parELP.size() != 0)
+    if (fHelp || params.size() != 0)
         throw runtime_error(
             "getstakingstatus\n"
             "Returns an object containing various staking information.\n"

@@ -5,7 +5,7 @@
 // Copyright (c) 2017-2018 The Ellerium developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
-#include "chainparELP.h"
+#include "chainparams.h"
 #include "random.h"
 #include "util.h"
 #include "utilstrencodings.h"
@@ -17,7 +17,7 @@ struct SeedSpec6 {
     uint8_t addr[16];
     uint16_t port;
 };
-#include "chainparELPseeds.h"
+#include "chainparamsseeds.h"
 /**
  * Main network
  */
@@ -68,12 +68,12 @@ static const Checkpoints::CCheckpointData dataRegtest = {
     1518000372,
     0,
     100};
-class CMainParELP : public CChainParELP
+class CMainParams : public CChainParams
 {
 public:
-    CMainParELP()
+    CMainParams()
     {
-        networkID = CBaseChainParELP::MAIN;
+        networkID = CBaseChainParams::MAIN;
         strNetworkID = "main";
         /**
          * The message start string is designed to be unlikely to occur in normal data.
@@ -144,16 +144,16 @@ public:
         return data;
     }
 };
-static CMainParELP mainParELP;
+static CMainParams mainParams;
 /**
  * Testnet (v3)
  */
-class CTestNetParELP : public CMainParELP
+class CTestNetParams : public CMainParams
 {
 public:
-    CTestNetParELP()
+    CTestNetParams()
     {
-        networkID = CBaseChainParELP::TESTNET;
+        networkID = CBaseChainParams::TESTNET;
         strNetworkID = "test";
         pchMessageStart[0] = 0x45;
         pchMessageStart[1] = 0x76;
@@ -204,16 +204,16 @@ public:
         return dataTestnet;
     }
 };
-static CTestNetParELP testNetParELP;
+static CTestNetParams testNetParams;
 /**
  * Regression test
  */
-class CRegTestParELP : public CTestNetParELP
+class CRegTestParams : public CTestNetParams
 {
 public:
-    CRegTestParELP()
+    CRegTestParams()
     {
-        networkID = CBaseChainParELP::REGTEST;
+        networkID = CBaseChainParams::REGTEST;
         strNetworkID = "regtest";
         pchMessageStart[0] = 0xa1;
         pchMessageStart[1] = 0xcf;
@@ -245,16 +245,16 @@ public:
         return dataRegtest;
     }
 };
-static CRegTestParELP regTestParELP;
+static CRegTestParams regTestParams;
 /**
  * Unit test
  */
-class CUnitTestParELP : public CMainParELP, public CModifiableParELP
+class CUnitTestParams : public CMainParams, public CModifiableParams
 {
 public:
-    CUnitTestParELP()
+    CUnitTestParams()
     {
-        networkID = CBaseChainParELP::UNITTEST;
+        networkID = CBaseChainParams::UNITTEST;
         strNetworkID = "unittest";
         nDefaultPort = 51478;
         vFixedSeeds.clear(); //! Unit test mode doesn't have any fixed seeds.
@@ -276,45 +276,45 @@ public:
     virtual void setAllowMinDifficultyBlocks(bool afAllowMinDifficultyBlocks) { fAllowMinDifficultyBlocks = afAllowMinDifficultyBlocks; }
     virtual void setSkipProofOfWorkCheck(bool afSkipProofOfWorkCheck) { fSkipProofOfWorkCheck = afSkipProofOfWorkCheck; }
 };
-static CUnitTestParELP unitTestParELP;
-static CChainParELP* pCurrentParELP = 0;
-CModifiableParELP* ModifiableParELP()
+static CUnitTestParams unitTestParams;
+static CChainParams* pCurrentParams = 0;
+CModifiableParams* ModifiableParams()
 {
-    assert(pCurrentParELP);
-    assert(pCurrentParELP == &unitTestParELP);
-    return (CModifiableParELP*)&unitTestParELP;
+    assert(pCurrentParams);
+    assert(pCurrentParams == &unitTestParams);
+    return (CModifiableParams*)&unitTestParams;
 }
-const CChainParELP& ParELP()
+const CChainParams& Params()
 {
-    assert(pCurrentParELP);
-    return *pCurrentParELP;
+    assert(pCurrentParams);
+    return *pCurrentParams;
 }
-CChainParELP& ParELP(CBaseChainParELP::Network network)
+CChainParams& Params(CBaseChainParams::Network network)
 {
     switch (network) {
-    case CBaseChainParELP::MAIN:
-        return mainParELP;
-    case CBaseChainParELP::TESTNET:
-        return testNetParELP;
-    case CBaseChainParELP::REGTEST:
-        return regTestParELP;
-    case CBaseChainParELP::UNITTEST:
-        return unitTestParELP;
+    case CBaseChainParams::MAIN:
+        return mainParams;
+    case CBaseChainParams::TESTNET:
+        return testNetParams;
+    case CBaseChainParams::REGTEST:
+        return regTestParams;
+    case CBaseChainParams::UNITTEST:
+        return unitTestParams;
     default:
         assert(false && "Unimplemented network");
-        return mainParELP;
+        return mainParams;
     }
 }
-void SelectParELP(CBaseChainParELP::Network network)
+void SelectParams(CBaseChainParams::Network network)
 {
-    SelectBaseParELP(network);
-    pCurrentParELP = &ParELP(network);
+    SelectBaseParams(network);
+    pCurrentParams = &Params(network);
 }
-bool SelectParELPFromCommandLine()
+bool SelectParamsFromCommandLine()
 {
-    CBaseChainParELP::Network network = NetworkIdFromCommandLine();
-    if (network == CBaseChainParELP::MAX_NETWORK_TYPES)
+    CBaseChainParams::Network network = NetworkIdFromCommandLine();
+    if (network == CBaseChainParams::MAX_NETWORK_TYPES)
         return false;
-    SelectParELP(network);
+    SelectParams(network);
     return true;
 }

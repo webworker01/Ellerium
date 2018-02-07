@@ -351,10 +351,10 @@ TINYFORMAT_DEFINE_FORMATVALUE_CHAR(unsigned char)
 // extra versions by hand.
 
 /*[[[cog
-maxParELP = 16
+maxParams = 16
 
 def makeCommaSepLists(lineTemplate, elemTemplate, startInd=1):
-    for j in range(startInd,maxParELP+1):
+    for j in range(startInd,maxParams+1):
         list = ', '.join([elemTemplate % {'i':i} for i in range(startInd,j+1)])
         cog.outl(lineTemplate % {'j':j, 'list':list})
 
@@ -375,7 +375,7 @@ makeCommaSepLists('#define TINYFORMAT_PASSARGS_TAIL_%(j)d , %(list)s',
 
 cog.outl()
 cog.outl('#define TINYFORMAT_FOREACH_ARGNUM(m) \\\n    ' +
-         ' '.join(['m(%d)' % (j,) for j in range(1,maxParELP+1)]))
+         ' '.join(['m(%d)' % (j,) for j in range(1,maxParams+1)]))
 ]]]*/
 #define TINYFORMAT_ARGTYPES_1 class T1
 #define TINYFORMAT_ARGTYPES_2 class T1, class T2
@@ -519,15 +519,15 @@ private:
     // stream.  Return true if formatting proceeded (generic version always
     // returns false)
     template <typename T>
-    static bool formatCStringTruncate(std::ostream& /*out*/, const T& /*value*/, std::streELPize /*truncLen*/)
+    static bool formatCStringTruncate(std::ostream& /*out*/, const T& /*value*/, std::streamsize /*truncLen*/)
     {
         return false;
     }
 #define TINYFORMAT_DEFINE_FORMAT_C_STRING_TRUNCATE(type)              \
     static bool formatCStringTruncate(std::ostream& out, type* value, \
-        std::streELPize truncLen)                                     \
+        std::streamsize truncLen)                                     \
     {                                                                 \
-        std::streELPize len = 0;                                      \
+        std::streamsize len = 0;                                      \
         while (len < truncLen && value[len] != 0)                     \
             ++len;                                                    \
         out.write(value, len);                                        \
@@ -553,10 +553,10 @@ private:
         for (; true; ++c) {
             switch (*c) {
             case '\0':
-                out.write(fmt, static_cast<std::streELPize>(c - fmt));
+                out.write(fmt, static_cast<std::streamsize>(c - fmt));
                 return c;
             case '%':
-                out.write(fmt, static_cast<std::streELPize>(c - fmt));
+                out.write(fmt, static_cast<std::streamsize>(c - fmt));
                 if (*(c + 1) != '%')
                     return c;
                 // for "%%", tack trailing % onto next literal section.
@@ -566,7 +566,7 @@ private:
         }
     }
 
-    static const char* streELPtateFromFormat(std::ostream& out,
+    static const char* streamStateFromFormat(std::ostream& out,
         unsigned int& extraFlags,
         const char* fmtStart,
         int variableWidth,
@@ -586,8 +586,8 @@ private:
     int m_variableWidth;
     int m_variablePrecision;
     // Saved stream state
-    std::streELPize m_origWidth;
-    std::streELPize m_origPrecision;
+    std::streamsize m_origWidth;
+    std::streamsize m_origPrecision;
     std::ios::fmtflags m_origFlags;
     char m_origFill;
 };
@@ -603,7 +603,7 @@ TINYFORMAT_NOINLINE // < greatly reduces bloat in optimized builds
     const char* fmtEnd = 0;
     if (m_extraFlags == Flag_None && !m_wantWidth && !m_wantPrecision) {
         m_fmt = printFormatStringLiteral(m_out, m_fmt);
-        fmtEnd = streELPtateFromFormat(m_out, m_extraFlags, m_fmt, 0, 0);
+        fmtEnd = streamStateFromFormat(m_out, m_extraFlags, m_fmt, 0, 0);
         m_wantWidth = (m_extraFlags & Flag_VariableWidth) != 0;
         m_wantPrecision = (m_extraFlags & Flag_VariablePrecision) != 0;
     }
@@ -622,7 +622,7 @@ TINYFORMAT_NOINLINE // < greatly reduces bloat in optimized builds
         }
         // If we get here, we've set both the variable precision and width as
         // required and we need to rerun the stream state setup to insert these.
-        fmtEnd = streELPtateFromFormat(m_out, m_extraFlags, m_fmt,
+        fmtEnd = streamStateFromFormat(m_out, m_extraFlags, m_fmt,
             m_variableWidth, m_variablePrecision);
     }
 
@@ -671,7 +671,7 @@ TINYFORMAT_NOINLINE // < greatly reduces bloat in optimized builds
 // Formatting options which can't be natively represented using the ostream
 // state are returned in the extraFlags parameter which is a bitwise
 // combination of values from the ExtraFormatFlags enum.
-inline const char* FormatIterator::streELPtateFromFormat(std::ostream& out,
+inline const char* FormatIterator::streamStateFromFormat(std::ostream& out,
     unsigned int& extraFlags,
     const char* fmtStart,
     int variableWidth,
@@ -828,7 +828,7 @@ inline const char* FormatIterator::streELPtateFromFormat(std::ostream& out,
     if (intConversion && precisionSet && !widthSet) {
         // "precision" for integers gives the minimum number of digits (to be
         // padded with zeros on the left).  This isn't really supported by the
-        // iostreELP, but we can approximately simulate it with the width if
+        // iostreams, but we can approximately simulate it with the width if
         // the width isn't otherwise used.
         out.width(out.precision());
         out.setf(std::ios::internal, std::ios::adjustfield);

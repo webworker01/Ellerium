@@ -2,17 +2,17 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef BITCOIN_CHAINPARELPBASE_H
-#define BITCOIN_CHAINPARELPBASE_H
+#ifndef BITCOIN_CHAINPARAMSBASE_H
+#define BITCOIN_CHAINPARAMSBASE_H
 
 #include <string>
 #include <vector>
 
 /**
- * CBaseChainParELP defines the base parameters (shared between ellerium-cli and elleriumd)
+ * CBaseChainParams defines the base parameters (shared between ellerium-cli and elleriumd)
  * of a given instance of the Ellerium system.
  */
-class CBaseChainParELP
+class CBaseChainParams
 {
 public:
     enum Network {
@@ -28,7 +28,7 @@ public:
     int RPCPort() const { return nRPCPort; }
 
 protected:
-    CBaseChainParELP() {}
+    CBaseChainParams() {}
 
     int nRPCPort;
     std::string strDataDir;
@@ -39,27 +39,27 @@ protected:
  * Return the currently selected parameters. This won't change after app startup
  * outside of the unit tests.
  */
-const CBaseChainParELP& BaseParELP();
+const CBaseChainParams& BaseParams();
 
-/** Sets the parELP returned by ParELP() to those for the given network. */
-void SelectBaseParELP(CBaseChainParELP::Network network);
+/** Sets the params returned by Params() to those for the given network. */
+void SelectBaseParams(CBaseChainParams::Network network);
 
 /**
  * Looks for -regtest or -testnet and returns the appropriate Network ID.
  * Returns MAX_NETWORK_TYPES if an invalid combination is given.
  */
-CBaseChainParELP::Network NetworkIdFromCommandLine();
+CBaseChainParams::Network NetworkIdFromCommandLine();
 
 /**
- * Calls NetworkIdFromCommandLine() and then calls SelectParELP as appropriate.
+ * Calls NetworkIdFromCommandLine() and then calls SelectParams as appropriate.
  * Returns false if an invalid combination is given.
  */
-bool SelectBaseParELPFromCommandLine();
+bool SelectBaseParamsFromCommandLine();
 
 /**
- * Return true if SelectBaseParELPFromCommandLine() has been called to select
+ * Return true if SelectBaseParamsFromCommandLine() has been called to select
  * a network.
  */
-bool AreBaseParELPConfigured();
+bool AreBaseParamsConfigured();
 
-#endif // BITCOIN_CHAINPARELPBASE_H
+#endif // BITCOIN_CHAINPARAMSBASE_H

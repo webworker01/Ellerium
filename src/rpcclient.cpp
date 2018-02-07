@@ -21,11 +21,11 @@ using namespace json_spirit;
 class CRPCConvertParam
 {
 public:
-    std::string methodName; //! method whose parELP want conversion
+    std::string methodName; //! method whose params want conversion
     int paramIdx;           //! 0-based idx of param to convert
 };
 // ***TODO***
-static const CRPCConvertParam vRPCConvertParELP[] =
+static const CRPCConvertParam vRPCConvertParams[] =
     {
         {"stop", 0},
         {"setmocktime", 0},
@@ -124,27 +124,27 @@ public:
 CRPCConvertTable::CRPCConvertTable()
 {
     const unsigned int n_elem =
-        (sizeof(vRPCConvertParELP) / sizeof(vRPCConvertParELP[0]));
+        (sizeof(vRPCConvertParams) / sizeof(vRPCConvertParams[0]));
 
     for (unsigned int i = 0; i < n_elem; i++) {
-        members.insert(std::make_pair(vRPCConvertParELP[i].methodName,
-            vRPCConvertParELP[i].paramIdx));
+        members.insert(std::make_pair(vRPCConvertParams[i].methodName,
+            vRPCConvertParams[i].paramIdx));
     }
 }
 
 static CRPCConvertTable rpcCvtTable;
 
 /** Convert strings to command-specific RPC representation */
-Array RPCConvertValues(const std::string& strMethod, const std::vector<std::string>& strParELP)
+Array RPCConvertValues(const std::string& strMethod, const std::vector<std::string>& strParams)
 {
-    Array parELP;
+    Array params;
 
-    for (unsigned int idx = 0; idx < strParELP.size(); idx++) {
-        const std::string& strVal = strParELP[idx];
+    for (unsigned int idx = 0; idx < strParams.size(); idx++) {
+        const std::string& strVal = strParams[idx];
 
         // insert string value directly
         if (!rpcCvtTable.convert(strMethod, idx)) {
-            parELP.push_back(strVal);
+            params.push_back(strVal);
         }
 
         // parse string as JSON, insert bool/number/object/etc. value
@@ -152,9 +152,9 @@ Array RPCConvertValues(const std::string& strMethod, const std::vector<std::stri
             Value jVal;
             if (!read_string(strVal, jVal))
                 throw runtime_error(string("Error parsing JSON:") + strVal);
-            parELP.push_back(jVal);
+            params.push_back(jVal);
         }
     }
 
-    return parELP;
+    return params;
 }

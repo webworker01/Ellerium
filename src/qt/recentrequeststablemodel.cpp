@@ -8,7 +8,7 @@
 #include "clientversion.h"
 #include "guiutil.h"
 #include "optionsmodel.h"
-#include "streELP.h"
+#include "streams.h"
 
 #include <boost/foreach.hpp>
 

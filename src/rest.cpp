@@ -7,7 +7,7 @@
 #include "primitives/block.h"
 #include "primitives/transaction.h"
 #include "rpcserver.h"
-#include "streELP.h"
+#include "streams.h"
 #include "sync.h"
 #include "utilstrencodings.h"
 #include "version.h"
@@ -52,12 +52,12 @@ static RestErr RESTERR(enum HTTPStatusCode status, string message)
     return re;
 }
 
-static enum RetFormat ParseDataFormat(vector<string>& parELP, const string strReq)
+static enum RetFormat ParseDataFormat(vector<string>& params, const string strReq)
 {
-    boost::split(parELP, strReq, boost::is_any_of("."));
-    if (parELP.size() > 1) {
+    boost::split(params, strReq, boost::is_any_of("."));
+    if (params.size() > 1) {
         for (unsigned int i = 0; i < ARRAYLEN(rf_names); i++)
-            if (parELP[1] == rf_names[i].name)
+            if (params[1] == rf_names[i].name)
                 return rf_names[i].rf;
     }
 
@@ -95,10 +95,10 @@ static bool rest_block(AcceptedConnection* conn,
     bool fRun,
     bool showTxDetails)
 {
-    vector<string> parELP;
-    enum RetFormat rf = ParseDataFormat(parELP, strReq);
+    vector<string> params;
+    enum RetFormat rf = ParseDataFormat(params, strReq);
 
-    string hashStr = parELP[0];
+    string hashStr = params[0];
     uint256 hash;
     if (!ParseHashStr(hashStr, hash))
         throw RESTERR(HTTP_BAD_REQUEST, "Invalid hash: " + hashStr);
@@ -168,10 +168,10 @@ static bool rest_tx(AcceptedConnection* conn,
     map<string, string>& mapHeaders,
     bool fRun)
 {
-    vector<string> parELP;
-    enum RetFormat rf = ParseDataFormat(parELP, strReq);
+    vector<string> params;
+    enum RetFormat rf = ParseDataFormat(params, strReq);
 
-    string hashStr = parELP[0];
+    string hashStr = params[0];
     uint256 hash;
     if (!ParseHashStr(hashStr, hash))
         throw RESTERR(HTTP_BAD_REQUEST, "Invalid hash: " + hashStr);

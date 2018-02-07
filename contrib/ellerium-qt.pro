@@ -64,9 +64,9 @@ HEADERS += src/activemasternode.h \
            src/base58.h \
            src/bloom.h \
            src/chain.h \
-           src/chainparELP.h \
-           src/chainparELPbase.h \
-           src/chainparELPseeds.h \
+           src/chainparams.h \
+           src/chainparamsbase.h \
+           src/chainparamsseeds.h \
            src/checkpoints.h \
            src/checkqueue.h \
            src/clientversion.h \
@@ -112,7 +112,7 @@ HEADERS += src/activemasternode.h \
            src/rpcserver.h \
            src/serialize.h \
            src/spork.h \
-           src/streELP.h \
+           src/streams.h \
            src/sync.h \
            src/threadsafety.h \
            src/timedata.h \
@@ -151,7 +151,7 @@ HEADERS += src/activemasternode.h \
 		   src/crypto/sph_whirlpool.h \
 		   src/crypto/sph_shabal.h \
 		   src/crypto/sph_fugue.h \
-		   src/crypto/sph_hELPi.h \
+		   src/crypto/sph_hamsi.h \
            src/crypto/sph_jh.h \
            src/crypto/sph_keccak.h \
            src/crypto/sph_luffa.h \
@@ -370,8 +370,8 @@ SOURCES += src/activemasternode.cpp \
            src/base58.cpp \
            src/bloom.cpp \
            src/chain.cpp \
-           src/chainparELP.cpp \
-           src/chainparELPbase.cpp \
+           src/chainparams.cpp \
+           src/chainparamsbase.cpp \
            src/checkpoints.cpp \
            src/clientversion.cpp \
            src/coins.cpp \
@@ -450,7 +450,7 @@ SOURCES += src/activemasternode.cpp \
            src/crypto/echo.c \
            src/crypto/groestl.c \
 		   src/crypto/fugue.c \
-		   src/crypto/hELPi.c \
+		   src/crypto/hamsi.c \
 		   src/crypto/haval.c \
 		   src/crypto/sha2.c \
 		   src/crypto/shabal.c \

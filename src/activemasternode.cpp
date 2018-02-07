@@ -19,7 +19,7 @@ void CActiveMasternode::ManageStatus()
     if (fDebug) LogPrintf("CActiveMasternode::ManageStatus() - Begin\n");
 
     //need correct blocks to send ping
-    if (ParELP().NetworkID() != CBaseChainParELP::REGTEST && !masternodeSync.IsBlockchainSynced()) {
+    if (Params().NetworkID() != CBaseChainParams::REGTEST && !masternodeSync.IsBlockchainSynced()) {
         status = ACTIVE_MASTERNODE_SYNC_IN_PROCESS;
         LogPrintf("CActiveMasternode::ManageStatus() - %s\n", GetStatus());
         return;
@@ -63,7 +63,7 @@ void CActiveMasternode::ManageStatus()
             service = CService(strMasterNodeAddr);
         }
 
-        if (ParELP().NetworkID() == CBaseChainParELP::MAIN) {
+        if (Params().NetworkID() == CBaseChainParams::MAIN) {
             if (service.GetPort() != 50020) {
                 notCapableReason = strprintf("Invalid port: %u - only 50020 is supported on mainnet.", service.GetPort());
                 LogPrintf("CActiveMasternode::ManageStatus() - not capable: %s\n", notCapableReason);
@@ -262,7 +262,7 @@ bool CActiveMasternode::Register(std::string strService, std::string strKeyMaste
     }
 
     CService service = CService(strService);
-    if (ParELP().NetworkID() == CBaseChainParELP::MAIN) {
+    if (Params().NetworkID() == CBaseChainParams::MAIN) {
         if (service.GetPort() != 50020) {
             errorMessage = strprintf("Invalid port %u for masternode %s - only 50020 is supported on mainnet.", service.GetPort(), strService);
             LogPrintf("CActiveMasternode::Register() - %s\n", errorMessage);

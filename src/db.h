@@ -8,7 +8,7 @@
 
 #include "clientversion.h"
 #include "serialize.h"
-#include "streELP.h"
+#include "streams.h"
 #include "sync.h"
 #include "version.h"
 
@@ -251,7 +251,7 @@ protected:
         else if (datKey.get_data() == NULL || datValue.get_data() == NULL)
             return 99999;
 
-        // Convert to streELP
+        // Convert to streams
         ssKey.SetType(SER_DISK);
         ssKey.clear();
         ssKey.write((char*)datKey.get_data(), datKey.get_size());

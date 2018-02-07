@@ -36,8 +36,8 @@ static bool AppInitRawTx(int argc, char* argv[])
     //
     ParseParameters(argc, argv);
 
-    // Check for -testnet or -regtest parameter (ParELP() calls are only valid after this clause)
-    if (!SelectParELPFromCommandLine()) {
+    // Check for -testnet or -regtest parameter (Params() calls are only valid after this clause)
+    if (!SelectParamsFromCommandLine()) {
         fprintf(stderr, "Error: Invalid combination of -regtest and -testnet.\n");
         return false;
     }

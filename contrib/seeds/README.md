@@ -1,7 +1,7 @@
 # Seeds
 
 Utility to generate the seeds.txt list that is compiled into the client
-(see [src/chainparELPseeds.h](/src/chainparELPseeds.h) and other utilities in [contrib/seeds](/contrib/seeds)).
+(see [src/chainparamsseeds.h](/src/chainparamsseeds.h) and other utilities in [contrib/seeds](/contrib/seeds)).
 
 Be sure to update `PATTERN_AGENT` in `makeseeds.py` to include the current version,
 and remove old versions as necessary.
@@ -10,7 +10,7 @@ The seeds compiled into the release are created from fuzzbawls' DNS seed data, l
 
     curl -s http://seeder.fuzzbawls.pw/ellerium-mainnet.txt > seeds_main.txt
     python3 makeseeds.py < seeds_main.txt > nodes_main.txt
-    python3 generate-seeds.py . > ../../src/chainparELPseeds.h
+    python3 generate-seeds.py . > ../../src/chainparamsseeds.h
 
 ## Dependencies
 

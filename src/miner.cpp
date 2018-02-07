@@ -87,7 +87,7 @@ void UpdateTime(CBlockHeader* pblock, const CBlockIndex* pindexPrev)
     pblock->nTime = std::max(pindexPrev->GetMedianTimePast() + 1, GetAdjustedTime());
 
     // Updating time can change work required on testnet:
-    if (ParELP().AllowMinDifficultyBlocks())
+    if (Params().AllowMinDifficultyBlocks())
         pblock->nBits = GetNextWorkRequired(pindexPrev, pblock);
 }
 
@@ -103,7 +103,7 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
 
     // -regtest only: allow overriding block.nVersion with
     // -blockversion=N to test forking scenarios
-    if (ParELP().MineBlocksOnDemand())
+    if (Params().MineBlocksOnDemand())
         pblock->nVersion = GetArg("-blockversion", pblock->nVersion);
 
     // Create coinbase tx
@@ -464,7 +464,7 @@ void BitcoinMiner(CWallet* pwallet, bool fProofOfStake)
 
     while (fGenerateBitcoins || fProofOfStake) {
         if (fProofOfStake) {
-            if (chainActive.Tip()->nHeight < ParELP().LAST_POW_BLOCK()) {
+            if (chainActive.Tip()->nHeight < Params().LAST_POW_BLOCK()) {
                 MilliSleep(5000);
                 continue;
             }
@@ -542,7 +542,7 @@ void BitcoinMiner(CWallet* pwallet, bool fProofOfStake)
 
                     // In regression test mode, stop mining after a block is found. This
                     // allows developers to controllably generate a block on demand.
-                    if (ParELP().MineBlocksOnDemand())
+                    if (Params().MineBlocksOnDemand())
                         throw boost::thread_interrupted();
 
                     break;
@@ -580,7 +580,7 @@ void BitcoinMiner(CWallet* pwallet, bool fProofOfStake)
             // Check for stop or if block needs to be rebuilt
             boost::this_thread::interruption_point();
             // Regtest mode doesn't require peers
-            if (vNodes.empty() && ParELP().MiningRequiresPeers())
+            if (vNodes.empty() && Params().MiningRequiresPeers())
                 break;
             if (pblock->nNonce >= 0xffff0000)
                 break;
@@ -591,7 +591,7 @@ void BitcoinMiner(CWallet* pwallet, bool fProofOfStake)
 
             // Update nTime every few seconds
             UpdateTime(pblock, pindexPrev);
-            if (ParELP().AllowMinDifficultyBlocks()) {
+            if (Params().AllowMinDifficultyBlocks()) {
                 // Changing pblock->nTime can change work required on testnet:
                 hashTarget.SetCompact(pblock->nBits);
             }
@@ -622,8 +622,8 @@ void GenerateBitcoins(bool fGenerate, CWallet* pwallet, int nThreads)
 
     if (nThreads < 0) {
         // In regtest threads defaults to 1
-        if (ParELP().DefaultMinerThreads())
-            nThreads = ParELP().DefaultMinerThreads();
+        if (Params().DefaultMinerThreads())
+            nThreads = Params().DefaultMinerThreads();
         else
             nThreads = boost::thread::hardware_concurrency();
     }

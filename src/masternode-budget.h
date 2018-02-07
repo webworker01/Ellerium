@@ -492,7 +492,7 @@ public:
     bool IsEstablished()
     {
         //Proposals must be at least a day old to make it into a budget
-        if (ParELP().NetworkID() == CBaseChainParELP::MAIN) return (nTime < GetTime() - (60 * 60 * 24));
+        if (Params().NetworkID() == CBaseChainParams::MAIN) return (nTime < GetTime() - (60 * 60 * 24));
 
         //for testing purposes - 4 hours
         return (nTime < GetTime() - (60 * 5));

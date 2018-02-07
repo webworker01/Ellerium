@@ -1,10 +1,10 @@
-/* $Id: hELPi_helper.c 202 2010-05-31 15:46:48Z tp $ */
+/* $Id: hamsi_helper.c 202 2010-05-31 15:46:48Z tp $ */
 /*
- * Helper code for HELPi (input block expansion). This code is
+ * Helper code for Hamsi (input block expansion). This code is
  * automatically generated and includes precomputed tables for
  * expansion code which handles 2 to 8 bits at a time.
  *
- * This file is included from hELPi.c, and is not meant to be compiled
+ * This file is included from hamsi.c, and is not meant to be compiled
  * independently.
  *
  * ==========================(LICENSE BEGIN)============================
@@ -39,7 +39,7 @@
 extern "C"{
 #endif
 
-#if SPH_HELPI_EXPAND_SMALL == 1
+#if SPH_HAMSI_EXPAND_SMALL == 1
 
 /* Note: this table lists bits within each byte from least
    siginificant to most significant. */
@@ -171,7 +171,7 @@ static const sph_u32 T256[32][8] = {
 
 #endif
 
-#if SPH_HELPI_EXPAND_SMALL == 2
+#if SPH_HAMSI_EXPAND_SMALL == 2
 
 static const sph_u32 T256_0[4][8] = {
 	{ SPH_C32(0x00000000), SPH_C32(0x00000000), SPH_C32(0x00000000),
@@ -567,7 +567,7 @@ static const sph_u32 T256_30[4][8] = {
 
 #endif
 
-#if SPH_HELPI_EXPAND_SMALL == 3
+#if SPH_HAMSI_EXPAND_SMALL == 3
 
 static const sph_u32 T256_0[8][8] = {
 	{ SPH_C32(0x00000000), SPH_C32(0x00000000), SPH_C32(0x00000000),
@@ -963,7 +963,7 @@ static const sph_u32 T256_30[4][8] = {
 
 #endif
 
-#if SPH_HELPI_EXPAND_SMALL == 4
+#if SPH_HAMSI_EXPAND_SMALL == 4
 
 static const sph_u32 T256_0[16][8] = {
 	{ SPH_C32(0x00000000), SPH_C32(0x00000000), SPH_C32(0x00000000),
@@ -1455,7 +1455,7 @@ static const sph_u32 T256_28[16][8] = {
 
 #endif
 
-#if SPH_HELPI_EXPAND_SMALL == 5
+#if SPH_HAMSI_EXPAND_SMALL == 5
 
 static const sph_u32 T256_0[32][8] = {
 	{ SPH_C32(0x00000000), SPH_C32(0x00000000), SPH_C32(0x00000000),
@@ -2139,7 +2139,7 @@ static const sph_u32 T256_30[4][8] = {
 
 #endif
 
-#if SPH_HELPI_EXPAND_SMALL == 6
+#if SPH_HAMSI_EXPAND_SMALL == 6
 
 static const sph_u32 T256_0[64][8] = {
 	{ SPH_C32(0x00000000), SPH_C32(0x00000000), SPH_C32(0x00000000),
@@ -3195,7 +3195,7 @@ static const sph_u32 T256_30[4][8] = {
 
 #endif
 
-#if SPH_HELPI_EXPAND_SMALL == 7
+#if SPH_HAMSI_EXPAND_SMALL == 7
 
 static const sph_u32 T256_0[128][8] = {
 	{ SPH_C32(0x00000000), SPH_C32(0x00000000), SPH_C32(0x00000000),
@@ -4851,7 +4851,7 @@ static const sph_u32 T256_28[16][8] = {
 
 #endif
 
-#if SPH_HELPI_EXPAND_SMALL == 8
+#if SPH_HAMSI_EXPAND_SMALL == 8
 
 static const sph_u32 T256_0[256][8] = {
 	{ SPH_C32(0x00000000), SPH_C32(0x00000000), SPH_C32(0x00000000),
@@ -7983,7 +7983,7 @@ static const sph_u32 T256_24[256][8] = {
 
 #endif
 
-#if SPH_HELPI_EXPAND_BIG == 1
+#if SPH_HAMSI_EXPAND_BIG == 1
 
 /* Note: this table lists bits within each byte from least
    siginificant to most significant. */
@@ -8419,7 +8419,7 @@ static const sph_u32 T512[64][16] = {
 
 #endif
 
-#if SPH_HELPI_EXPAND_BIG == 2
+#if SPH_HAMSI_EXPAND_BIG == 2
 
 static const sph_u32 T512_0[4][16] = {
 	{ SPH_C32(0x00000000), SPH_C32(0x00000000), SPH_C32(0x00000000),
@@ -9843,7 +9843,7 @@ static const sph_u32 T512_62[4][16] = {
 
 #endif
 
-#if SPH_HELPI_EXPAND_BIG == 3
+#if SPH_HAMSI_EXPAND_BIG == 3
 
 static const sph_u32 T512_0[8][16] = {
 	{ SPH_C32(0x00000000), SPH_C32(0x00000000), SPH_C32(0x00000000),
@@ -11319,7 +11319,7 @@ static const sph_u32 T512_63[2][16] = {
 
 #endif
 
-#if SPH_HELPI_EXPAND_BIG == 4
+#if SPH_HAMSI_EXPAND_BIG == 4
 
 static const sph_u32 T512_0[16][16] = {
 	{ SPH_C32(0x00000000), SPH_C32(0x00000000), SPH_C32(0x00000000),
@@ -13191,7 +13191,7 @@ static const sph_u32 T512_60[16][16] = {
 
 #endif
 
-#if SPH_HELPI_EXPAND_BIG == 5
+#if SPH_HAMSI_EXPAND_BIG == 5
 
 static const sph_u32 T512_0[32][16] = {
 	{ SPH_C32(0x00000000), SPH_C32(0x00000000), SPH_C32(0x00000000),
@@ -15867,7 +15867,7 @@ static const sph_u32 T512_60[16][16] = {
 
 #endif
 
-#if SPH_HELPI_EXPAND_BIG == 6
+#if SPH_HAMSI_EXPAND_BIG == 6
 
 static const sph_u32 T512_0[64][16] = {
 	{ SPH_C32(0x00000000), SPH_C32(0x00000000), SPH_C32(0x00000000),
@@ -20039,7 +20039,7 @@ static const sph_u32 T512_60[16][16] = {
 
 #endif
 
-#if SPH_HELPI_EXPAND_BIG == 7
+#if SPH_HAMSI_EXPAND_BIG == 7
 
 static const sph_u32 T512_0[128][16] = {
 	{ SPH_C32(0x00000000), SPH_C32(0x00000000), SPH_C32(0x00000000),
@@ -27179,7 +27179,7 @@ static const sph_u32 T512_63[2][16] = {
 
 #endif
 
-#if SPH_HELPI_EXPAND_BIG == 8
+#if SPH_HAMSI_EXPAND_BIG == 8
 
 static const sph_u32 T512_0[256][16] = {
 	{ SPH_C32(0x00000000), SPH_C32(0x00000000), SPH_C32(0x00000000),

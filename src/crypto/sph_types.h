@@ -12,7 +12,7 @@
  * i.e. if they do not have a size of exactly 8 bits, then compilation
  * is aborted. Architectures where bytes are not octets are relatively
  * rare, even in the embedded devices market. We forbid non-octet bytes
- * because there is no clear convention on how octet streELP are encoded
+ * because there is no clear convention on how octet streams are encoded
  * on such systems.
  *
  * ==========================(LICENSE BEGIN)============================
@@ -50,7 +50,7 @@
 #include <limits.h>
 
 /*
- * All our I/O functions are defined over octet streELP. We do not know
+ * All our I/O functions are defined over octet streams. We do not know
  * how to handle input data if bytes are not octets.
  */
 #if CHAR_BIT != 8
@@ -97,8 +97,8 @@
  * can be added. The functions for which this API is implemented include
  * the SHA-2 functions and all SHA-3 candidates.
  *
- * <code>sphlib</code> defines hash function which may hash octet streELP,
- * i.e. streELP of bits where the number of bits is a multiple of eight.
+ * <code>sphlib</code> defines hash function which may hash octet streams,
+ * i.e. streams of bits where the number of bits is a multiple of eight.
  * The data input functions in the <code>sphlib</code> API expect data
  * as anonymous pointers (<code>"const void *"</code>) with a length
  * (of type <code>"size_t"</code>) which gives the input data chunk length
@@ -314,11 +314,11 @@
  *   - Groestl-256: short name: <code>groestl256</code>
  *   - Groestl-384: short name: <code>groestl384</code>
  *   - Groestl-512: short name: <code>groestl512</code>
- * - HELPi family: file <code>sph_hELPi.h</code>
- *   - HELPi-224: short name: <code>hELPi224</code>
- *   - HELPi-256: short name: <code>hELPi256</code>
- *   - HELPi-384: short name: <code>hELPi384</code>
- *   - HELPi-512: short name: <code>hELPi512</code>
+ * - Hamsi family: file <code>sph_hamsi.h</code>
+ *   - Hamsi-224: short name: <code>hamsi224</code>
+ *   - Hamsi-256: short name: <code>hamsi256</code>
+ *   - Hamsi-384: short name: <code>hamsi384</code>
+ *   - Hamsi-512: short name: <code>hamsi512</code>
  * - JH family: file <code>sph_jh.h</code>
  *   - JH-224: short name: <code>jh224</code>
  *   - JH-256: short name: <code>jh256</code>

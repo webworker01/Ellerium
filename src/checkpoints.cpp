@@ -7,7 +7,7 @@
 
 #include "checkpoints.h"
 
-#include "chainparELP.h"
+#include "chainparams.h"
 #include "main.h"
 #include "uint256.h"
 
@@ -33,7 +33,7 @@ bool CheckBlock(int nHeight, const uint256& hash)
     if (!fEnabled)
         return true;
 
-    const MapCheckpoints& checkpoints = *ParELP().Checkpoints().mapCheckpoints;
+    const MapCheckpoints& checkpoints = *Params().Checkpoints().mapCheckpoints;
 
     MapCheckpoints::const_iterator i = checkpoints.find(nHeight);
     if (i == checkpoints.end()) return true;
@@ -54,7 +54,7 @@ double GuessVerificationProgress(CBlockIndex* pindex, bool fSigchecks)
     // Work is defined as: 1.0 per transaction before the last checkpoint, and
     // fSigcheckVerificationFactor per transaction after.
 
-    const CCheckpointData& data = ParELP().Checkpoints();
+    const CCheckpointData& data = Params().Checkpoints();
 
     if (pindex->nChainTx <= data.nTransactionsLastCheckpoint) {
         double nCheapBefore = pindex->nChainTx;
@@ -78,7 +78,7 @@ int GetTotalBlocksEstimate()
     if (!fEnabled)
         return 0;
 
-    const MapCheckpoints& checkpoints = *ParELP().Checkpoints().mapCheckpoints;
+    const MapCheckpoints& checkpoints = *Params().Checkpoints().mapCheckpoints;
 
     return checkpoints.rbegin()->first;
 }
@@ -88,7 +88,7 @@ CBlockIndex* GetLastCheckpoint()
     if (!fEnabled)
         return NULL;
 
-    const MapCheckpoints& checkpoints = *ParELP().Checkpoints().mapCheckpoints;
+    const MapCheckpoints& checkpoints = *Params().Checkpoints().mapCheckpoints;
 
     BOOST_REVERSE_FOREACH (const MapCheckpoints::value_type& i, checkpoints) {
         const uint256& hash = i.second;

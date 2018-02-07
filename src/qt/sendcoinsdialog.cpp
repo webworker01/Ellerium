@@ -610,47 +610,47 @@ void SendCoinsDialog::processSendCoinsReturn(const WalletModel::SendCoinsReturn&
 {
     bool fAskForUnlock = false;
     
-    QPair<QString, CClientUIInterface::MessageBoxFlags> msgParELP;
+    QPair<QString, CClientUIInterface::MessageBoxFlags> msgParams;
     // Default to a warning message, override if error message is needed
-    msgParELP.second = CClientUIInterface::MSG_WARNING;
+    msgParams.second = CClientUIInterface::MSG_WARNING;
 
     // This comment is specific to SendCoinsDialog usage of WalletModel::SendCoinsReturn.
     // WalletModel::TransactionCommitFailed is used only in WalletModel::sendCoins()
     // all others are used only in WalletModel::prepareTransaction()
     switch (sendCoinsReturn.status) {
     case WalletModel::InvalidAddress:
-        msgParELP.first = tr("The recipient address is not valid, please recheck.");
+        msgParams.first = tr("The recipient address is not valid, please recheck.");
         break;
     case WalletModel::InvalidAmount:
-        msgParELP.first = tr("The amount to pay must be larger than 0.");
+        msgParams.first = tr("The amount to pay must be larger than 0.");
         break;
     case WalletModel::AmountExceedsBalance:
-        msgParELP.first = tr("The amount exceeds your balance.");
+        msgParams.first = tr("The amount exceeds your balance.");
         break;
     case WalletModel::AmountWithFeeExceedsBalance:
-        msgParELP.first = tr("The total exceeds your balance when the %1 transaction fee is included.").arg(msgArg);
+        msgParams.first = tr("The total exceeds your balance when the %1 transaction fee is included.").arg(msgArg);
         break;
     case WalletModel::DuplicateAddress:
-        msgParELP.first = tr("Duplicate address found, can only send to each address once per send operation.");
+        msgParams.first = tr("Duplicate address found, can only send to each address once per send operation.");
         break;
     case WalletModel::TransactionCreationFailed:
-        msgParELP.first = tr("Transaction creation failed!");
-        msgParELP.second = CClientUIInterface::MSG_ERROR;
+        msgParams.first = tr("Transaction creation failed!");
+        msgParams.second = CClientUIInterface::MSG_ERROR;
         break;
     case WalletModel::TransactionCommitFailed:
-        msgParELP.first = tr("The transaction was rejected! This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.");
-        msgParELP.second = CClientUIInterface::MSG_ERROR;
+        msgParams.first = tr("The transaction was rejected! This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.");
+        msgParams.second = CClientUIInterface::MSG_ERROR;
         break;
     case WalletModel::AnonymizeOnlyUnlocked:
         // Unlock is only need when the coins are send
         if(!fPrepare)
             fAskForUnlock = true;
         else
-            msgParELP.first = tr("Error: The wallet was unlocked only to anonymize coins.");
+            msgParams.first = tr("Error: The wallet was unlocked only to anonymize coins.");
         break;
 
     case WalletModel::InsaneFee:
-        msgParELP.first = tr("A fee %1 times higher than %2 per kB is considered an insanely high fee.").arg(10000).arg(BitcoinUnits::formatWithUnit(model->getOptionsModel()->getDisplayUnit(), ::minRelayTxFee.GetFeePerK()));
+        msgParams.first = tr("A fee %1 times higher than %2 per kB is considered an insanely high fee.").arg(10000).arg(BitcoinUnits::formatWithUnit(model->getOptionsModel()->getDisplayUnit(), ::minRelayTxFee.GetFeePerK()));
         break;
     // included to prevent a compiler warning.
     case WalletModel::OK:
@@ -662,7 +662,7 @@ void SendCoinsDialog::processSendCoinsReturn(const WalletModel::SendCoinsReturn&
     if(fAskForUnlock) {
         model->requestUnlock(false);
         if(model->getEncryptionStatus () != WalletModel::Unlocked) {
-            msgParELP.first = tr("Error: The wallet was unlocked only to anonymize coins. Unlock canceled.");
+            msgParams.first = tr("Error: The wallet was unlocked only to anonymize coins. Unlock canceled.");
         }
         else {
             // Wallet unlocked
@@ -670,7 +670,7 @@ void SendCoinsDialog::processSendCoinsReturn(const WalletModel::SendCoinsReturn&
         }
     }
 
-    emit message(tr("Send Coins"), msgParELP.first, msgParELP.second);
+    emit message(tr("Send Coins"), msgParams.first, msgParams.second);
 }
 
 void SendCoinsDialog::minimizeFeeSection(bool fMinimize)

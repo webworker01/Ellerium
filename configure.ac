@@ -14,9 +14,9 @@ AC_CONFIG_MACRO_DIR([build-aux/m4])
 
 AC_CANONICAL_HOST
 
-AH_TOP([#ifndef ELP_CONFIG_H])
-AH_TOP([#define ELP_CONFIG_H])
-AH_BOTTOM([#endif //ELP_CONFIG_H])
+AH_TOP([#ifndef AMS_CONFIG_H])
+AH_TOP([#define AMS_CONFIG_H])
+AH_BOTTOM([#endif //AMS_CONFIG_H])
 
 dnl faketime breaks configure and is only needed for make. Disable it here.
 unset FAKETIME
@@ -62,7 +62,7 @@ AC_PROG_OBJCXX
 dnl Libtool init checks.
 LT_INIT([pic-only])
 
-dnl Check/return PATH for base progrELP.
+dnl Check/return PATH for base programs.
 AC_PATH_TOOL(AR, ar)
 AC_PATH_TOOL(RANLIB, ranlib)
 AC_PATH_TOOL(STRIP, strip)
@@ -417,7 +417,7 @@ AX_GCC_FUNC_ATTRIBUTE([dllimport])
 
 if test x$use_glibc_compat != xno; then
 
-  #__fdelt_chk's parELP and return type have changed from long unsigned int to long int.
+  #__fdelt_chk's params and return type have changed from long unsigned int to long int.
   # See which one is present here.
   AC_MSG_CHECKING(__fdelt_chk type)
   AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#ifdef _FORTIFY_SOURCE

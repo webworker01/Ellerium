@@ -7,7 +7,7 @@
 
 #include "clientversion.h"
 #include "main.h"
-#include "streELP.h"
+#include "streams.h"
 #include "util.h"
 #include "utilmoneystr.h"
 #include "version.h"
@@ -476,7 +476,7 @@ void CTxMemPool::removeCoinbaseSpends(const CCoinsViewCache* pcoins, unsigned in
                 continue;
             const CCoins* coins = pcoins->AccessCoins(txin.prevout.hash);
             if (fSanityCheck) assert(coins);
-            if (!coins || ((coins->IsCoinBase() || coins->IsCoinStake()) && nMemPoolHeight - coins->nHeight < ParELP().COINBASE_MATURITY())) {
+            if (!coins || ((coins->IsCoinBase() || coins->IsCoinStake()) && nMemPoolHeight - coins->nHeight < Params().COINBASE_MATURITY())) {
                 transactionsToRemove.push_back(tx);
                 break;
             }

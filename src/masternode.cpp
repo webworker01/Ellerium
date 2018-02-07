@@ -322,7 +322,7 @@ bool CMasternode::IsValidNetAddr()
 {
     // TODO: regtest is fine with any addresses for now,
     // should probably be a bit smarter if one day we start to implement tests for this
-    return ParELP().NetworkID() == CBaseChainParELP::REGTEST ||
+    return Params().NetworkID() == CBaseChainParams::REGTEST ||
            (IsReachable(addr) && addr.IsRoutable());
 }
 
@@ -414,8 +414,8 @@ bool CMasternodeBroadcast::Create(std::string strService, std::string strKeyMast
     }
 
     CService service = CService(strService);
-    int mainnetDefaultPort = ParELP(CBaseChainParELP::MAIN).GetDefaultPort();
-    if (ParELP().NetworkID() == CBaseChainParELP::MAIN) {
+    int mainnetDefaultPort = Params(CBaseChainParams::MAIN).GetDefaultPort();
+    if (Params().NetworkID() == CBaseChainParams::MAIN) {
         if (service.GetPort() != mainnetDefaultPort) {
             strErrorRet = strprintf("Invalid port %u for masternode %s, only %d is supported on mainnet.", service.GetPort(), strService, mainnetDefaultPort);
             LogPrintf("CMasternodeBroadcast::Create -- %s\n", strErrorRet);
@@ -516,7 +516,7 @@ bool CMasternodeBroadcast::CheckAndUpdate(int& nDos)
         return false;
     }
 
-    if (ParELP().NetworkID() == CBaseChainParELP::MAIN) {
+    if (Params().NetworkID() == CBaseChainParams::MAIN) {
         if (addr.GetPort() != 50020) return false;
     } else if (addr.GetPort() == 50020)
         return false;
@@ -604,7 +604,7 @@ bool CMasternodeBroadcast::CheckInputsAndAdd(int& nDoS)
     }
 
     // verify that sig time is legit in past
-    // should be at least not earlier than block when 1000 ELP tx got MASTERNODE_MIN_CONFIRMATIONS
+    // should be at least not earlier than block when 1000 AMS tx got MASTERNODE_MIN_CONFIRMATIONS
     uint256 hashBlock = 0;
     CTransaction tx2;
     GetTransaction(vin.prevout.hash, tx2, hashBlock, true);
@@ -629,7 +629,7 @@ bool CMasternodeBroadcast::CheckInputsAndAdd(int& nDoS)
     }
 
     bool isLocal = addr.IsRFC1918() || addr.IsLocal();
-    if (ParELP().NetworkID() == CBaseChainParELP::REGTEST) isLocal = false;
+    if (Params().NetworkID() == CBaseChainParams::REGTEST) isLocal = false;
 
     if (!isLocal) Relay();
 

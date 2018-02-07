@@ -8,7 +8,7 @@
 
 #include "amount.h"
 #include "base58.h"
-#include "chainparELP.h"
+#include "chainparams.h"
 #include "core_io.h"
 #include "init.h"
 #include "main.h"
@@ -105,9 +105,9 @@ Value GetNetworkHashPS(int lookup, int height)
     return (int64_t)(workDiff.getdouble() / timeDiff);
 }
 
-Value getnetworkhashps(const Array& parELP, bool fHelp)
+Value getnetworkhashps(const Array& params, bool fHelp)
 {
-    if (fHelp || parELP.size() > 2)
+    if (fHelp || params.size() > 2)
         throw runtime_error(
             "getnetworkhashps ( blocks height )\n"
             "\nReturns the estimated network hashes per second based on the last n blocks.\n"
@@ -121,13 +121,13 @@ Value getnetworkhashps(const Array& parELP, bool fHelp)
             "\nExamples:\n" +
             HelpExampleCli("getnetworkhashps", "") + HelpExampleRpc("getnetworkhashps", ""));
 
-    return GetNetworkHashPS(parELP.size() > 0 ? parELP[0].get_int() : 120, parELP.size() > 1 ? parELP[1].get_int() : -1);
+    return GetNetworkHashPS(params.size() > 0 ? params[0].get_int() : 120, params.size() > 1 ? params[1].get_int() : -1);
 }
 
 #ifdef ENABLE_WALLET
-Value getgenerate(const Array& parELP, bool fHelp)
+Value getgenerate(const Array& params, bool fHelp)
 {
-    if (fHelp || parELP.size() != 0)
+    if (fHelp || params.size() != 0)
         throw runtime_error(
             "getgenerate\n"
             "\nReturn if the server is set to generate coins or not. The default is false.\n"
@@ -142,9 +142,9 @@ Value getgenerate(const Array& parELP, bool fHelp)
 }
 
 
-Value setgenerate(const Array& parELP, bool fHelp)
+Value setgenerate(const Array& params, bool fHelp)
 {
-    if (fHelp || parELP.size() < 1 || parELP.size() > 2)
+    if (fHelp || params.size() < 1 || params.size() > 2)
         throw runtime_error(
             "setgenerate generate ( genproclimit )\n"
             "\nSet 'generate' true or false to turn generation on or off.\n"
@@ -167,18 +167,18 @@ Value setgenerate(const Array& parELP, bool fHelp)
         throw JSONRPCError(RPC_METHOD_NOT_FOUND, "Method not found (disabled)");
 
     bool fGenerate = true;
-    if (parELP.size() > 0)
-        fGenerate = parELP[0].get_bool();
+    if (params.size() > 0)
+        fGenerate = params[0].get_bool();
 
     int nGenProcLimit = -1;
-    if (parELP.size() > 1) {
-        nGenProcLimit = parELP[1].get_int();
+    if (params.size() > 1) {
+        nGenProcLimit = params[1].get_int();
         if (nGenProcLimit == 0)
             fGenerate = false;
     }
 
     // -regtest mode: don't return until nGenProcLimit blocks are generated
-    if (fGenerate && ParELP().MineBlocksOnDemand()) {
+    if (fGenerate && Params().MineBlocksOnDemand()) {
         int nHeightStart = 0;
         int nHeightEnd = 0;
         int nHeight = 0;
@@ -224,9 +224,9 @@ Value setgenerate(const Array& parELP, bool fHelp)
     return Value::null;
 }
 
-Value gethashespersec(const Array& parELP, bool fHelp)
+Value gethashespersec(const Array& params, bool fHelp)
 {
-    if (fHelp || parELP.size() != 0)
+    if (fHelp || params.size() != 0)
         throw runtime_error(
             "gethashespersec\n"
             "\nReturns a recent hashes per second performance measurement while generating.\n"
@@ -243,9 +243,9 @@ Value gethashespersec(const Array& parELP, bool fHelp)
 #endif
 
 
-Value getmininginfo(const Array& parELP, bool fHelp)
+Value getmininginfo(const Array& params, bool fHelp)
 {
-    if (fHelp || parELP.size() != 0)
+    if (fHelp || params.size() != 0)
         throw runtime_error(
             "getmininginfo\n"
             "\nReturns a json object containing mining-related information."
@@ -273,22 +273,22 @@ Value getmininginfo(const Array& parELP, bool fHelp)
     obj.push_back(Pair("difficulty", (double)GetDifficulty()));
     obj.push_back(Pair("errors", GetWarnings("statusbar")));
     obj.push_back(Pair("genproclimit", (int)GetArg("-genproclimit", -1)));
-    obj.push_back(Pair("networkhashps", getnetworkhashps(parELP, false)));
+    obj.push_back(Pair("networkhashps", getnetworkhashps(params, false)));
     obj.push_back(Pair("pooledtx", (uint64_t)mempool.size()));
-    obj.push_back(Pair("testnet", ParELP().TestnetToBeDeprecatedFieldRPC()));
-    obj.push_back(Pair("chain", ParELP().NetworkIDString()));
+    obj.push_back(Pair("testnet", Params().TestnetToBeDeprecatedFieldRPC()));
+    obj.push_back(Pair("chain", Params().NetworkIDString()));
 #ifdef ENABLE_WALLET
-    obj.push_back(Pair("generate", getgenerate(parELP, false)));
-    obj.push_back(Pair("hashespersec", gethashespersec(parELP, false)));
+    obj.push_back(Pair("generate", getgenerate(params, false)));
+    obj.push_back(Pair("hashespersec", gethashespersec(params, false)));
 #endif
     return obj;
 }
 
 
 // NOTE: Unlike wallet RPC (which use BTC values), mining RPCs follow GBT (BIP 22) in using satoshi amounts
-Value prioritisetransaction(const Array& parELP, bool fHelp)
+Value prioritisetransaction(const Array& params, bool fHelp)
 {
-    if (fHelp || parELP.size() != 3)
+    if (fHelp || params.size() != 3)
         throw runtime_error(
             "prioritisetransaction <txid> <priority delta> <fee delta>\n"
             "Accepts the transaction into mined blocks at a higher (or lower) priority\n"
@@ -305,11 +305,11 @@ Value prioritisetransaction(const Array& parELP, bool fHelp)
             "\nExamples:\n" +
             HelpExampleCli("prioritisetransaction", "\"txid\" 0.0 10000") + HelpExampleRpc("prioritisetransaction", "\"txid\", 0.0, 10000"));
 
-    uint256 hash = ParseHashStr(parELP[0].get_str(), "txid");
+    uint256 hash = ParseHashStr(params[0].get_str(), "txid");
 
-    CAmount nAmount = parELP[2].get_int64();
+    CAmount nAmount = params[2].get_int64();
 
-    mempool.PrioritiseTransaction(hash, parELP[0].get_str(), parELP[1].get_real(), nAmount);
+    mempool.PrioritiseTransaction(hash, params[0].get_str(), params[1].get_real(), nAmount);
     return true;
 }
 
@@ -332,9 +332,9 @@ static Value BIP22ValidationResult(const CValidationState& state)
     return "valid?";
 }
 
-Value getblocktemplate(const Array& parELP, bool fHelp)
+Value getblocktemplate(const Array& params, bool fHelp)
 {
-    if (fHelp || parELP.size() > 1)
+    if (fHelp || params.size() > 1)
         throw runtime_error(
             "getblocktemplate ( \"jsonrequestobject\" )\n"
             "\nIf the request parameters include a 'mode' key, that is used to explicitly select between the default 'template' request or a 'proposal'.\n"
@@ -402,8 +402,8 @@ Value getblocktemplate(const Array& parELP, bool fHelp)
 
     std::string strMode = "template";
     Value lpval = Value::null;
-    if (parELP.size() > 0) {
-        const Object& oparam = parELP[0].get_obj();
+    if (params.size() > 0) {
+        const Object& oparam = params[0].get_obj();
         const Value& modeval = find_value(oparam, "mode");
         if (modeval.type() == str_type)
             strMode = modeval.get_str();
@@ -654,7 +654,7 @@ Value getblocktemplate(const Array& parELP, bool fHelp)
         result.push_back(Pair("payee_amount", ""));
     }
 
-    result.push_back(Pair("masternode_payments", pblock->nTime > ParELP().StartMasternodePayments()));
+    result.push_back(Pair("masternode_payments", pblock->nTime > Params().StartMasternodePayments()));
     result.push_back(Pair("enforce_masternode_payments", true));
 
     return result;
@@ -679,9 +679,9 @@ protected:
     };
 };
 
-Value submitblock(const Array& parELP, bool fHelp)
+Value submitblock(const Array& params, bool fHelp)
 {
-    if (fHelp || parELP.size() < 1 || parELP.size() > 2)
+    if (fHelp || params.size() < 1 || params.size() > 2)
         throw runtime_error(
             "submitblock \"hexdata\" ( \"jsonparametersobject\" )\n"
             "\nAttempts to submit new block to network.\n"
@@ -699,7 +699,7 @@ Value submitblock(const Array& parELP, bool fHelp)
             HelpExampleCli("submitblock", "\"mydata\"") + HelpExampleRpc("submitblock", "\"mydata\""));
 
     CBlock block;
-    if (!DecodeHexBlk(block, parELP[0].get_str()))
+    if (!DecodeHexBlk(block, params[0].get_str()))
         throw JSONRPCError(RPC_DESERIALIZATION_ERROR, "Block decode failed");
 
     uint256 hash = block.GetHash();
@@ -736,9 +736,9 @@ Value submitblock(const Array& parELP, bool fHelp)
     return BIP22ValidationResult(state);
 }
 
-Value estimatefee(const Array& parELP, bool fHelp)
+Value estimatefee(const Array& params, bool fHelp)
 {
-    if (fHelp || parELP.size() != 1)
+    if (fHelp || params.size() != 1)
         throw runtime_error(
             "estimatefee nblocks\n"
             "\nEstimates the approximate fee per kilobyte\n"
@@ -754,9 +754,9 @@ Value estimatefee(const Array& parELP, bool fHelp)
             "\nExample:\n" +
             HelpExampleCli("estimatefee", "6"));
 
-    RPCTypeCheck(parELP, boost::assign::list_of(int_type));
+    RPCTypeCheck(params, boost::assign::list_of(int_type));
 
-    int nBlocks = parELP[0].get_int();
+    int nBlocks = params[0].get_int();
     if (nBlocks < 1)
         nBlocks = 1;
 
@@ -767,9 +767,9 @@ Value estimatefee(const Array& parELP, bool fHelp)
     return ValueFromAmount(feeRate.GetFeePerK());
 }
 
-Value estimatepriority(const Array& parELP, bool fHelp)
+Value estimatepriority(const Array& params, bool fHelp)
 {
-    if (fHelp || parELP.size() != 1)
+    if (fHelp || params.size() != 1)
         throw runtime_error(
             "estimatepriority nblocks\n"
             "\nEstimates the approximate priority\n"
@@ -785,9 +785,9 @@ Value estimatepriority(const Array& parELP, bool fHelp)
             "\nExample:\n" +
             HelpExampleCli("estimatepriority", "6"));
 
-    RPCTypeCheck(parELP, boost::assign::list_of(int_type));
+    RPCTypeCheck(params, boost::assign::list_of(int_type));
 
-    int nBlocks = parELP[0].get_int();
+    int nBlocks = params[0].get_int();
     if (nBlocks < 1)
         nBlocks = 1;
 

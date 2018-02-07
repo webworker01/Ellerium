@@ -24,9 +24,9 @@
 using namespace json_spirit;
 using namespace std;
 
-Value getconnectioncount(const Array& parELP, bool fHelp)
+Value getconnectioncount(const Array& params, bool fHelp)
 {
-    if (fHelp || parELP.size() != 0)
+    if (fHelp || params.size() != 0)
         throw runtime_error(
             "getconnectioncount\n"
             "\nReturns the number of connections to other nodes.\n"
@@ -39,9 +39,9 @@ Value getconnectioncount(const Array& parELP, bool fHelp)
     return (int)vNodes.size();
 }
 
-Value ping(const Array& parELP, bool fHelp)
+Value ping(const Array& params, bool fHelp)
 {
-    if (fHelp || parELP.size() != 0)
+    if (fHelp || params.size() != 0)
         throw runtime_error(
             "ping\n"
             "\nRequests that a ping be sent to all other nodes, to measure ping time.\n"
@@ -72,9 +72,9 @@ static void CopyNodeStats(std::vector<CNodeStats>& vstats)
     }
 }
 
-Value getpeerinfo(const Array& parELP, bool fHelp)
+Value getpeerinfo(const Array& params, bool fHelp)
 {
-    if (fHelp || parELP.size() != 0)
+    if (fHelp || params.size() != 0)
         throw runtime_error(
             "getpeerinfo\n"
             "\nReturns data about each connected network node as a json array of objects.\n"
@@ -156,12 +156,12 @@ Value getpeerinfo(const Array& parELP, bool fHelp)
     return ret;
 }
 
-Value addnode(const Array& parELP, bool fHelp)
+Value addnode(const Array& params, bool fHelp)
 {
     string strCommand;
-    if (parELP.size() == 2)
-        strCommand = parELP[1].get_str();
-    if (fHelp || parELP.size() != 2 ||
+    if (params.size() == 2)
+        strCommand = params[1].get_str();
+    if (fHelp || params.size() != 2 ||
         (strCommand != "onetry" && strCommand != "add" && strCommand != "remove"))
         throw runtime_error(
             "addnode \"node\" \"add|remove|onetry\"\n"
@@ -173,7 +173,7 @@ Value addnode(const Array& parELP, bool fHelp)
             "\nExamples:\n" +
             HelpExampleCli("addnode", "\"192.168.0.6:50020\" \"onetry\"") + HelpExampleRpc("addnode", "\"192.168.0.6:50020\", \"onetry\""));
 
-    string strNode = parELP[0].get_str();
+    string strNode = params[0].get_str();
 
     if (strCommand == "onetry") {
         CAddress addr;
@@ -200,9 +200,9 @@ Value addnode(const Array& parELP, bool fHelp)
     return Value::null;
 }
 
-Value getaddednodeinfo(const Array& parELP, bool fHelp)
+Value getaddednodeinfo(const Array& params, bool fHelp)
 {
-    if (fHelp || parELP.size() < 1 || parELP.size() > 2)
+    if (fHelp || params.size() < 1 || params.size() > 2)
         throw runtime_error(
             "getaddednodeinfo dns ( \"node\" )\n"
             "\nReturns information about the given added node, or all added nodes\n"
@@ -230,15 +230,15 @@ Value getaddednodeinfo(const Array& parELP, bool fHelp)
             "\nExamples:\n" +
             HelpExampleCli("getaddednodeinfo", "true") + HelpExampleCli("getaddednodeinfo", "true \"192.168.0.201\"") + HelpExampleRpc("getaddednodeinfo", "true, \"192.168.0.201\""));
 
-    bool fDns = parELP[0].get_bool();
+    bool fDns = params[0].get_bool();
 
     list<string> laddedNodes(0);
-    if (parELP.size() == 1) {
+    if (params.size() == 1) {
         LOCK(cs_vAddedNodes);
         BOOST_FOREACH (string& strAddNode, vAddedNodes)
             laddedNodes.push_back(strAddNode);
     } else {
-        string strNode = parELP[1].get_str();
+        string strNode = params[1].get_str();
         LOCK(cs_vAddedNodes);
         BOOST_FOREACH (string& strAddNode, vAddedNodes)
             if (strAddNode == strNode) {
@@ -262,7 +262,7 @@ Value getaddednodeinfo(const Array& parELP, bool fHelp)
     list<pair<string, vector<CService> > > laddedAddreses(0);
     BOOST_FOREACH (string& strAddNode, laddedNodes) {
         vector<CService> vservNode(0);
-        if (Lookup(strAddNode.c_str(), vservNode, ParELP().GetDefaultPort(), fNameLookup, 0))
+        if (Lookup(strAddNode.c_str(), vservNode, Params().GetDefaultPort(), fNameLookup, 0))
             laddedAddreses.push_back(make_pair(strAddNode, vservNode));
         else {
             Object obj;
@@ -303,9 +303,9 @@ Value getaddednodeinfo(const Array& parELP, bool fHelp)
     return ret;
 }
 
-Value getnettotals(const Array& parELP, bool fHelp)
+Value getnettotals(const Array& params, bool fHelp)
 {
-    if (fHelp || parELP.size() > 0)
+    if (fHelp || params.size() > 0)
         throw runtime_error(
             "getnettotals\n"
             "\nReturns information about network traffic, including bytes in, bytes out,\n"
@@ -345,9 +345,9 @@ static Array GetNetworksInfo()
     return networks;
 }
 
-Value getnetworkinfo(const Array& parELP, bool fHelp)
+Value getnetworkinfo(const Array& params, bool fHelp)
 {
-    if (fHelp || parELP.size() != 0)
+    if (fHelp || params.size() != 0)
         throw runtime_error(
             "getnetworkinfo\n"
             "Returns an object containing various state info regarding P2P networking.\n"

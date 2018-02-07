@@ -599,22 +599,22 @@ int main(int argc, char* argv[])
     }
 
     /// 7. Determine network (and switch to network specific options)
-    // - Do not call ParELP() before this step
+    // - Do not call Params() before this step
     // - Do this after parsing the configuration file, as the network can be switched there
     // - QSettings() will use the new application name after this, resulting in network-specific settings
     // - Needs to be done before createOptionsModel
 
-    // Check for -testnet or -regtest parameter (ParELP() calls are only valid after this clause)
-    if (!SelectParELPFromCommandLine()) {
+    // Check for -testnet or -regtest parameter (Params() calls are only valid after this clause)
+    if (!SelectParamsFromCommandLine()) {
         QMessageBox::critical(0, QObject::tr("Ellerium Core"), QObject::tr("Error: Invalid combination of -regtest and -testnet."));
         return 1;
     }
 #ifdef ENABLE_WALLET
-    // Parse URIs on command line -- this can affect ParELP()
+    // Parse URIs on command line -- this can affect Params()
     PaymentServer::ipcParseCommandLine(argc, argv);
 #endif
 
-    QScopedPointer<const NetworkStyle> networkStyle(NetworkStyle::instantiate(QString::fromStdString(ParELP().NetworkIDString())));
+    QScopedPointer<const NetworkStyle> networkStyle(NetworkStyle::instantiate(QString::fromStdString(Params().NetworkIDString())));
     assert(!networkStyle.isNull());
     // Allow for separate UI settings for testnets
     QApplication::setApplicationName(networkStyle->getAppName());

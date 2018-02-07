@@ -103,9 +103,9 @@ Object blockHeaderToJSON(const CBlock& block, const CBlockIndex* blockindex)
 }
 
 
-Value getblockcount(const Array& parELP, bool fHelp)
+Value getblockcount(const Array& params, bool fHelp)
 {
-    if (fHelp || parELP.size() != 0)
+    if (fHelp || params.size() != 0)
         throw runtime_error(
             "getblockcount\n"
             "\nReturns the number of blocks in the longest block chain.\n"
@@ -117,9 +117,9 @@ Value getblockcount(const Array& parELP, bool fHelp)
     return chainActive.Height();
 }
 
-Value getbestblockhash(const Array& parELP, bool fHelp)
+Value getbestblockhash(const Array& params, bool fHelp)
 {
-    if (fHelp || parELP.size() != 0)
+    if (fHelp || params.size() != 0)
         throw runtime_error(
             "getbestblockhash\n"
             "\nReturns the hash of the best (tip) block in the longest block chain.\n"
@@ -131,9 +131,9 @@ Value getbestblockhash(const Array& parELP, bool fHelp)
     return chainActive.Tip()->GetBlockHash().GetHex();
 }
 
-Value getdifficulty(const Array& parELP, bool fHelp)
+Value getdifficulty(const Array& params, bool fHelp)
 {
-    if (fHelp || parELP.size() != 0)
+    if (fHelp || params.size() != 0)
         throw runtime_error(
             "getdifficulty\n"
             "\nReturns the proof-of-work difficulty as a multiple of the minimum difficulty.\n"
@@ -146,9 +146,9 @@ Value getdifficulty(const Array& parELP, bool fHelp)
 }
 
 
-Value getrawmempool(const Array& parELP, bool fHelp)
+Value getrawmempool(const Array& params, bool fHelp)
 {
-    if (fHelp || parELP.size() > 1)
+    if (fHelp || params.size() > 1)
         throw runtime_error(
             "getrawmempool ( verbose )\n"
             "\nReturns all transaction ids in memory pool as a json array of string transaction ids.\n"
@@ -177,8 +177,8 @@ Value getrawmempool(const Array& parELP, bool fHelp)
             HelpExampleCli("getrawmempool", "true") + HelpExampleRpc("getrawmempool", "true"));
 
     bool fVerbose = false;
-    if (parELP.size() > 0)
-        fVerbose = parELP[0].get_bool();
+    if (params.size() > 0)
+        fVerbose = params[0].get_bool();
 
     if (fVerbose) {
         LOCK(mempool.cs);
@@ -216,9 +216,9 @@ Value getrawmempool(const Array& parELP, bool fHelp)
     }
 }
 
-Value getblockhash(const Array& parELP, bool fHelp)
+Value getblockhash(const Array& params, bool fHelp)
 {
-    if (fHelp || parELP.size() != 1)
+    if (fHelp || params.size() != 1)
         throw runtime_error(
             "getblockhash index\n"
             "\nReturns hash of block in best-block-chain at index provided.\n"
@@ -229,7 +229,7 @@ Value getblockhash(const Array& parELP, bool fHelp)
             "\nExamples:\n" +
             HelpExampleCli("getblockhash", "1000") + HelpExampleRpc("getblockhash", "1000"));
 
-    int nHeight = parELP[0].get_int();
+    int nHeight = params[0].get_int();
     if (nHeight < 0 || nHeight > chainActive.Height())
         throw JSONRPCError(RPC_INVALID_PARAMETER, "Block height out of range");
 
@@ -237,9 +237,9 @@ Value getblockhash(const Array& parELP, bool fHelp)
     return pblockindex->GetBlockHash().GetHex();
 }
 
-Value getblock(const Array& parELP, bool fHelp)
+Value getblock(const Array& params, bool fHelp)
 {
-    if (fHelp || parELP.size() < 1 || parELP.size() > 2)
+    if (fHelp || params.size() < 1 || params.size() > 2)
         throw runtime_error(
             "getblock \"hash\" ( verbose )\n"
             "\nIf verbose is false, returns a string that is serialized, hex-encoded data for block 'hash'.\n"
@@ -271,12 +271,12 @@ Value getblock(const Array& parELP, bool fHelp)
             "\nExamples:\n" +
             HelpExampleCli("getblock", "\"00000000000fd08c2fb661d2fcb0d49abb3a91e5f27082ce64feed3b4dede2e2\"") + HelpExampleRpc("getblock", "\"00000000000fd08c2fb661d2fcb0d49abb3a91e5f27082ce64feed3b4dede2e2\""));
 
-    std::string strHash = parELP[0].get_str();
+    std::string strHash = params[0].get_str();
     uint256 hash(strHash);
 
     bool fVerbose = true;
-    if (parELP.size() > 1)
-        fVerbose = parELP[1].get_bool();
+    if (params.size() > 1)
+        fVerbose = params[1].get_bool();
 
     if (mapBlockIndex.count(hash) == 0)
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Block not found");
@@ -297,9 +297,9 @@ Value getblock(const Array& parELP, bool fHelp)
     return blockToJSON(block, pblockindex);
 }
 
-Value getblockheader(const Array& parELP, bool fHelp)
+Value getblockheader(const Array& params, bool fHelp)
 {
-    if (fHelp || parELP.size() < 1 || parELP.size() > 2)
+    if (fHelp || params.size() < 1 || params.size() > 2)
         throw runtime_error(
             "getblockheader \"hash\" ( verbose )\n"
             "\nIf verbose is false, returns a string that is serialized, hex-encoded data for block 'hash' header.\n"
@@ -321,12 +321,12 @@ Value getblockheader(const Array& parELP, bool fHelp)
             "\nExamples:\n" +
             HelpExampleCli("getblockheader", "\"00000000000fd08c2fb661d2fcb0d49abb3a91e5f27082ce64feed3b4dede2e2\"") + HelpExampleRpc("getblockheader", "\"00000000000fd08c2fb661d2fcb0d49abb3a91e5f27082ce64feed3b4dede2e2\""));
 
-    std::string strHash = parELP[0].get_str();
+    std::string strHash = params[0].get_str();
     uint256 hash(strHash);
 
     bool fVerbose = true;
-    if (parELP.size() > 1)
-        fVerbose = parELP[1].get_bool();
+    if (params.size() > 1)
+        fVerbose = params[1].get_bool();
 
     if (mapBlockIndex.count(hash) == 0)
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Block not found");
@@ -347,9 +347,9 @@ Value getblockheader(const Array& parELP, bool fHelp)
     return blockHeaderToJSON(block, pblockindex);
 }
 
-Value gettxoutsetinfo(const Array& parELP, bool fHelp)
+Value gettxoutsetinfo(const Array& params, bool fHelp)
 {
-    if (fHelp || parELP.size() != 0)
+    if (fHelp || params.size() != 0)
         throw runtime_error(
             "gettxoutsetinfo\n"
             "\nReturns statistics about the unspent transaction output set.\n"
@@ -383,9 +383,9 @@ Value gettxoutsetinfo(const Array& parELP, bool fHelp)
     return ret;
 }
 
-Value gettxout(const Array& parELP, bool fHelp)
+Value gettxout(const Array& params, bool fHelp)
 {
-    if (fHelp || parELP.size() < 2 || parELP.size() > 3)
+    if (fHelp || params.size() < 2 || params.size() > 3)
         throw runtime_error(
             "gettxout \"txid\" n ( includemempool )\n"
             "\nReturns details about an unspent transaction output.\n"
@@ -420,12 +420,12 @@ Value gettxout(const Array& parELP, bool fHelp)
 
     Object ret;
 
-    std::string strHash = parELP[0].get_str();
+    std::string strHash = params[0].get_str();
     uint256 hash(strHash);
-    int n = parELP[1].get_int();
+    int n = params[1].get_int();
     bool fMempool = true;
-    if (parELP.size() > 2)
-        fMempool = parELP[2].get_bool();
+    if (params.size() > 2)
+        fMempool = params[2].get_bool();
 
     CCoins coins;
     if (fMempool) {
@@ -458,9 +458,9 @@ Value gettxout(const Array& parELP, bool fHelp)
     return ret;
 }
 
-Value verifychain(const Array& parELP, bool fHelp)
+Value verifychain(const Array& params, bool fHelp)
 {
-    if (fHelp || parELP.size() > 2)
+    if (fHelp || params.size() > 2)
         throw runtime_error(
             "verifychain ( checklevel numblocks )\n"
             "\nVerifies blockchain database.\n"
@@ -474,17 +474,17 @@ Value verifychain(const Array& parELP, bool fHelp)
 
     int nCheckLevel = GetArg("-checklevel", 3);
     int nCheckDepth = GetArg("-checkblocks", 288);
-    if (parELP.size() > 0)
-        nCheckLevel = parELP[0].get_int();
-    if (parELP.size() > 1)
-        nCheckDepth = parELP[1].get_int();
+    if (params.size() > 0)
+        nCheckLevel = params[0].get_int();
+    if (params.size() > 1)
+        nCheckDepth = params[1].get_int();
 
     return CVerifyDB().VerifyDB(pcoinsTip, nCheckLevel, nCheckDepth);
 }
 
-Value getblockchaininfo(const Array& parELP, bool fHelp)
+Value getblockchaininfo(const Array& params, bool fHelp)
 {
-    if (fHelp || parELP.size() != 0)
+    if (fHelp || params.size() != 0)
         throw runtime_error(
             "getblockchaininfo\n"
             "Returns an object containing various state info regarding block chain processing.\n"
@@ -502,7 +502,7 @@ Value getblockchaininfo(const Array& parELP, bool fHelp)
             HelpExampleCli("getblockchaininfo", "") + HelpExampleRpc("getblockchaininfo", ""));
 
     Object obj;
-    obj.push_back(Pair("chain", ParELP().NetworkIDString()));
+    obj.push_back(Pair("chain", Params().NetworkIDString()));
     obj.push_back(Pair("blocks", (int)chainActive.Height()));
     obj.push_back(Pair("headers", pindexBestHeader ? pindexBestHeader->nHeight : -1));
     obj.push_back(Pair("bestblockhash", chainActive.Tip()->GetBlockHash().GetHex()));
@@ -526,9 +526,9 @@ struct CompareBlocksByHeight {
     }
 };
 
-Value getchaintips(const Array& parELP, bool fHelp)
+Value getchaintips(const Array& params, bool fHelp)
 {
-    if (fHelp || parELP.size() != 0)
+    if (fHelp || params.size() != 0)
         throw runtime_error(
             "getchaintips\n"
             "Return information about all known tips in the block tree,"
@@ -610,9 +610,9 @@ Value getchaintips(const Array& parELP, bool fHelp)
     return res;
 }
 
-Value getmempoolinfo(const Array& parELP, bool fHelp)
+Value getmempoolinfo(const Array& params, bool fHelp)
 {
-    if (fHelp || parELP.size() != 0)
+    if (fHelp || params.size() != 0)
         throw runtime_error(
             "getmempoolinfo\n"
             "\nReturns details on the active state of the TX memory pool.\n"
@@ -631,9 +631,9 @@ Value getmempoolinfo(const Array& parELP, bool fHelp)
     return ret;
 }
 
-Value invalidateblock(const Array& parELP, bool fHelp)
+Value invalidateblock(const Array& params, bool fHelp)
 {
-    if (fHelp || parELP.size() != 1)
+    if (fHelp || params.size() != 1)
         throw runtime_error(
             "invalidateblock \"hash\"\n"
             "\nPermanently marks a block as invalid, as if it violated a consensus rule.\n"
@@ -643,7 +643,7 @@ Value invalidateblock(const Array& parELP, bool fHelp)
             "\nExamples:\n" +
             HelpExampleCli("invalidateblock", "\"blockhash\"") + HelpExampleRpc("invalidateblock", "\"blockhash\""));
 
-    std::string strHash = parELP[0].get_str();
+    std::string strHash = params[0].get_str();
     uint256 hash(strHash);
     CValidationState state;
 
@@ -667,9 +667,9 @@ Value invalidateblock(const Array& parELP, bool fHelp)
     return Value::null;
 }
 
-Value reconsiderblock(const Array& parELP, bool fHelp)
+Value reconsiderblock(const Array& params, bool fHelp)
 {
-    if (fHelp || parELP.size() != 1)
+    if (fHelp || params.size() != 1)
         throw runtime_error(
             "reconsiderblock \"hash\"\n"
             "\nRemoves invalidity status of a block and its descendants, reconsider them for activation.\n"
@@ -680,7 +680,7 @@ Value reconsiderblock(const Array& parELP, bool fHelp)
             "\nExamples:\n" +
             HelpExampleCli("reconsiderblock", "\"blockhash\"") + HelpExampleRpc("reconsiderblock", "\"blockhash\""));
 
-    std::string strHash = parELP[0].get_str();
+    std::string strHash = params[0].get_str();
     uint256 hash(strHash);
     CValidationState state;
 

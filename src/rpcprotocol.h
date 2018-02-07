@@ -8,8 +8,8 @@
 
 #include <boost/asio.hpp>
 #include <boost/asio/ssl.hpp>
-#include <boost/iostreELP/concepts.hpp>
-#include <boost/iostreELP/stream.hpp>
+#include <boost/iostreams/concepts.hpp>
+#include <boost/iostreams/stream.hpp>
 #include <list>
 #include <map>
 #include <stdint.h>
@@ -35,7 +35,7 @@ enum RPCErrorCode {
     //! Standard JSON-RPC 2.0 errors
     RPC_INVALID_REQUEST = -32600,
     RPC_METHOD_NOT_FOUND = -32601,
-    RPC_INVALID_PARELP = -32602,
+    RPC_INVALID_PARAMS = -32602,
     RPC_INTERNAL_ERROR = -32603,
     RPC_PARSE_ERROR = -32700,
 
@@ -80,7 +80,7 @@ enum RPCErrorCode {
  * IOStream device that speaks SSL but can also speak non-SSL
  */
 template <typename Protocol>
-class SSLIOStreamDevice : public boost::iostreELP::device<boost::iostreELP::bidirectional>
+class SSLIOStreamDevice : public boost::iostreams::device<boost::iostreams::bidirectional>
 {
 public:
     SSLIOStreamDevice(boost::asio::ssl::stream<typename Protocol::socket>& streamIn, bool fUseSSLIn) : stream(streamIn)
@@ -95,13 +95,13 @@ public:
         fNeedHandshake = false;
         stream.handshake(role);
     }
-    std::streELPize read(char* s, std::streELPize n)
+    std::streamsize read(char* s, std::streamsize n)
     {
         handshake(boost::asio::ssl::stream_base::server); // HTTPS servers read first
         if (fUseSSL) return stream.read_some(boost::asio::buffer(s, n));
         return stream.next_layer().read_some(boost::asio::buffer(s, n));
     }
-    std::streELPize write(const char* s, std::streELPize n)
+    std::streamsize write(const char* s, std::streamsize n)
     {
         handshake(boost::asio::ssl::stream_base::client); // HTTPS clients write first
         if (fUseSSL) return boost::asio::write(stream, boost::asio::buffer(s, n));
@@ -152,7 +152,7 @@ bool ReadHTTPRequestLine(std::basic_istream<char>& stream, int& proto, std::stri
 int ReadHTTPStatus(std::basic_istream<char>& stream, int& proto);
 int ReadHTTPHeaders(std::basic_istream<char>& stream, std::map<std::string, std::string>& mapHeadersRet);
 int ReadHTTPMessage(std::basic_istream<char>& stream, std::map<std::string, std::string>& mapHeadersRet, std::string& strMessageRet, int nProto, size_t max_size);
-std::string JSONRPCRequest(const std::string& strMethod, const json_spirit::Array& parELP, const json_spirit::Value& id);
+std::string JSONRPCRequest(const std::string& strMethod, const json_spirit::Array& params, const json_spirit::Value& id);
 json_spirit::Object JSONRPCReplyObj(const json_spirit::Value& result, const json_spirit::Value& error, const json_spirit::Value& id);
 std::string JSONRPCReply(const json_spirit::Value& result, const json_spirit::Value& error, const json_spirit::Value& id);
 json_spirit::Object JSONRPCError(int code, const std::string& message);

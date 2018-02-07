@@ -13,7 +13,7 @@
 #include "util.h"
 
 #include "allocators.h"
-#include "chainparELPbase.h"
+#include "chainparamsbase.h"
 #include "random.h"
 #include "serialize.h"
 #include "sync.h"
@@ -258,7 +258,7 @@ int LogPrintStr(const std::string& str)
         // print to console
         ret = fwrite(str.data(), 1, str.size(), stdout);
         fflush(stdout);
-    } else if (fPrintToDebugLog && AreBaseParELPConfigured()) {
+    } else if (fPrintToDebugLog && AreBaseParamsConfigured()) {
         static bool fStartedNewLine = true;
         boost::call_once(&DebugPrintInit, debugPrintInitFlag);
 
@@ -490,7 +490,7 @@ const boost::filesystem::path& GetDataDir(bool fNetSpecific)
         path = GetDefaultDataDir();
     }
     if (fNetSpecific)
-        path /= BaseParELP().DataDir();
+        path /= BaseParams().DataDir();
 
     fs::create_directories(path);
 

@@ -5,7 +5,7 @@
 
 #include "alert.h"
 
-#include "chainparELP.h"
+#include "chainparams.h"
 #include "clientversion.h"
 #include "net.h"
 #include "pubkey.h"
@@ -145,7 +145,7 @@ bool CAlert::RelayTo(CNode* pnode) const
 
 bool CAlert::CheckSignature() const
 {
-    CPubKey key(ParELP().AlertKey());
+    CPubKey key(Params().AlertKey());
     if (!key.Verify(Hash(vchMsg.begin(), vchMsg.end()), vchSig))
         return error("CAlert::CheckSignature() : verify signature failed");
 
