@@ -221,7 +221,7 @@
     </message>
     <message>
         <location line="+9"/>
-        <source>Ellerium will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your AMSs from being stolen by malware infecting your computer.</source>
+        <source>Ellerium will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your EPLs from being stolen by malware infecting your computer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -231,7 +231,7 @@
     </message>
     <message>
         <location line="+0"/>
-        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR AMS&lt;/b&gt;!</source>
+        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR EPL&lt;/b&gt;!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1975,12 +1975,12 @@ Please check the address and try again.</source>
     </message>
     <message>
         <location line="+13"/>
-        <source>Use 2 separate masternodes to mix funds up to 10000 AMS</source>
+        <source>Use 2 separate masternodes to mix funds up to 10000 EPL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+13"/>
-        <source>Use 8 separate masternodes to mix funds up to 10000 AMS</source>
+        <source>Use 8 separate masternodes to mix funds up to 10000 EPL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1990,12 +1990,12 @@ Please check the address and try again.</source>
     </message>
     <message>
         <location line="+13"/>
-        <source>This option is the quickest and will cost about ~0.025 AMS to anonymize 10000 AMS</source>
+        <source>This option is the quickest and will cost about ~0.025 EPL to anonymize 10000 EPL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+13"/>
-        <source>This option is moderately fast and will cost about 0.05 AMS to anonymize 10000 AMS</source>
+        <source>This option is moderately fast and will cost about 0.05 EPL to anonymize 10000 EPL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2005,7 +2005,7 @@ Please check the address and try again.</source>
     </message>
     <message>
         <location line="+13"/>
-        <source>0.1 AMS per 10000 AMS you anonymize.</source>
+        <source>0.1 EPL per 10000 EPL you anonymize.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2456,7 +2456,7 @@ https://www.transifex.com/ellerium-project/ellerium-project-translations</source
     </message>
     <message>
         <location line="+27"/>
-        <source>0 AMS / 0 Rounds</source>
+        <source>0 EPL / 0 Rounds</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3597,7 +3597,7 @@ https://www.transifex.com/ellerium-project/ellerium-project-translations</source
     </message>
     <message>
         <location line="+7"/>
-        <source>0 AMS</source>
+        <source>0 EPL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3657,12 +3657,12 @@ https://www.transifex.com/ellerium-project/ellerium-project-translations</source
     </message>
     <message>
         <location line="-165"/>
-        <source>If the custom fee is set to 1000 uAMSs and the transaction is only 250 bytes, then &quot;per kilobyte&quot; only pays 250 uAMSs in fee,&lt;br /&gt;while &quot;at least&quot; pays 1000 uAMSs. For transactions bigger than a kilobyte both pay by kilobyte.</source>
+        <source>If the custom fee is set to 1000 uEPLs and the transaction is only 250 bytes, then &quot;per kilobyte&quot; only pays 250 uEPLs in fee,&lt;br /&gt;while &quot;at least&quot; pays 1000 uEPLs. For transactions bigger than a kilobyte both pay by kilobyte.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+16"/>
-        <source>If the custom fee is set to 1000 uAMSs and the transaction is only 250 bytes, then &quot;per kilobyte&quot; only pays 250 uAMSs in fee,&lt;br /&gt;while &quot;total at least&quot; pays 1000 uAMSs. For transactions bigger than a kilobyte both pay by kilobyte.</source>
+        <source>If the custom fee is set to 1000 uEPLs and the transaction is only 250 bytes, then &quot;per kilobyte&quot; only pays 250 uEPLs in fee,&lt;br /&gt;while &quot;total at least&quot; pays 1000 uEPLs. For transactions bigger than a kilobyte both pay by kilobyte.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4957,7 +4957,7 @@ https://www.transifex.com/ellerium-project/ellerium-project-translations</source
     <message>
         <location line="-18"/>
         <location line="+9"/>
-        <source>SwiftTX doesn&apos;t support sending values that high yet. Transactions are currently limited to %1 AMS.</source>
+        <source>SwiftTX doesn&apos;t support sending values that high yet. Transactions are currently limited to %1 EPL.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -5118,12 +5118,12 @@ https://www.transifex.com/ellerium-project/ellerium-project-translations</source
     </message>
     <message>
         <location line="+3"/>
-        <source>Fees (in AMS/Kb) smaller than this are considered zero fee for relaying (default: %s)</source>
+        <source>Fees (in EPL/Kb) smaller than this are considered zero fee for relaying (default: %s)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+3"/>
-        <source>Fees (in AMS/Kb) smaller than this are considered zero fee for transaction creation (default: %s)</source>
+        <source>Fees (in EPL/Kb) smaller than this are considered zero fee for transaction creation (default: %s)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5273,12 +5273,12 @@ for example: alertnotify=echo %%s | mail -s &quot;Ellerium Alert&quot; admin@foo
     </message>
     <message>
         <location line="+2"/>
-        <source>Unable to locate enough Obfuscation non-denominated funds for this transaction that are not equal 10000 AMS.</source>
+        <source>Unable to locate enough Obfuscation non-denominated funds for this transaction that are not equal 10000 EPL.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+3"/>
-        <source>Unable to locate enough funds for this transaction that are not equal 10000 AMS.</source>
+        <source>Unable to locate enough funds for this transaction that are not equal 10000 EPL.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5645,7 +5645,7 @@ for example: alertnotify=echo %%s | mail -s &quot;Ellerium Alert&quot; admin@foo
     </message>
     <message>
         <location line="+1"/>
-        <source>Fee (in AMS/kB) to add to transactions you send (default: %s)</source>
+        <source>Fee (in EPL/kB) to add to transactions you send (default: %s)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5800,7 +5800,7 @@ for example: alertnotify=echo %%s | mail -s &quot;Ellerium Alert&quot; admin@foo
     </message>
     <message>
         <location line="+1"/>
-        <source>Keep N AMS anonymized (default: %u)</source>
+        <source>Keep N EPL anonymized (default: %u)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
