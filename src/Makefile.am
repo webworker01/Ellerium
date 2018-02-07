@@ -60,15 +60,15 @@ else
 LIBBITCOIN_CONSENSUS=
 endif
 
-bin_PROGRAMS =
+bin_PROGRELP =
 TESTS =
 
 if BUILD_BITCOIND
-  bin_PROGRAMS += elleriumd
+  bin_PROGRELP += elleriumd
 endif
 
 if BUILD_BITCOIN_UTILS
-  bin_PROGRAMS += ellerium-cli ellerium-tx
+  bin_PROGRELP += ellerium-cli ellerium-tx
 endif
 
 .PHONY: FORCE

@@ -176,16 +176,16 @@
         <translation>Confirm wallet encryption</translation>
     </message>
     <message>
-        <source>Ellerium will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your AMSs from being stolen by malware infecting your computer.</source>
-        <translation>Ellerium will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your AMSs from being stolen by malware infecting your computer.</translation>
+        <source>Ellerium will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your ELPs from being stolen by malware infecting your computer.</source>
+        <translation>Ellerium will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your ELPs from being stolen by malware infecting your computer.</translation>
     </message>
     <message>
         <source>Are you sure you wish to encrypt your wallet?</source>
         <translation>Are you sure you wish to encrypt your wallet?</translation>
     </message>
     <message>
-        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR AMS&lt;/b&gt;!</source>
-        <translation>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR AMS&lt;/b&gt;!</translation>
+        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR ELP&lt;/b&gt;!</source>
+        <translation>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR ELP&lt;/b&gt;!</translation>
     </message>
     <message>
         <source>Wallet encrypted</source>
@@ -1560,32 +1560,32 @@ Please check the address and try again.</translation>
         <translation>Please select a privacy level.</translation>
     </message>
     <message>
-        <source>Use 2 separate masternodes to mix funds up to 10000 AMS</source>
-        <translation>Use 2 separate masternodes to mix funds up to 10000 AMS</translation>
+        <source>Use 2 separate masternodes to mix funds up to 10000 ELP</source>
+        <translation>Use 2 separate masternodes to mix funds up to 10000 ELP</translation>
     </message>
     <message>
-        <source>Use 8 separate masternodes to mix funds up to 10000 AMS</source>
-        <translation>Use 8 separate masternodes to mix funds up to 10000 AMS</translation>
+        <source>Use 8 separate masternodes to mix funds up to 10000 ELP</source>
+        <translation>Use 8 separate masternodes to mix funds up to 10000 ELP</translation>
     </message>
     <message>
         <source>Use 16 separate masternodes</source>
         <translation>Use 16 separate masternodes</translation>
     </message>
     <message>
-        <source>This option is the quickest and will cost about ~0.025 AMS to anonymize 10000 AMS</source>
-        <translation>This option is the quickest and will cost about ~0.025 AMS to anonymize 10000 AMS</translation>
+        <source>This option is the quickest and will cost about ~0.025 ELP to anonymize 10000 ELP</source>
+        <translation>This option is the quickest and will cost about ~0.025 ELP to anonymize 10000 ELP</translation>
     </message>
     <message>
-        <source>This option is moderately fast and will cost about 0.05 AMS to anonymize 10000 AMS</source>
-        <translation>This option is moderately fast and will cost about 0.05 AMS to anonymize 10000 AMS</translation>
+        <source>This option is moderately fast and will cost about 0.05 ELP to anonymize 10000 ELP</source>
+        <translation>This option is moderately fast and will cost about 0.05 ELP to anonymize 10000 ELP</translation>
     </message>
     <message>
         <source>This is the slowest and most secure option. Using maximum anonymity will cost</source>
         <translation>This is the slowest and most secure option. Using maximum anonymity will cost</translation>
     </message>
     <message>
-        <source>0.1 AMS per 10000 AMS you anonymize.</source>
-        <translation>0.1 AMS per 10000 AMS you anonymize.</translation>
+        <source>0.1 ELP per 10000 ELP you anonymize.</source>
+        <translation>0.1 ELP per 10000 ELP you anonymize.</translation>
     </message>
     <message>
         <source>Obfuscation Configuration</source>
@@ -1943,8 +1943,8 @@ https://www.transifex.com/ellerium-project/ellerium-project-translations</transl
         <translation>Obfuscation Balance:</translation>
     </message>
     <message>
-        <source>0 AMS / 0 Rounds</source>
-        <translation>0 AMS / 0 Rounds</translation>
+        <source>0 ELP / 0 Rounds</source>
+        <translation>0 ELP / 0 Rounds</translation>
     </message>
     <message>
         <source>Enabled/Disabled</source>
@@ -2812,8 +2812,8 @@ https://www.transifex.com/ellerium-project/ellerium-project-translations</transl
         <translation>UTXO Size:</translation>
     </message>
     <message>
-        <source>0 AMS</source>
-        <translation>0 AMS</translation>
+        <source>0 ELP</source>
+        <translation>0 ELP</translation>
     </message>
     <message>
         <source>Transaction Fee:</source>
@@ -2860,12 +2860,12 @@ https://www.transifex.com/ellerium-project/ellerium-project-translations</transl
         <translation>Confirmation time:</translation>
     </message>
     <message>
-        <source>If the custom fee is set to 1000 uAMSs and the transaction is only 250 bytes, then "per kilobyte" only pays 250 uAMSs in fee,&lt;br /&gt;while "at least" pays 1000 uAMSs. For transactions bigger than a kilobyte both pay by kilobyte.</source>
-        <translation>If the custom fee is set to 1000 uAMSs and the transaction is only 250 bytes, then "per kilobyte" only pays 250 uAMSs in fee,&lt;br /&gt;while "at least" pays 1000 uAMSs. For transactions bigger than a kilobyte both pay by kilobyte.</translation>
+        <source>If the custom fee is set to 1000 uELPs and the transaction is only 250 bytes, then "per kilobyte" only pays 250 uELPs in fee,&lt;br /&gt;while "at least" pays 1000 uELPs. For transactions bigger than a kilobyte both pay by kilobyte.</source>
+        <translation>If the custom fee is set to 1000 uELPs and the transaction is only 250 bytes, then "per kilobyte" only pays 250 uELPs in fee,&lt;br /&gt;while "at least" pays 1000 uELPs. For transactions bigger than a kilobyte both pay by kilobyte.</translation>
     </message>
     <message>
-        <source>If the custom fee is set to 1000 uAMSs and the transaction is only 250 bytes, then "per kilobyte" only pays 250 uAMSs in fee,&lt;br /&gt;while "total at least" pays 1000 uAMSs. For transactions bigger than a kilobyte both pay by kilobyte.</source>
-        <translation>If the custom fee is set to 1000 uAMSs and the transaction is only 250 bytes, then "per kilobyte" only pays 250 uAMSs in fee,&lt;br /&gt;while "total at least" pays 1000 uAMSs. For transactions bigger than a kilobyte both pay by kilobyte.</translation>
+        <source>If the custom fee is set to 1000 uELPs and the transaction is only 250 bytes, then "per kilobyte" only pays 250 uELPs in fee,&lt;br /&gt;while "total at least" pays 1000 uELPs. For transactions bigger than a kilobyte both pay by kilobyte.</source>
+        <translation>If the custom fee is set to 1000 uELPs and the transaction is only 250 bytes, then "per kilobyte" only pays 250 uELPs in fee,&lt;br /&gt;while "total at least" pays 1000 uELPs. For transactions bigger than a kilobyte both pay by kilobyte.</translation>
     </message>
     <message>
         <source>Paying only the minimum fee is just fine as long as there is less transaction volume than space in the blocks.&lt;br /&gt;But be aware that this can end up in a never confirming transaction once there is more demand for Ellerium transactions than the network can process.</source>
@@ -3860,8 +3860,8 @@ https://www.transifex.com/ellerium-project/ellerium-project-translations</transl
         <translation>Send Coins</translation>
     </message>
     <message>
-        <source>SwiftTX doesn't support sending values that high yet. Transactions are currently limited to %1 AMS.</source>
-        <translation>SwiftTX doesn't support sending values that high yet. Transactions are currently limited to %1 AMS.</translation>
+        <source>SwiftTX doesn't support sending values that high yet. Transactions are currently limited to %1 ELP.</source>
+        <translation>SwiftTX doesn't support sending values that high yet. Transactions are currently limited to %1 ELP.</translation>
     </message>
 </context>
 <context>
@@ -3990,12 +3990,12 @@ https://www.transifex.com/ellerium-project/ellerium-project-translations</transl
         <translation>Execute command when the best block changes (%s in cmd is replaced by block hash)</translation>
     </message>
     <message>
-        <source>Fees (in AMS/Kb) smaller than this are considered zero fee for relaying (default: %s)</source>
-        <translation>Fees (in AMS/Kb) smaller than this are considered zero fee for relaying (default: %s)</translation>
+        <source>Fees (in ELP/Kb) smaller than this are considered zero fee for relaying (default: %s)</source>
+        <translation>Fees (in ELP/Kb) smaller than this are considered zero fee for relaying (default: %s)</translation>
     </message>
     <message>
-        <source>Fees (in AMS/Kb) smaller than this are considered zero fee for transaction creation (default: %s)</source>
-        <translation>Fees (in AMS/Kb) smaller than this are considered zero fee for transaction creation (default: %s)</translation>
+        <source>Fees (in ELP/Kb) smaller than this are considered zero fee for transaction creation (default: %s)</source>
+        <translation>Fees (in ELP/Kb) smaller than this are considered zero fee for transaction creation (default: %s)</translation>
     </message>
     <message>
         <source>Flush database activity from memory pool to disk log every &lt;n&gt; megabytes (default: %u)</source>
@@ -4126,12 +4126,12 @@ for example: alertnotify=echo %%s | mail -s "Ellerium Alert" admin@foo.com
         <translation>Unable to locate enough Obfuscation denominated funds for this transaction.</translation>
     </message>
     <message>
-        <source>Unable to locate enough Obfuscation non-denominated funds for this transaction that are not equal 10000 AMS.</source>
-        <translation>Unable to locate enough Obfuscation non-denominated funds for this transaction that are not equal 10000 AMS.</translation>
+        <source>Unable to locate enough Obfuscation non-denominated funds for this transaction that are not equal 10000 ELP.</source>
+        <translation>Unable to locate enough Obfuscation non-denominated funds for this transaction that are not equal 10000 ELP.</translation>
     </message>
     <message>
-        <source>Unable to locate enough funds for this transaction that are not equal 10000 AMS.</source>
-        <translation>Unable to locate enough funds for this transaction that are not equal 10000 AMS.</translation>
+        <source>Unable to locate enough funds for this transaction that are not equal 10000 ELP.</source>
+        <translation>Unable to locate enough funds for this transaction that are not equal 10000 ELP.</translation>
     </message>
     <message>
         <source>Use separate SOCKS5 proxy to reach peers via Tor hidden services (default: %s)</source>
@@ -4424,8 +4424,8 @@ for example: alertnotify=echo %%s | mail -s "Ellerium Alert" admin@foo.com
         <translation>Failed to read block</translation>
     </message>
     <message>
-        <source>Fee (in AMS/kB) to add to transactions you send (default: %s)</source>
-        <translation>Fee (in AMS/kB) to add to transactions you send (default: %s)</translation>
+        <source>Fee (in ELP/kB) to add to transactions you send (default: %s)</source>
+        <translation>Fee (in ELP/kB) to add to transactions you send (default: %s)</translation>
     </message>
     <message>
         <source>Finalizing transaction.</source>
@@ -4548,8 +4548,8 @@ for example: alertnotify=echo %%s | mail -s "Ellerium Alert" admin@foo.com
         <translation>Invalid script detected.</translation>
     </message>
     <message>
-        <source>Keep N AMS anonymized (default: %u)</source>
-        <translation>Keep N AMS anonymized (default: %u)</translation>
+        <source>Keep N ELP anonymized (default: %u)</source>
+        <translation>Keep N ELP anonymized (default: %u)</translation>
     </message>
     <message>
         <source>Keep at most &lt;n&gt; unconnectable transactions in memory (default: %u)</source>

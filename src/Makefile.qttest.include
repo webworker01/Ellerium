@@ -1,4 +1,4 @@
-bin_PROGRAMS += qt/test/test_ellerium-qt
+bin_PROGRELP += qt/test/test_ellerium-qt
 TESTS += qt/test/test_ellerium-qt
 
 TEST_QT_MOC_CPP = qt/test/moc_uritests.cpp
