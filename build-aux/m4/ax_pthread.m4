@@ -8,21 +8,21 @@
 #
 # DESCRIPTION
 #
-#   This macro figures out how to build C programs using POSIX threads. It
+#   This macro figures out how to build C progrELP using POSIX threads. It
 #   sets the PTHREAD_LIBS output variable to the threads library and linker
 #   flags, and the PTHREAD_CFLAGS output variable to any special C compiler
 #   flags that are needed. (The user can also force certain compiler
 #   flags/libs to be tested by setting these environment variables.)
 #
 #   Also sets PTHREAD_CC to any special C compiler that is needed for
-#   multi-threaded programs (defaults to the value of CC otherwise). (This
+#   multi-threaded progrELP (defaults to the value of CC otherwise). (This
 #   is necessary on AIX to use the special cc_r compiler alias.)
 #
 #   NOTE: You are assumed to not only compile your program with these flags,
 #   but also link it with them as well. e.g. you should link with
 #   $PTHREAD_CC $CFLAGS $PTHREAD_CFLAGS $LDFLAGS ... $PTHREAD_LIBS $LIBS
 #
-#   If you are only building threads programs, you may wish to use these
+#   If you are only building threads progrELP, you may wish to use these
 #   variables in your default LIBS, CFLAGS, and CC:
 #
 #     LIBS="$PTHREAD_LIBS $LIBS"

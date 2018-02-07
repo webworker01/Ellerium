@@ -29,7 +29,7 @@ int nSubmittedFinalBudget;
 int GetBudgetPaymentCycleBlocks()
 {
     // Amount of blocks in a months period of time (using 1 minutes per) = (60*24*30)
-    if (Params().NetworkID() == CBaseChainParams::MAIN) return 43200;
+    if (ParELP().NetworkID() == CBaseChainParELP::MAIN) return 43200;
     //for testing purposes
 
     return 144; //ten times per day
@@ -249,7 +249,7 @@ bool CBudgetDB::Write(const CBudgetManager& objToSave)
     // serialize, checksum data up to that point, then append checksum
     CDataStream ssObj(SER_DISK, CLIENT_VERSION);
     ssObj << strMagicMessage;                   // masternode cache file specific magic message
-    ssObj << FLATDATA(Params().MessageStart()); // network specific magic number
+    ssObj << FLATDATA(ParELP().MessageStart()); // network specific magic number
     ssObj << objToSave;
     uint256 hash = Hash(ssObj.begin(), ssObj.end());
     ssObj << hash;
@@ -333,7 +333,7 @@ CBudgetDB::ReadResult CBudgetDB::Read(CBudgetManager& objToLoad, bool fDryRun)
         ssObj >> FLATDATA(pchMsgTmp);
 
         // ... verify the network matches ours
-        if (memcmp(pchMsgTmp, Params().MessageStart(), sizeof(pchMsgTmp))) {
+        if (memcmp(pchMsgTmp, ParELP().MessageStart(), sizeof(pchMsgTmp))) {
             error("%s : Invalid network magic number", __func__);
             return IncorrectMagicNumber;
         }
@@ -789,16 +789,16 @@ CAmount CBudgetManager::GetTotalBudget(int nHeight)
 {
     if (chainActive.Tip() == NULL) return 0;
 
-    if (Params().NetworkID() == CBaseChainParams::TESTNET) {
+    if (ParELP().NetworkID() == CBaseChainParELP::TESTNET) {
         CAmount nSubsidy = 500 * COIN;
         return ((nSubsidy / 100) * 10) * 146;
     }
 
     //get block value and calculate from that
     CAmount nSubsidy = 0;
-    if (nHeight <= Params().LAST_POW_BLOCK() && nHeight >= 151200) {
+    if (nHeight <= ParELP().LAST_POW_BLOCK() && nHeight >= 151200) {
         nSubsidy = 50 * COIN;
-    } else if (nHeight <= 302399 && nHeight > Params().LAST_POW_BLOCK()) {
+    } else if (nHeight <= 302399 && nHeight > ParELP().LAST_POW_BLOCK()) {
         nSubsidy = 50 * COIN;
     } else if (nHeight <= 345599 && nHeight >= 302400) {
         nSubsidy = 45 * COIN;
@@ -954,7 +954,7 @@ void CBudgetManager::ProcessMessage(CNode* pfrom, std::string& strCommand, CData
         uint256 nProp;
         vRecv >> nProp;
 
-        if (Params().NetworkID() == CBaseChainParams::MAIN) {
+        if (ParELP().NetworkID() == CBaseChainParELP::MAIN) {
             if (nProp == 0) {
                 if (pfrom->HasFulfilledRequest("mnvs")) {
                     LogPrintf("mnvs - peer already asked me for the list\n");
@@ -1722,7 +1722,7 @@ void CFinalizedBudget::AutoCheck()
 
     //do this 1 in 4 blocks -- spread out the voting activity on mainnet
     // -- this function is only called every fourteenth block, so this is really 1 in 56 blocks
-    if (Params().NetworkID() == CBaseChainParams::MAIN && rand() % 4 != 0) {
+    if (ParELP().NetworkID() == CBaseChainParELP::MAIN && rand() % 4 != 0) {
         LogPrintf("CFinalizedBudget::AutoCheck - waiting\n");
         return;
     }

@@ -11,7 +11,7 @@
 #include "data/alertTests.raw.h"
 
 #include "serialize.h"
-#include "streams.h"
+#include "streELP.h"
 #include "util.h"
 #include "utilstrencodings.h"
 

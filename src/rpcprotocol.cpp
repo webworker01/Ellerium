@@ -24,8 +24,8 @@
 #include <boost/bind.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/foreach.hpp>
-#include <boost/iostreams/concepts.hpp>
-#include <boost/iostreams/stream.hpp>
+#include <boost/iostreELP/concepts.hpp>
+#include <boost/iostreELP/stream.hpp>
 #include <boost/shared_ptr.hpp>
 
 using namespace std;
@@ -258,11 +258,11 @@ int ReadHTTPMessage(std::basic_istream<char>& stream, map<string, string>& mapHe
  * http://www.codeproject.com/KB/recipes/JSON_Spirit.aspx
  */
 
-string JSONRPCRequest(const string& strMethod, const Array& params, const Value& id)
+string JSONRPCRequest(const string& strMethod, const Array& parELP, const Value& id)
 {
     Object request;
     request.push_back(Pair("method", strMethod));
-    request.push_back(Pair("params", params));
+    request.push_back(Pair("parELP", parELP));
     request.push_back(Pair("id", id));
     return write_string(Value(request), false) + "\n";
 }

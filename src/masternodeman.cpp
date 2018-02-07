@@ -58,7 +58,7 @@ bool CMasternodeDB::Write(const CMasternodeMan& mnodemanToSave)
     // serialize, checksum data up to that point, then append checksum
     CDataStream ssMasternodes(SER_DISK, CLIENT_VERSION);
     ssMasternodes << strMagicMessage;                   // masternode cache file specific magic message
-    ssMasternodes << FLATDATA(Params().MessageStart()); // network specific magic number
+    ssMasternodes << FLATDATA(ParELP().MessageStart()); // network specific magic number
     ssMasternodes << mnodemanToSave;
     uint256 hash = Hash(ssMasternodes.begin(), ssMasternodes.end());
     ssMasternodes << hash;
@@ -141,7 +141,7 @@ CMasternodeDB::ReadResult CMasternodeDB::Read(CMasternodeMan& mnodemanToLoad, bo
         ssMasternodes >> FLATDATA(pchMsgTmp);
 
         // ... verify the network matches ours
-        if (memcmp(pchMsgTmp, Params().MessageStart(), sizeof(pchMsgTmp))) {
+        if (memcmp(pchMsgTmp, ParELP().MessageStart(), sizeof(pchMsgTmp))) {
             error("%s : Invalid network magic number", __func__);
             return IncorrectMagicNumber;
         }
@@ -365,7 +365,7 @@ void CMasternodeMan::DsegUpdate(CNode* pnode)
 {
     LOCK(cs);
 
-    if (Params().NetworkID() == CBaseChainParams::MAIN) {
+    if (ParELP().NetworkID() == CBaseChainParELP::MAIN) {
         if (!(pnode->addr.IsRFC1918() || pnode->addr.IsLocal())) {
             std::map<CNetAddr, int64_t>::iterator it = mWeAskedForMasternodeList.find(pnode->addr);
             if (it != mWeAskedForMasternodeList.end()) {
@@ -641,7 +641,7 @@ CMasternode* CMasternodeMan::GetMasternodeByRank(int nRank, int64_t nBlockHeight
 void CMasternodeMan::ProcessMasternodeConnections()
 {
     //we don't care about this for regtest
-    if (Params().NetworkID() == CBaseChainParams::REGTEST) return;
+    if (ParELP().NetworkID() == CBaseChainParELP::REGTEST) return;
 
     LOCK(cs_vNodes);
     BOOST_FOREACH (CNode* pnode, vNodes) {
@@ -737,7 +737,7 @@ void CMasternodeMan::ProcessMessage(CNode* pfrom, std::string& strCommand, CData
             //local network
             bool isLocal = (pfrom->addr.IsRFC1918() || pfrom->addr.IsLocal());
 
-            if (!isLocal && Params().NetworkID() == CBaseChainParams::MAIN) {
+            if (!isLocal && ParELP().NetworkID() == CBaseChainParELP::MAIN) {
                 std::map<CNetAddr, int64_t>::iterator i = mAskedUsForMasternodeList.find(pfrom->addr);
                 if (i != mAskedUsForMasternodeList.end()) {
                     int64_t t = (*i).second;
@@ -856,7 +856,7 @@ void CMasternodeMan::ProcessMessage(CNode* pfrom, std::string& strCommand, CData
             return;
         }
 
-        if (Params().NetworkID() == CBaseChainParams::MAIN) {
+        if (ParELP().NetworkID() == CBaseChainParELP::MAIN) {
             if (addr.GetPort() != 50020) return;
         } else if (addr.GetPort() == 50020)
             return;
@@ -943,7 +943,7 @@ void CMasternodeMan::ProcessMessage(CNode* pfrom, std::string& strCommand, CData
             GetTransaction(vin.prevout.hash, tx2, hashBlock, true);
             BlockMap::iterator mi = mapBlockIndex.find(hashBlock);
             if (mi != mapBlockIndex.end() && (*mi).second) {
-                CBlockIndex* pMNIndex = (*mi).second;                                                        // block for 100000 AMS tx -> 1 confirmation
+                CBlockIndex* pMNIndex = (*mi).second;                                                        // block for 100000 ELP tx -> 1 confirmation
                 CBlockIndex* pConfIndex = chainActive[pMNIndex->nHeight + MASTERNODE_MIN_CONFIRMATIONS - 1]; // block where tx got MASTERNODE_MIN_CONFIRMATIONS
                 if (pConfIndex->GetBlockTime() > sigTime) {
                     LogPrintf("mnb - Bad sigTime %d for Masternode %20s %105s (%i conf block is at %d)\n",

@@ -56,9 +56,9 @@ libsecp256k1_la_CPPFLAGS = -I$(top_srcdir)/include $(SECP_INCLUDES)
 libsecp256k1_la_LIBADD = $(COMMON_LIB) $(SECP_LIBS)
 
 
-noinst_PROGRAMS =
+noinst_PROGRELP =
 if USE_BENCHMARK
-noinst_PROGRAMS += bench_verify bench_sign bench_inv
+noinst_PROGRELP += bench_verify bench_sign bench_inv
 bench_verify_SOURCES = src/bench_verify.c
 bench_verify_LDADD = libsecp256k1.la $(SECP_LIBS)
 bench_verify_LDFLAGS = -static
@@ -72,7 +72,7 @@ bench_inv_CPPFLAGS = $(SECP_INCLUDES)
 endif
 
 if USE_TESTS
-noinst_PROGRAMS += tests
+noinst_PROGRELP += tests
 tests_SOURCES = src/tests.c
 tests_CPPFLAGS = -DVERIFY $(SECP_INCLUDES) $(SECP_TEST_INCLUDES)
 tests_LDADD = $(COMMON_LIB) $(SECP_LIBS) $(SECP_TEST_LIBS)

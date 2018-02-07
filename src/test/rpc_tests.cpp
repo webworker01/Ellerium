@@ -32,11 +32,11 @@ Value CallRPC(string args)
     boost::split(vArgs, args, boost::is_any_of(" \t"));
     string strMethod = vArgs[0];
     vArgs.erase(vArgs.begin());
-    Array params = RPCConvertValues(strMethod, vArgs);
+    Array parELP = RPCConvertValues(strMethod, vArgs);
 
     rpcfn_type method = tableRPC[strMethod]->actor;
     try {
-        Value result = (*method)(params, false);
+        Value result = (*method)(parELP, false);
         return result;
     }
     catch (Object& objError)
@@ -48,7 +48,7 @@ Value CallRPC(string args)
 
 BOOST_AUTO_TEST_SUITE(rpc_tests)
 
-BOOST_AUTO_TEST_CASE(rpc_rawparams)
+BOOST_AUTO_TEST_CASE(rpc_rawparELP)
 {
     // Test raw transaction API argument handling
     Value r;

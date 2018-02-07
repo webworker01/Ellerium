@@ -6,7 +6,7 @@
 #include "pow.h"
 
 #include "chain.h"
-#include "chainparams.h"
+#include "chainparELP.h"
 #include "main.h"
 #include "primitives/block.h"
 #include "uint256.h"
@@ -28,10 +28,10 @@ unsigned int static DarkGravityWave(const CBlockIndex* pindexLast)
     uint256 PastDifficultyAveragePrev;
 
     if (BlockLastSolved == NULL || BlockLastSolved->nHeight == 0 || BlockLastSolved->nHeight < PastBlocksMin) {
-        return Params().ProofOfWorkLimit().GetCompact();
+        return ParELP().ProofOfWorkLimit().GetCompact();
     }
 
-    if (pindexLast->nHeight > Params().LAST_POW_BLOCK()) {
+    if (pindexLast->nHeight > ParELP().LAST_POW_BLOCK()) {
         uint256 bnTargetLimit = (~uint256(0) >> 24);
         int64_t nTargetSpacing = 60;
         int64_t nTargetTimespan = 60 * 40;
@@ -88,7 +88,7 @@ unsigned int static DarkGravityWave(const CBlockIndex* pindexLast)
 
     uint256 bnNew(PastDifficultyAverage);
 
-    int64_t _nTargetTimespan = CountBlocks * Params().TargetSpacing();
+    int64_t _nTargetTimespan = CountBlocks * ParELP().TargetSpacing();
 
     if (nActualTimespan < _nTargetTimespan / 3)
         nActualTimespan = _nTargetTimespan / 3;
@@ -99,8 +99,8 @@ unsigned int static DarkGravityWave(const CBlockIndex* pindexLast)
     bnNew *= nActualTimespan;
     bnNew /= _nTargetTimespan;
 
-    if (bnNew > Params().ProofOfWorkLimit()) {
-        bnNew = Params().ProofOfWorkLimit();
+    if (bnNew > ParELP().ProofOfWorkLimit()) {
+        bnNew = ParELP().ProofOfWorkLimit();
     }
 
     return bnNew.GetCompact();	
@@ -117,13 +117,13 @@ bool CheckProofOfWork(uint256 hash, unsigned int nBits)
     bool fOverflow;
     uint256 bnTarget;
 
-    if (Params().SkipProofOfWorkCheck())
+    if (ParELP().SkipProofOfWorkCheck())
         return true;
 
     bnTarget.SetCompact(nBits, &fNegative, &fOverflow);
 
     // Check range
-    if (fNegative || bnTarget == 0 || fOverflow || bnTarget > Params().ProofOfWorkLimit())
+    if (fNegative || bnTarget == 0 || fOverflow || bnTarget > ParELP().ProofOfWorkLimit())
         return error("CheckProofOfWork() : nBits below minimum work");
 
     // Check proof of work matches claimed amount

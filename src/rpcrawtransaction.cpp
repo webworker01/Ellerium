@@ -107,9 +107,9 @@ void TxToJSON(const CTransaction& tx, const uint256 hashBlock, Object& entry)
     }
 }
 
-Value getrawtransaction(const Array& params, bool fHelp)
+Value getrawtransaction(const Array& parELP, bool fHelp)
 {
-    if (fHelp || params.size() < 1 || params.size() > 2)
+    if (fHelp || parELP.size() < 1 || parELP.size() > 2)
         throw runtime_error(
             "getrawtransaction \"txid\" ( verbose )\n"
             "\nNOTE: By default this function only works sometimes. This is when the tx is in the mempool\n"
@@ -170,11 +170,11 @@ Value getrawtransaction(const Array& params, bool fHelp)
             "\nExamples:\n" +
             HelpExampleCli("getrawtransaction", "\"mytxid\"") + HelpExampleCli("getrawtransaction", "\"mytxid\" 1") + HelpExampleRpc("getrawtransaction", "\"mytxid\", 1"));
 
-    uint256 hash = ParseHashV(params[0], "parameter 1");
+    uint256 hash = ParseHashV(parELP[0], "parameter 1");
 
     bool fVerbose = false;
-    if (params.size() > 1)
-        fVerbose = (params[1].get_int() != 0);
+    if (parELP.size() > 1)
+        fVerbose = (parELP[1].get_int() != 0);
 
     CTransaction tx;
     uint256 hashBlock = 0;
@@ -193,9 +193,9 @@ Value getrawtransaction(const Array& params, bool fHelp)
 }
 
 #ifdef ENABLE_WALLET
-Value listunspent(const Array& params, bool fHelp)
+Value listunspent(const Array& parELP, bool fHelp)
 {
-    if (fHelp || params.size() > 3)
+    if (fHelp || parELP.size() > 3)
         throw runtime_error(
             "listunspent ( minconf maxconf  [\"address\",...] )\n"
             "\nReturns array of unspent transaction outputs\n"
@@ -228,19 +228,19 @@ Value listunspent(const Array& params, bool fHelp)
             "\nExamples\n" +
             HelpExampleCli("listunspent", "") + HelpExampleCli("listunspent", "6 9999999 \"[\\\"1PGFqEzfmQch1gKD3ra4k18PNj3tTUUSqg\\\",\\\"1LtvqCaApEdUGFkpKMM4MstjcaL4dKg8SP\\\"]\"") + HelpExampleRpc("listunspent", "6, 9999999 \"[\\\"1PGFqEzfmQch1gKD3ra4k18PNj3tTUUSqg\\\",\\\"1LtvqCaApEdUGFkpKMM4MstjcaL4dKg8SP\\\"]\""));
 
-    RPCTypeCheck(params, list_of(int_type)(int_type)(array_type));
+    RPCTypeCheck(parELP, list_of(int_type)(int_type)(array_type));
 
     int nMinDepth = 1;
-    if (params.size() > 0)
-        nMinDepth = params[0].get_int();
+    if (parELP.size() > 0)
+        nMinDepth = parELP[0].get_int();
 
     int nMaxDepth = 9999999;
-    if (params.size() > 1)
-        nMaxDepth = params[1].get_int();
+    if (parELP.size() > 1)
+        nMaxDepth = parELP[1].get_int();
 
     set<CBitcoinAddress> setAddress;
-    if (params.size() > 2) {
-        Array inputs = params[2].get_array();
+    if (parELP.size() > 2) {
+        Array inputs = parELP[2].get_array();
         BOOST_FOREACH (Value& input, inputs) {
             CBitcoinAddress address(input.get_str());
             if (!address.IsValid())
@@ -299,9 +299,9 @@ Value listunspent(const Array& params, bool fHelp)
 }
 #endif
 
-Value createrawtransaction(const Array& params, bool fHelp)
+Value createrawtransaction(const Array& parELP, bool fHelp)
 {
-    if (fHelp || params.size() != 2)
+    if (fHelp || parELP.size() != 2)
         throw runtime_error(
             "createrawtransaction [{\"txid\":\"id\",\"vout\":n},...] {\"address\":amount,...}\n"
             "\nCreate a transaction spending the given inputs and sending to the given addresses.\n"
@@ -330,10 +330,10 @@ Value createrawtransaction(const Array& params, bool fHelp)
             "\nExamples\n" +
             HelpExampleCli("createrawtransaction", "\"[{\\\"txid\\\":\\\"myid\\\",\\\"vout\\\":0}]\" \"{\\\"address\\\":0.01}\"") + HelpExampleRpc("createrawtransaction", "\"[{\\\"txid\\\":\\\"myid\\\",\\\"vout\\\":0}]\", \"{\\\"address\\\":0.01}\""));
 
-    RPCTypeCheck(params, list_of(array_type)(obj_type));
+    RPCTypeCheck(parELP, list_of(array_type)(obj_type));
 
-    Array inputs = params[0].get_array();
-    Object sendTo = params[1].get_obj();
+    Array inputs = parELP[0].get_array();
+    Object sendTo = parELP[1].get_obj();
 
     CMutableTransaction rawTx;
 
@@ -373,9 +373,9 @@ Value createrawtransaction(const Array& params, bool fHelp)
     return EncodeHexTx(rawTx);
 }
 
-Value decoderawtransaction(const Array& params, bool fHelp)
+Value decoderawtransaction(const Array& parELP, bool fHelp)
 {
-    if (fHelp || params.size() != 1)
+    if (fHelp || parELP.size() != 1)
         throw runtime_error(
             "decoderawtransaction \"hexstring\"\n"
             "\nReturn a JSON object representing the serialized, hex-encoded transaction.\n"
@@ -422,11 +422,11 @@ Value decoderawtransaction(const Array& params, bool fHelp)
             "\nExamples:\n" +
             HelpExampleCli("decoderawtransaction", "\"hexstring\"") + HelpExampleRpc("decoderawtransaction", "\"hexstring\""));
 
-    RPCTypeCheck(params, list_of(str_type));
+    RPCTypeCheck(parELP, list_of(str_type));
 
     CTransaction tx;
 
-    if (!DecodeHexTx(tx, params[0].get_str()))
+    if (!DecodeHexTx(tx, parELP[0].get_str()))
         throw JSONRPCError(RPC_DESERIALIZATION_ERROR, "TX decode failed");
 
     Object result;
@@ -435,9 +435,9 @@ Value decoderawtransaction(const Array& params, bool fHelp)
     return result;
 }
 
-Value decodescript(const Array& params, bool fHelp)
+Value decodescript(const Array& parELP, bool fHelp)
 {
-    if (fHelp || params.size() != 1)
+    if (fHelp || parELP.size() != 1)
         throw runtime_error(
             "decodescript \"hex\"\n"
             "\nDecode a hex-encoded script.\n"
@@ -458,12 +458,12 @@ Value decodescript(const Array& params, bool fHelp)
             "\nExamples:\n" +
             HelpExampleCli("decodescript", "\"hexstring\"") + HelpExampleRpc("decodescript", "\"hexstring\""));
 
-    RPCTypeCheck(params, list_of(str_type));
+    RPCTypeCheck(parELP, list_of(str_type));
 
     Object r;
     CScript script;
-    if (params[0].get_str().size() > 0) {
-        vector<unsigned char> scriptData(ParseHexV(params[0], "argument"));
+    if (parELP[0].get_str().size() > 0) {
+        vector<unsigned char> scriptData(ParseHexV(parELP[0], "argument"));
         script = CScript(scriptData.begin(), scriptData.end());
     } else {
         // Empty scripts are valid
@@ -474,9 +474,9 @@ Value decodescript(const Array& params, bool fHelp)
     return r;
 }
 
-Value signrawtransaction(const Array& params, bool fHelp)
+Value signrawtransaction(const Array& parELP, bool fHelp)
 {
-    if (fHelp || params.size() < 1 || params.size() > 4)
+    if (fHelp || parELP.size() < 1 || parELP.size() > 4)
         throw runtime_error(
             "signrawtransaction \"hexstring\" ( [{\"txid\":\"id\",\"vout\":n,\"scriptPubKey\":\"hex\",\"redeemScript\":\"hex\"},...] [\"privatekey1\",...] sighashtype )\n"
             "\nSign inputs for raw transaction (serialized, hex-encoded).\n"
@@ -522,9 +522,9 @@ Value signrawtransaction(const Array& params, bool fHelp)
                                           "\nExamples:\n" +
             HelpExampleCli("signrawtransaction", "\"myhex\"") + HelpExampleRpc("signrawtransaction", "\"myhex\""));
 
-    RPCTypeCheck(params, list_of(str_type)(array_type)(array_type)(str_type), true);
+    RPCTypeCheck(parELP, list_of(str_type)(array_type)(array_type)(str_type), true);
 
-    vector<unsigned char> txData(ParseHexV(params[0], "argument 1"));
+    vector<unsigned char> txData(ParseHexV(parELP[0], "argument 1"));
     CDataStream ssData(txData, SER_NETWORK, PROTOCOL_VERSION);
     vector<CMutableTransaction> txVariants;
     while (!ssData.empty()) {
@@ -565,9 +565,9 @@ Value signrawtransaction(const Array& params, bool fHelp)
 
     bool fGivenKeys = false;
     CBasicKeyStore tempKeystore;
-    if (params.size() > 2 && params[2].type() != null_type) {
+    if (parELP.size() > 2 && parELP[2].type() != null_type) {
         fGivenKeys = true;
-        Array keys = params[2].get_array();
+        Array keys = parELP[2].get_array();
         BOOST_FOREACH (Value k, keys) {
             CBitcoinSecret vchSecret;
             bool fGood = vchSecret.SetString(k.get_str());
@@ -585,8 +585,8 @@ Value signrawtransaction(const Array& params, bool fHelp)
 #endif
 
     // Add previous txouts given in the RPC call:
-    if (params.size() > 1 && params[1].type() != null_type) {
-        Array prevTxs = params[1].get_array();
+    if (parELP.size() > 1 && parELP[1].type() != null_type) {
+        Array prevTxs = parELP[1].get_array();
         BOOST_FOREACH (Value& p, prevTxs) {
             if (p.type() != obj_type)
                 throw JSONRPCError(RPC_DESERIALIZATION_ERROR, "expected object with {\"txid'\",\"vout\",\"scriptPubKey\"}");
@@ -639,10 +639,10 @@ Value signrawtransaction(const Array& params, bool fHelp)
 #endif
 
     int nHashType = SIGHASH_ALL;
-    if (params.size() > 3 && params[3].type() != null_type) {
+    if (parELP.size() > 3 && parELP[3].type() != null_type) {
         static map<string, int> mapSigHashValues =
             boost::assign::map_list_of(string("ALL"), int(SIGHASH_ALL))(string("ALL|ANYONECANPAY"), int(SIGHASH_ALL | SIGHASH_ANYONECANPAY))(string("NONE"), int(SIGHASH_NONE))(string("NONE|ANYONECANPAY"), int(SIGHASH_NONE | SIGHASH_ANYONECANPAY))(string("SINGLE"), int(SIGHASH_SINGLE))(string("SINGLE|ANYONECANPAY"), int(SIGHASH_SINGLE | SIGHASH_ANYONECANPAY));
-        string strHashType = params[3].get_str();
+        string strHashType = parELP[3].get_str();
         if (mapSigHashValues.count(strHashType))
             nHashType = mapSigHashValues[strHashType];
         else
@@ -681,9 +681,9 @@ Value signrawtransaction(const Array& params, bool fHelp)
     return result;
 }
 
-Value sendrawtransaction(const Array& params, bool fHelp)
+Value sendrawtransaction(const Array& parELP, bool fHelp)
 {
-    if (fHelp || params.size() < 1 || params.size() > 2)
+    if (fHelp || parELP.size() < 1 || parELP.size() > 2)
         throw runtime_error(
             "sendrawtransaction \"hexstring\" ( allowhighfees )\n"
             "\nSubmits raw transaction (serialized, hex-encoded) to local node and network.\n"
@@ -700,17 +700,17 @@ Value sendrawtransaction(const Array& params, bool fHelp)
             "\nSend the transaction (signed hex)\n" + HelpExampleCli("sendrawtransaction", "\"signedhex\"") +
             "\nAs a json rpc call\n" + HelpExampleRpc("sendrawtransaction", "\"signedhex\""));
 
-    RPCTypeCheck(params, list_of(str_type)(bool_type));
+    RPCTypeCheck(parELP, list_of(str_type)(bool_type));
 
     // parse hex string from parameter
     CTransaction tx;
-    if (!DecodeHexTx(tx, params[0].get_str()))
+    if (!DecodeHexTx(tx, parELP[0].get_str()))
         throw JSONRPCError(RPC_DESERIALIZATION_ERROR, "TX decode failed");
     uint256 hashTx = tx.GetHash();
 
     bool fOverrideFees = false;
-    if (params.size() > 1)
-        fOverrideFees = params[1].get_bool();
+    if (parELP.size() > 1)
+        fOverrideFees = parELP[1].get_bool();
 
     CCoinsViewCache& view = *pcoinsTip;
     const CCoins* existingCoins = view.AccessCoins(hashTx);

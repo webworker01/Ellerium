@@ -3,7 +3,7 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include "chainparamsbase.h"
+#include "chainparELPbase.h"
 
 #include "util.h"
 
@@ -16,82 +16,82 @@ using namespace boost::assign;
 /**
  * Main network
  */
-class CBaseMainParams : public CBaseChainParams
+class CBaseMainParELP : public CBaseChainParELP
 {
 public:
-    CBaseMainParams()
+    CBaseMainParELP()
     {
-        networkID = CBaseChainParams::MAIN;
+        networkID = CBaseChainParELP::MAIN;
         nRPCPort = 76101;
     }
 };
-static CBaseMainParams mainParams;
+static CBaseMainParELP mainParELP;
 
 /**
  * Testnet (v3)
  */
-class CBaseTestNetParams : public CBaseMainParams
+class CBaseTestNetParELP : public CBaseMainParELP
 {
 public:
-    CBaseTestNetParams()
+    CBaseTestNetParELP()
     {
-        networkID = CBaseChainParams::TESTNET;
+        networkID = CBaseChainParELP::TESTNET;
         nRPCPort = 76201;
         strDataDir = "testnet4";
     }
 };
-static CBaseTestNetParams testNetParams;
+static CBaseTestNetParELP testNetParELP;
 
 /*
  * Regression test
  */
-class CBaseRegTestParams : public CBaseTestNetParams
+class CBaseRegTestParELP : public CBaseTestNetParELP
 {
 public:
-    CBaseRegTestParams()
+    CBaseRegTestParELP()
     {
-        networkID = CBaseChainParams::REGTEST;
+        networkID = CBaseChainParELP::REGTEST;
         strDataDir = "regtest";
     }
 };
-static CBaseRegTestParams regTestParams;
+static CBaseRegTestParELP regTestParELP;
 
 /*
  * Unit test
  */
-class CBaseUnitTestParams : public CBaseMainParams
+class CBaseUnitTestParELP : public CBaseMainParELP
 {
 public:
-    CBaseUnitTestParams()
+    CBaseUnitTestParELP()
     {
-        networkID = CBaseChainParams::UNITTEST;
+        networkID = CBaseChainParELP::UNITTEST;
         strDataDir = "unittest";
     }
 };
-static CBaseUnitTestParams unitTestParams;
+static CBaseUnitTestParELP unitTestParELP;
 
-static CBaseChainParams* pCurrentBaseParams = 0;
+static CBaseChainParELP* pCurrentBaseParELP = 0;
 
-const CBaseChainParams& BaseParams()
+const CBaseChainParELP& BaseParELP()
 {
-    assert(pCurrentBaseParams);
-    return *pCurrentBaseParams;
+    assert(pCurrentBaseParELP);
+    return *pCurrentBaseParELP;
 }
 
-void SelectBaseParams(CBaseChainParams::Network network)
+void SelectBaseParELP(CBaseChainParELP::Network network)
 {
     switch (network) {
-    case CBaseChainParams::MAIN:
-        pCurrentBaseParams = &mainParams;
+    case CBaseChainParELP::MAIN:
+        pCurrentBaseParELP = &mainParELP;
         break;
-    case CBaseChainParams::TESTNET:
-        pCurrentBaseParams = &testNetParams;
+    case CBaseChainParELP::TESTNET:
+        pCurrentBaseParELP = &testNetParELP;
         break;
-    case CBaseChainParams::REGTEST:
-        pCurrentBaseParams = &regTestParams;
+    case CBaseChainParELP::REGTEST:
+        pCurrentBaseParELP = &regTestParELP;
         break;
-    case CBaseChainParams::UNITTEST:
-        pCurrentBaseParams = &unitTestParams;
+    case CBaseChainParELP::UNITTEST:
+        pCurrentBaseParELP = &unitTestParELP;
         break;
     default:
         assert(false && "Unimplemented network");
@@ -99,31 +99,31 @@ void SelectBaseParams(CBaseChainParams::Network network)
     }
 }
 
-CBaseChainParams::Network NetworkIdFromCommandLine()
+CBaseChainParELP::Network NetworkIdFromCommandLine()
 {
     bool fRegTest = GetBoolArg("-regtest", false);
     bool fTestNet = GetBoolArg("-testnet", false);
 
     if (fTestNet && fRegTest)
-        return CBaseChainParams::MAX_NETWORK_TYPES;
+        return CBaseChainParELP::MAX_NETWORK_TYPES;
     if (fRegTest)
-        return CBaseChainParams::REGTEST;
+        return CBaseChainParELP::REGTEST;
     if (fTestNet)
-        return CBaseChainParams::TESTNET;
-    return CBaseChainParams::MAIN;
+        return CBaseChainParELP::TESTNET;
+    return CBaseChainParELP::MAIN;
 }
 
-bool SelectBaseParamsFromCommandLine()
+bool SelectBaseParELPFromCommandLine()
 {
-    CBaseChainParams::Network network = NetworkIdFromCommandLine();
-    if (network == CBaseChainParams::MAX_NETWORK_TYPES)
+    CBaseChainParELP::Network network = NetworkIdFromCommandLine();
+    if (network == CBaseChainParELP::MAX_NETWORK_TYPES)
         return false;
 
-    SelectBaseParams(network);
+    SelectBaseParELP(network);
     return true;
 }
 
-bool AreBaseParamsConfigured()
+bool AreBaseParELPConfigured()
 {
-    return pCurrentBaseParams != NULL;
+    return pCurrentBaseParELP != NULL;
 }

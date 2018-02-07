@@ -27,7 +27,7 @@
 #include "crypto/sph_shavite.h"
 #include "crypto/sph_simd.h"
 #include "crypto/sph_echo.h" 
-#include "crypto/sph_hamsi.h"  
+#include "crypto/sph_hELPi.h"  
 #include "crypto/sph_fugue.h" 
 #include "crypto/sph_shabal.h"  
 #include "crypto/sph_whirlpool.h"  
@@ -58,7 +58,7 @@ GLOBAL sph_cubehash512_context  z_cubehash;
 GLOBAL sph_shavite512_context   z_shavite;
 GLOBAL sph_simd512_context      z_simd;
 GLOBAL sph_echo512_context      z_echo;
-GLOBAL sph_hamsi512_context     z_hamsi;
+GLOBAL sph_hELPi512_context     z_hELPi;
 GLOBAL sph_fugue512_context     z_fugue;
 GLOBAL sph_shabal512_context    z_shabal;
 GLOBAL sph_whirlpool_context    z_whirlpool;
@@ -77,7 +77,7 @@ GLOBAL sph_haval256_5_context   z_haval;
     sph_shavite512_init(&z_shavite); \
     sph_simd512_init(&z_simd); \
     sph_echo512_init(&z_echo); \
-    sph_hamsi512_init(&z_hamsi); \
+    sph_hELPi512_init(&z_hELPi); \
     sph_fugue512_init(&z_fugue); \
     sph_shabal512_init(&z_shabal); \
     sph_whirlpool_init(&z_whirlpool); \
@@ -91,7 +91,7 @@ GLOBAL sph_haval256_5_context   z_haval;
 #define ZJH (memcpy(&ctx_jh, &z_jh, sizeof(z_jh)))
 #define ZKECCAK (memcpy(&ctx_keccak, &z_keccak, sizeof(z_keccak)))
 #define ZSKEIN (memcpy(&ctx_skein, &z_skein, sizeof(z_skein)))
-#define ZHAMSI (memcpy(&ctx_hamsi, &z_hamsi, sizeof(z_hamsi)))
+#define ZHELPI (memcpy(&ctx_hELPi, &z_hELPi, sizeof(z_hELPi)))
 #define ZFUGUE (memcpy(&ctx_fugue, &z_fugue, sizeof(z_fugue)))
 #define ZSHABAL (memcpy(&ctx_shabal, &z_shabal, sizeof(z_shabal)))
 #define ZWHIRLPOOL (memcpy(&ctx_whirlpool, &z_whirlpool, sizeof(z_whirlpool)))
@@ -307,7 +307,7 @@ inline uint256 XEVAN(const T1 pbegin, const T1 pend)
     sph_shavite512_context    ctx_shavite;
     sph_simd512_context       ctx_simd;
     sph_echo512_context       ctx_echo;
-    sph_hamsi512_context      ctx_hamsi;
+    sph_hELPi512_context      ctx_hELPi;
     sph_fugue512_context      ctx_fugue;
     sph_shabal512_context     ctx_shabal;
     sph_whirlpool_context     ctx_whirlpool;
@@ -366,9 +366,9 @@ static unsigned char pblank[1];
     sph_echo512 (&ctx_echo, static_cast<const void*>(&hash[9]), worknumber);
     sph_echo512_close(&ctx_echo, static_cast<void*>(&hash[10]));
 
-    sph_hamsi512_init(&ctx_hamsi);
-    sph_hamsi512 (&ctx_hamsi, static_cast<const void*>(&hash[10]), worknumber);
-    sph_hamsi512_close(&ctx_hamsi, static_cast<void*>(&hash[11]));
+    sph_hELPi512_init(&ctx_hELPi);
+    sph_hELPi512 (&ctx_hELPi, static_cast<const void*>(&hash[10]), worknumber);
+    sph_hELPi512_close(&ctx_hELPi, static_cast<void*>(&hash[11]));
 
     sph_fugue512_init(&ctx_fugue);
     sph_fugue512 (&ctx_fugue, static_cast<const void*>(&hash[11]), worknumber);
@@ -435,9 +435,9 @@ static unsigned char pblank[1];
     sph_echo512 (&ctx_echo, static_cast<const void*>(&hash[26]), worknumber);
     sph_echo512_close(&ctx_echo, static_cast<void*>(&hash[27]));
 
-    sph_hamsi512_init(&ctx_hamsi);
-    sph_hamsi512 (&ctx_hamsi, static_cast<const void*>(&hash[27]), worknumber);
-    sph_hamsi512_close(&ctx_hamsi, static_cast<void*>(&hash[28]));
+    sph_hELPi512_init(&ctx_hELPi);
+    sph_hELPi512 (&ctx_hELPi, static_cast<const void*>(&hash[27]), worknumber);
+    sph_hELPi512_close(&ctx_hELPi, static_cast<void*>(&hash[28]));
 
     sph_fugue512_init(&ctx_fugue);
     sph_fugue512 (&ctx_fugue, static_cast<const void*>(&hash[28]), worknumber);

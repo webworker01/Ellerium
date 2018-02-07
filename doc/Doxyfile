@@ -250,7 +250,7 @@ EXTENSION_MAPPING      =
 # set this tag to YES in order to let doxygen match functions declarations and
 # definitions whose arguments contain STL classes (e.g. func(std::string); v.s.
 # func(std::string) {}). This also makes the inheritance and collaboration
-# diagrams that involve STL classes more complete and accurate.
+# diagrELP that involve STL classes more complete and accurate.
 
 BUILTIN_STL_SUPPORT    = NO
 
@@ -1312,7 +1312,7 @@ COMPACT_RTF            = NO
 # will contain hyperlink fields. The RTF file will
 # contain links (just like the HTML output) instead of page references.
 # This makes the output suitable for online browsing using WORD or other
-# programs which support those fields.
+# progrELP which support those fields.
 # Note: wordpad (write) and others do not support links.
 
 RTF_HYPERLINKS         = NO
@@ -1549,13 +1549,13 @@ PERL_PATH              = /usr/bin/perl
 # Configuration options related to the dot tool
 #---------------------------------------------------------------------------
 
-# If the CLASS_DIAGRAMS tag is set to YES (the default) Doxygen will
+# If the CLASS_DIAGRELP tag is set to YES (the default) Doxygen will
 # generate a inheritance diagram (in HTML, RTF and LaTeX) for classes with base
-# or super classes. Setting the tag to NO turns the diagrams off. Note that
+# or super classes. Setting the tag to NO turns the diagrELP off. Note that
 # this option also works with HAVE_DOT disabled, but it is recommended to
 # install and use dot, since it yields more powerful graphs.
 
-CLASS_DIAGRAMS         = YES
+CLASS_DIAGRELP         = YES
 
 # You can define message sequence charts within doxygen comments using the \msc
 # command. Doxygen will then run the mscgen tool (see
@@ -1612,7 +1612,7 @@ DOT_FONTPATH           =
 # If the CLASS_GRAPH and HAVE_DOT tags are set to YES then doxygen
 # will generate a graph for each documented class showing the direct and
 # indirect inheritance relations. Setting this tag to YES will force the
-# the CLASS_DIAGRAMS tag to NO.
+# the CLASS_DIAGRELP tag to NO.
 
 CLASS_GRAPH            = YES
 
@@ -1629,7 +1629,7 @@ COLLABORATION_GRAPH    = YES
 GROUP_GRAPHS           = YES
 
 # If the UML_LOOK tag is set to YES doxygen will generate inheritance and
-# collaboration diagrams in a style similar to the OMG's Unified Modeling
+# collaboration diagrELP in a style similar to the OMG's Unified Modeling
 # Language.
 
 UML_LOOK               = NO

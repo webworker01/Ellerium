@@ -24,8 +24,8 @@
 #include <boost/bind.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/foreach.hpp>
-#include <boost/iostreams/concepts.hpp>
-#include <boost/iostreams/stream.hpp>
+#include <boost/iostreELP/concepts.hpp>
+#include <boost/iostreELP/stream.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/thread.hpp>
 
@@ -50,16 +50,16 @@ static boost::asio::io_service::work* rpc_dummy_work = NULL;
 static std::vector<CSubNet> rpc_allow_subnets; //!< List of subnets to allow RPC connections from
 static std::vector<boost::shared_ptr<ip::tcp::acceptor> > rpc_acceptors;
 
-void RPCTypeCheck(const Array& params,
+void RPCTypeCheck(const Array& parELP,
     const list<Value_type>& typesExpected,
     bool fAllowNull)
 {
     unsigned int i = 0;
     BOOST_FOREACH (Value_type t, typesExpected) {
-        if (params.size() <= i)
+        if (parELP.size() <= i)
             break;
 
-        const Value& v = params[i];
+        const Value& v = parELP[i];
         if (!((v.type() == t) || (fAllowNull && (v.type() == null_type)))) {
             string err = strprintf("Expected type %s, got %s",
                 Value_type_name[t], Value_type_name[v.type()]);
@@ -166,10 +166,10 @@ string CRPCTable::help(string strCommand) const
 #endif
 
         try {
-            Array params;
+            Array parELP;
             rpcfn_type pfn = pcmd->actor;
             if (setDone.insert(pfn).second)
-                (*pfn)(params, true);
+                (*pfn)(parELP, true);
         } catch (std::exception& e) {
             // Help text is returned in an exception
             string strHelp = string(e.what());
@@ -195,9 +195,9 @@ string CRPCTable::help(string strCommand) const
     return strRet;
 }
 
-Value help(const Array& params, bool fHelp)
+Value help(const Array& parELP, bool fHelp)
 {
-    if (fHelp || params.size() > 1)
+    if (fHelp || parELP.size() > 1)
         throw runtime_error(
             "help ( \"command\" )\n"
             "\nList all commands, or get help for a specified command.\n"
@@ -207,17 +207,17 @@ Value help(const Array& params, bool fHelp)
             "\"text\"     (string) The help text\n");
 
     string strCommand;
-    if (params.size() > 0)
-        strCommand = params[0].get_str();
+    if (parELP.size() > 0)
+        strCommand = parELP[0].get_str();
 
     return tableRPC.help(strCommand);
 }
 
 
-Value stop(const Array& params, bool fHelp)
+Value stop(const Array& parELP, bool fHelp)
 {
     // Accept the deprecated and ignored 'detach' boolean argument
-    if (fHelp || params.size() > 1)
+    if (fHelp || parELP.size() > 1)
         throw runtime_error(
             "stop\n"
             "\nStop Ellerium server.");
@@ -465,7 +465,7 @@ public:
 
 private:
     SSLIOStreamDevice<Protocol> _d;
-    iostreams::stream<SSLIOStreamDevice<Protocol> > _stream;
+    iostreELP::stream<SSLIOStreamDevice<Protocol> > _stream;
 };
 
 void ServiceConnection(AcceptedConnection* conn);
@@ -570,7 +570,7 @@ void StartRPCThreads()
     strRPCUserColonPass = mapArgs["-rpcuser"] + ":" + mapArgs["-rpcpassword"];
     if (((mapArgs["-rpcpassword"] == "") ||
             (mapArgs["-rpcuser"] == mapArgs["-rpcpassword"])) &&
-        Params().RequireRPCPassword()) {
+        ParELP().RequireRPCPassword()) {
         unsigned char rand_pwd[32];
         GetRandBytes(rand_pwd, 32);
         uiInterface.ThreadSafeMessageBox(strprintf(
@@ -620,7 +620,7 @@ void StartRPCThreads()
 
     std::vector<ip::tcp::endpoint> vEndpoints;
     bool bBindAny = false;
-    int defaultPort = GetArg("-rpcport", BaseParams().RPCPort());
+    int defaultPort = GetArg("-rpcport", BaseParELP().RPCPort());
     if (!mapArgs.count("-rpcallowip")) // Default to loopback if not allowing external IPs
     {
         vEndpoints.push_back(ip::tcp::endpoint(asio::ip::address_v6::loopback(), defaultPort));
@@ -796,7 +796,7 @@ class JSONRequest
 public:
     Value id;
     string strMethod;
-    Array params;
+    Array parELP;
 
     JSONRequest() { id = Value::null; }
     void parse(const Value& valRequest);
@@ -822,14 +822,14 @@ void JSONRequest::parse(const Value& valRequest)
     if (strMethod != "getblocktemplate")
         LogPrint("rpc", "ThreadRPCServer method=%s\n", SanitizeString(strMethod));
 
-    // Parse params
-    Value valParams = find_value(request, "params");
-    if (valParams.type() == array_type)
-        params = valParams.get_array();
-    else if (valParams.type() == null_type)
-        params = Array();
+    // Parse parELP
+    Value valParELP = find_value(request, "parELP");
+    if (valParELP.type() == array_type)
+        parELP = valParELP.get_array();
+    else if (valParELP.type() == null_type)
+        parELP = Array();
     else
-        throw JSONRPCError(RPC_INVALID_REQUEST, "Params must be an array");
+        throw JSONRPCError(RPC_INVALID_REQUEST, "ParELP must be an array");
 }
 
 
@@ -841,7 +841,7 @@ static Object JSONRPCExecOne(const Value& req)
     try {
         jreq.parse(req);
 
-        Value result = tableRPC.execute(jreq.strMethod, jreq.params);
+        Value result = tableRPC.execute(jreq.strMethod, jreq.parELP);
         rpc_result = JSONRPCReplyObj(result, Value::null, jreq.id);
     } catch (Object& objError) {
         rpc_result = JSONRPCReplyObj(Value::null, objError, jreq.id);
@@ -904,7 +904,7 @@ static bool HTTPReq_JSONRPC(AcceptedConnection* conn,
         if (valRequest.type() == obj_type) {
             jreq.parse(valRequest);
 
-            Value result = tableRPC.execute(jreq.strMethod, jreq.params);
+            Value result = tableRPC.execute(jreq.strMethod, jreq.parELP);
 
             // Send reply
             strReply = JSONRPCReply(result, Value::null, jreq.id);
@@ -962,7 +962,7 @@ void ServiceConnection(AcceptedConnection* conn)
     }
 }
 
-json_spirit::Value CRPCTable::execute(const std::string& strMethod, const json_spirit::Array& params) const
+json_spirit::Value CRPCTable::execute(const std::string& strMethod, const json_spirit::Array& parELP) const
 {
     // Find method
     const CRPCCommand* pcmd = tableRPC[strMethod];
@@ -984,11 +984,11 @@ json_spirit::Value CRPCTable::execute(const std::string& strMethod, const json_s
         Value result;
         {
             if (pcmd->threadSafe)
-                result = pcmd->actor(params, false);
+                result = pcmd->actor(parELP, false);
 #ifdef ENABLE_WALLET
             else if (!pwalletMain) {
                 LOCK(cs_main);
-                result = pcmd->actor(params, false);
+                result = pcmd->actor(parELP, false);
             } else {
                 while (true) {
                     TRY_LOCK(cs_main, lockMain);
@@ -1002,7 +1002,7 @@ json_spirit::Value CRPCTable::execute(const std::string& strMethod, const json_s
                             MilliSleep(50);
                             continue;
                         }
-                        result = pcmd->actor(params, false);
+                        result = pcmd->actor(parELP, false);
                         break;
                     }
                     break;
@@ -1011,7 +1011,7 @@ json_spirit::Value CRPCTable::execute(const std::string& strMethod, const json_s
 #else  // ENABLE_WALLET
             else {
                 LOCK(cs_main);
-                result = pcmd->actor(params, false);
+                result = pcmd->actor(parELP, false);
             }
 #endif // !ENABLE_WALLET
         }
@@ -1041,7 +1041,7 @@ std::string HelpExampleRpc(string methodname, string args)
 {
     return "> curl --user myusername --data-binary '{\"jsonrpc\": \"1.0\", \"id\":\"curltest\", "
            "\"method\": \"" +
-           methodname + "\", \"params\": [" + args + "] }' -H 'content-type: text/plain;' http://127.0.0.1:51020/\n";
+           methodname + "\", \"parELP\": [" + args + "] }' -H 'content-type: text/plain;' http://127.0.0.1:51020/\n";
 }
 
 const CRPCTable tableRPC;

@@ -60,15 +60,15 @@ else
 LIBBITCOIN_CONSENSUS=
 endif
 
-bin_PROGRAMS =
+bin_PROGRELP =
 TESTS =
 
 if BUILD_BITCOIND
-  bin_PROGRAMS += elleriumd
+  bin_PROGRELP += elleriumd
 endif
 
 if BUILD_BITCOIN_UTILS
-  bin_PROGRAMS += ellerium-cli ellerium-tx
+  bin_PROGRELP += ellerium-cli ellerium-tx
 endif
 
 .PHONY: FORCE
@@ -83,9 +83,9 @@ BITCOIN_CORE_H = \
   bip38.h \
   bloom.h \
   chain.h \
-  chainparams.h \
-  chainparamsbase.h \
-  chainparamsseeds.h \
+  chainparELP.h \
+  chainparELPbase.h \
+  chainparELPseeds.h \
   checkpoints.h \
   checkqueue.h \
   clientversion.h \
@@ -138,7 +138,7 @@ BITCOIN_CORE_H = \
   script/script_error.h \
   serialize.h \
   spork.h \
-  streams.h \
+  streELP.h \
   sync.h \
   threadsafety.h \
   timedata.h \
@@ -271,7 +271,7 @@ crypto_libbitcoin_crypto_a_SOURCES = \
   crypto/echo.c \
   crypto/groestl.c \
   crypto/fugue.c \
-  crypto/hamsi.c \
+  crypto/hELPi.c \
   crypto/jh.c \
   crypto/keccak.c \
   crypto/luffa.c \
@@ -300,7 +300,7 @@ crypto_libbitcoin_crypto_a_SOURCES = \
   crypto/sph_shavite.h \
   crypto/sph_simd.h \
   crypto/sph_skein.h \
-  crypto/sph_hamsi.h \
+  crypto/sph_hELPi.h \
   crypto/sph_fugue.h \
   crypto/sph_shabal.h \
   crypto/sph_whirlpool.h \
@@ -325,7 +325,7 @@ libbitcoin_common_a_SOURCES = \
   amount.cpp \
   base58.cpp \
   bip38.cpp \
-  chainparams.cpp \
+  chainparELP.cpp \
   coins.cpp \
   compressor.cpp \
   primitives/block.cpp \
@@ -357,7 +357,7 @@ libbitcoin_util_a_SOURCES = \
   compat/strnlen.cpp \
   compat/glibc_sanity.cpp \
   compat/glibcxx_sanity.cpp \
-  chainparamsbase.cpp \
+  chainparELPbase.cpp \
   clientversion.cpp \
   random.cpp \
   rpcprotocol.cpp \

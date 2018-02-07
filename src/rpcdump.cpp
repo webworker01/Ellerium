@@ -80,9 +80,9 @@ std::string DecodeDumpString(const std::string& str)
     return ret.str();
 }
 
-Value importprivkey(const Array& params, bool fHelp)
+Value importprivkey(const Array& parELP, bool fHelp)
 {
-    if (fHelp || params.size() < 1 || params.size() > 3)
+    if (fHelp || parELP.size() < 1 || parELP.size() > 3)
         throw runtime_error(
             "importprivkey \"elleriumprivkey\" ( \"label\" rescan )\n"
             "\nAdds a private key (as returned by dumpprivkey) to your wallet.\n"
@@ -100,15 +100,15 @@ Value importprivkey(const Array& params, bool fHelp)
 
     EnsureWalletIsUnlocked();
 
-    string strSecret = params[0].get_str();
+    string strSecret = parELP[0].get_str();
     string strLabel = "";
-    if (params.size() > 1)
-        strLabel = params[1].get_str();
+    if (parELP.size() > 1)
+        strLabel = parELP[1].get_str();
 
     // Whether to perform rescan after import
     bool fRescan = true;
-    if (params.size() > 2)
-        fRescan = params[2].get_bool();
+    if (parELP.size() > 2)
+        fRescan = parELP[2].get_bool();
 
     CBitcoinSecret vchSecret;
     bool fGood = vchSecret.SetString(strSecret);
@@ -145,9 +145,9 @@ Value importprivkey(const Array& params, bool fHelp)
     return Value::null;
 }
 
-Value importaddress(const Array& params, bool fHelp)
+Value importaddress(const Array& parELP, bool fHelp)
 {
-    if (fHelp || params.size() < 1 || params.size() > 3)
+    if (fHelp || parELP.size() < 1 || parELP.size() > 3)
         throw runtime_error(
             "importaddress \"address\" ( \"label\" rescan )\n"
             "\nAdds an address or script (in hex) that can be watched as if it were in your wallet but cannot be used to spend.\n"
@@ -164,24 +164,24 @@ Value importaddress(const Array& params, bool fHelp)
 
     CScript script;
 
-    CBitcoinAddress address(params[0].get_str());
+    CBitcoinAddress address(parELP[0].get_str());
     if (address.IsValid()) {
         script = GetScriptForDestination(address.Get());
-    } else if (IsHex(params[0].get_str())) {
-        std::vector<unsigned char> data(ParseHex(params[0].get_str()));
+    } else if (IsHex(parELP[0].get_str())) {
+        std::vector<unsigned char> data(ParseHex(parELP[0].get_str()));
         script = CScript(data.begin(), data.end());
     } else {
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid Ellerium address or script");
     }
 
     string strLabel = "";
-    if (params.size() > 1)
-        strLabel = params[1].get_str();
+    if (parELP.size() > 1)
+        strLabel = parELP[1].get_str();
 
     // Whether to perform rescan after import
     bool fRescan = true;
-    if (params.size() > 2)
-        fRescan = params[2].get_bool();
+    if (parELP.size() > 2)
+        fRescan = parELP[2].get_bool();
 
     {
         if (::IsMine(*pwalletMain, script) == ISMINE_SPENDABLE)
@@ -209,9 +209,9 @@ Value importaddress(const Array& params, bool fHelp)
     return Value::null;
 }
 
-Value importwallet(const Array& params, bool fHelp)
+Value importwallet(const Array& parELP, bool fHelp)
 {
-    if (fHelp || params.size() != 1)
+    if (fHelp || parELP.size() != 1)
         throw runtime_error(
             "importwallet \"filename\"\n"
             "\nImports keys from a wallet dump file (see dumpwallet).\n"
@@ -226,7 +226,7 @@ Value importwallet(const Array& params, bool fHelp)
     EnsureWalletIsUnlocked();
 
     ifstream file;
-    file.open(params[0].get_str().c_str(), std::ios::in | std::ios::ate);
+    file.open(parELP[0].get_str().c_str(), std::ios::in | std::ios::ate);
     if (!file.is_open())
         throw JSONRPCError(RPC_INVALID_PARAMETER, "Cannot open wallet dump file");
 
@@ -305,9 +305,9 @@ Value importwallet(const Array& params, bool fHelp)
     return Value::null;
 }
 
-Value dumpprivkey(const Array& params, bool fHelp)
+Value dumpprivkey(const Array& parELP, bool fHelp)
 {
-    if (fHelp || params.size() != 1)
+    if (fHelp || parELP.size() != 1)
         throw runtime_error(
             "dumpprivkey \"elleriumaddress\"\n"
             "\nReveals the private key corresponding to 'elleriumaddress'.\n"
@@ -321,7 +321,7 @@ Value dumpprivkey(const Array& params, bool fHelp)
 
     EnsureWalletIsUnlocked();
 
-    string strAddress = params[0].get_str();
+    string strAddress = parELP[0].get_str();
     CBitcoinAddress address;
     if (!address.SetString(strAddress))
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid Ellerium address");
@@ -335,9 +335,9 @@ Value dumpprivkey(const Array& params, bool fHelp)
 }
 
 
-Value dumpwallet(const Array& params, bool fHelp)
+Value dumpwallet(const Array& parELP, bool fHelp)
 {
-    if (fHelp || params.size() != 1)
+    if (fHelp || parELP.size() != 1)
         throw runtime_error(
             "dumpwallet \"filename\"\n"
             "\nDumps all wallet keys in a human-readable format.\n"
@@ -349,7 +349,7 @@ Value dumpwallet(const Array& params, bool fHelp)
     EnsureWalletIsUnlocked();
 
     ofstream file;
-    file.open(params[0].get_str().c_str());
+    file.open(parELP[0].get_str().c_str());
     if (!file.is_open())
         throw JSONRPCError(RPC_INVALID_PARAMETER, "Cannot open wallet dump file");
 
@@ -393,9 +393,9 @@ Value dumpwallet(const Array& params, bool fHelp)
     return Value::null;
 }
 
-Value bip38encrypt(const Array& params, bool fHelp)
+Value bip38encrypt(const Array& parELP, bool fHelp)
 {
-    if (fHelp || params.size() != 2)
+    if (fHelp || parELP.size() != 2)
         throw runtime_error(
             "bip38encrypt \"elleriumaddress\"\n"
             "\nEncrypts a private key corresponding to 'elleriumaddress'.\n"
@@ -408,8 +408,8 @@ Value bip38encrypt(const Array& params, bool fHelp)
 
     EnsureWalletIsUnlocked();
 
-    string strAddress = params[0].get_str();
-    string strPassphrase = params[1].get_str();
+    string strAddress = parELP[0].get_str();
+    string strPassphrase = parELP[1].get_str();
 
     CBitcoinAddress address;
     if (!address.SetString(strAddress))
@@ -431,9 +431,9 @@ Value bip38encrypt(const Array& params, bool fHelp)
     return result;
 }
 
-Value bip38decrypt(const Array& params, bool fHelp)
+Value bip38decrypt(const Array& parELP, bool fHelp)
 {
-    if (fHelp || params.size() != 2)
+    if (fHelp || parELP.size() != 2)
         throw runtime_error(
             "bip38decrypt \"elleriumaddress\"\n"
             "\nDecrypts and then imports password protected private key.\n"
@@ -448,8 +448,8 @@ Value bip38decrypt(const Array& params, bool fHelp)
     EnsureWalletIsUnlocked();
 
     /** Collect private key and passphrase **/
-    string strPassphrase = params[0].get_str();
-    string strKey = params[1].get_str();
+    string strPassphrase = parELP[0].get_str();
+    string strKey = parELP[1].get_str();
 
     uint256 privKey;
     bool fCompressed;

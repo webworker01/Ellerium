@@ -77,9 +77,9 @@ string AccountFromValue(const Value& value)
     return strAccount;
 }
 
-Value getnewaddress(const Array& params, bool fHelp)
+Value getnewaddress(const Array& parELP, bool fHelp)
 {
-    if (fHelp || params.size() > 1)
+    if (fHelp || parELP.size() > 1)
         throw runtime_error(
             "getnewaddress ( \"account\" )\n"
             "\nReturns a new Ellerium address for receiving payments.\n"
@@ -94,8 +94,8 @@ Value getnewaddress(const Array& params, bool fHelp)
 
     // Parse the account first so we don't generate a key if there's an error
     string strAccount;
-    if (params.size() > 0)
-        strAccount = AccountFromValue(params[0]);
+    if (parELP.size() > 0)
+        strAccount = AccountFromValue(parELP[0]);
 
     if (!pwalletMain->IsLocked())
         pwalletMain->TopUpKeyPool();
@@ -146,9 +146,9 @@ CBitcoinAddress GetAccountAddress(string strAccount, bool bForceNew = false)
     return CBitcoinAddress(account.vchPubKey.GetID());
 }
 
-Value getaccountaddress(const Array& params, bool fHelp)
+Value getaccountaddress(const Array& parELP, bool fHelp)
 {
-    if (fHelp || params.size() != 1)
+    if (fHelp || parELP.size() != 1)
         throw runtime_error(
             "getaccountaddress \"account\"\n"
             "\nReturns the current Ellerium address for receiving payments to this account.\n"
@@ -160,7 +160,7 @@ Value getaccountaddress(const Array& params, bool fHelp)
             HelpExampleCli("getaccountaddress", "") + HelpExampleCli("getaccountaddress", "\"\"") + HelpExampleCli("getaccountaddress", "\"myaccount\"") + HelpExampleRpc("getaccountaddress", "\"myaccount\""));
 
     // Parse the account first so we don't generate a key if there's an error
-    string strAccount = AccountFromValue(params[0]);
+    string strAccount = AccountFromValue(parELP[0]);
 
     Value ret;
 
@@ -170,9 +170,9 @@ Value getaccountaddress(const Array& params, bool fHelp)
 }
 
 
-Value getrawchangeaddress(const Array& params, bool fHelp)
+Value getrawchangeaddress(const Array& parELP, bool fHelp)
 {
-    if (fHelp || params.size() > 1)
+    if (fHelp || parELP.size() > 1)
         throw runtime_error(
             "getrawchangeaddress\n"
             "\nReturns a new Ellerium address, for receiving change.\n"
@@ -198,9 +198,9 @@ Value getrawchangeaddress(const Array& params, bool fHelp)
 }
 
 
-Value setaccount(const Array& params, bool fHelp)
+Value setaccount(const Array& parELP, bool fHelp)
 {
-    if (fHelp || params.size() < 1 || params.size() > 2)
+    if (fHelp || parELP.size() < 1 || parELP.size() > 2)
         throw runtime_error(
             "setaccount \"elleriumaddress\" \"account\"\n"
             "\nSets the account associated with the given address.\n"
@@ -210,14 +210,14 @@ Value setaccount(const Array& params, bool fHelp)
             "\nExamples:\n" +
             HelpExampleCli("setaccount", "\"XwnLY9Tf7Zsef8gMGL2fhWA9ZmMjt4KPwg\" \"tabby\"") + HelpExampleRpc("setaccount", "\"XwnLY9Tf7Zsef8gMGL2fhWA9ZmMjt4KPwg\", \"tabby\""));
 
-    CBitcoinAddress address(params[0].get_str());
+    CBitcoinAddress address(parELP[0].get_str());
     if (!address.IsValid())
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid Ellerium address");
 
 
     string strAccount;
-    if (params.size() > 1)
-        strAccount = AccountFromValue(params[1]);
+    if (parELP.size() > 1)
+        strAccount = AccountFromValue(parELP[1]);
 
     // Only add the account if the address is yours.
     if (IsMine(*pwalletMain, address.Get())) {
@@ -235,9 +235,9 @@ Value setaccount(const Array& params, bool fHelp)
 }
 
 
-Value getaccount(const Array& params, bool fHelp)
+Value getaccount(const Array& parELP, bool fHelp)
 {
-    if (fHelp || params.size() != 1)
+    if (fHelp || parELP.size() != 1)
         throw runtime_error(
             "getaccount \"elleriumaddress\"\n"
             "\nReturns the account associated with the given address.\n"
@@ -248,7 +248,7 @@ Value getaccount(const Array& params, bool fHelp)
             "\nExamples:\n" +
             HelpExampleCli("getaccount", "\"XwnLY9Tf7Zsef8gMGL2fhWA9ZmMjt4KPwg\"") + HelpExampleRpc("getaccount", "\"XwnLY9Tf7Zsef8gMGL2fhWA9ZmMjt4KPwg\""));
 
-    CBitcoinAddress address(params[0].get_str());
+    CBitcoinAddress address(parELP[0].get_str());
     if (!address.IsValid())
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid Ellerium address");
 
@@ -260,9 +260,9 @@ Value getaccount(const Array& params, bool fHelp)
 }
 
 
-Value getaddressesbyaccount(const Array& params, bool fHelp)
+Value getaddressesbyaccount(const Array& parELP, bool fHelp)
 {
-    if (fHelp || params.size() != 1)
+    if (fHelp || parELP.size() != 1)
         throw runtime_error(
             "getaddressesbyaccount \"account\"\n"
             "\nReturns the list of addresses for the given account.\n"
@@ -276,7 +276,7 @@ Value getaddressesbyaccount(const Array& params, bool fHelp)
             "\nExamples:\n" +
             HelpExampleCli("getaddressesbyaccount", "\"tabby\"") + HelpExampleRpc("getaddressesbyaccount", "\"tabby\""));
 
-    string strAccount = AccountFromValue(params[0]);
+    string strAccount = AccountFromValue(parELP[0]);
 
     // Find all addresses that have the given account
     Array ret;
@@ -321,9 +321,9 @@ void SendMoney(const CTxDestination& address, CAmount nValue, CWalletTx& wtxNew,
         throw JSONRPCError(RPC_WALLET_ERROR, "Error: The transaction was rejected! This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.");
 }
 
-Value sendtoaddress(const Array& params, bool fHelp)
+Value sendtoaddress(const Array& parELP, bool fHelp)
 {
-    if (fHelp || params.size() < 2 || params.size() > 4)
+    if (fHelp || parELP.size() < 2 || parELP.size() > 4)
         throw runtime_error(
             "sendtoaddress \"elleriumaddress\" amount ( \"comment\" \"comment-to\" )\n"
             "\nSend an amount to a given address. The amount is a real and is rounded to the nearest 0.00000001\n" +
@@ -341,19 +341,19 @@ Value sendtoaddress(const Array& params, bool fHelp)
             "\nExamples:\n" +
             HelpExampleCli("sendtoaddress", "\"XwnLY9Tf7Zsef8gMGL2fhWA9ZmMjt4KPwg\" 0.1") + HelpExampleCli("sendtoaddress", "\"XwnLY9Tf7Zsef8gMGL2fhWA9ZmMjt4KPwg\" 0.1 \"donation\" \"seans outpost\"") + HelpExampleRpc("sendtoaddress", "\"XwnLY9Tf7Zsef8gMGL2fhWA9ZmMjt4KPwg\", 0.1, \"donation\", \"seans outpost\""));
 
-    CBitcoinAddress address(params[0].get_str());
+    CBitcoinAddress address(parELP[0].get_str());
     if (!address.IsValid())
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid Ellerium address");
 
     // Amount
-    CAmount nAmount = AmountFromValue(params[1]);
+    CAmount nAmount = AmountFromValue(parELP[1]);
 
     // Wallet comments
     CWalletTx wtx;
-    if (params.size() > 2 && params[2].type() != null_type && !params[2].get_str().empty())
-        wtx.mapValue["comment"] = params[2].get_str();
-    if (params.size() > 3 && params[3].type() != null_type && !params[3].get_str().empty())
-        wtx.mapValue["to"] = params[3].get_str();
+    if (parELP.size() > 2 && parELP[2].type() != null_type && !parELP[2].get_str().empty())
+        wtx.mapValue["comment"] = parELP[2].get_str();
+    if (parELP.size() > 3 && parELP[3].type() != null_type && !parELP[3].get_str().empty())
+        wtx.mapValue["to"] = parELP[3].get_str();
 
     EnsureWalletIsUnlocked();
 
@@ -362,9 +362,9 @@ Value sendtoaddress(const Array& params, bool fHelp)
     return wtx.GetHash().GetHex();
 }
 
-Value sendtoaddressix(const Array& params, bool fHelp)
+Value sendtoaddressix(const Array& parELP, bool fHelp)
 {
-    if (fHelp || params.size() < 2 || params.size() > 4)
+    if (fHelp || parELP.size() < 2 || parELP.size() > 4)
         throw runtime_error(
             "sendtoaddressix \"elleriumaddress\" amount ( \"comment\" \"comment-to\" )\n"
             "\nSend an amount to a given address. The amount is a real and is rounded to the nearest 0.00000001\n" +
@@ -382,19 +382,19 @@ Value sendtoaddressix(const Array& params, bool fHelp)
             "\nExamples:\n" +
             HelpExampleCli("sendtoaddressix", "\"XwnLY9Tf7Zsef8gMGL2fhWA9ZmMjt4KPwg\" 0.1") + HelpExampleCli("sendtoaddressix", "\"XwnLY9Tf7Zsef8gMGL2fhWA9ZmMjt4KPwg\" 0.1 \"donation\" \"seans outpost\"") + HelpExampleRpc("sendtoaddressix", "\"XwnLY9Tf7Zsef8gMGL2fhWA9ZmMjt4KPwg\", 0.1, \"donation\", \"seans outpost\""));
 
-    CBitcoinAddress address(params[0].get_str());
+    CBitcoinAddress address(parELP[0].get_str());
     if (!address.IsValid())
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid Ellerium address");
 
     // Amount
-    CAmount nAmount = AmountFromValue(params[1]);
+    CAmount nAmount = AmountFromValue(parELP[1]);
 
     // Wallet comments
     CWalletTx wtx;
-    if (params.size() > 2 && params[2].type() != null_type && !params[2].get_str().empty())
-        wtx.mapValue["comment"] = params[2].get_str();
-    if (params.size() > 3 && params[3].type() != null_type && !params[3].get_str().empty())
-        wtx.mapValue["to"] = params[3].get_str();
+    if (parELP.size() > 2 && parELP[2].type() != null_type && !parELP[2].get_str().empty())
+        wtx.mapValue["comment"] = parELP[2].get_str();
+    if (parELP.size() > 3 && parELP[3].type() != null_type && !parELP[3].get_str().empty())
+        wtx.mapValue["to"] = parELP[3].get_str();
 
     EnsureWalletIsUnlocked();
 
@@ -402,7 +402,7 @@ Value sendtoaddressix(const Array& params, bool fHelp)
 
     return wtx.GetHash().GetHex();
 }
-Value listaddressgroupings(const Array& params, bool fHelp)
+Value listaddressgroupings(const Array& parELP, bool fHelp)
 {
     if (fHelp)
         throw runtime_error(
@@ -445,9 +445,9 @@ Value listaddressgroupings(const Array& params, bool fHelp)
     return jsonGroupings;
 }
 
-Value signmessage(const Array& params, bool fHelp)
+Value signmessage(const Array& parELP, bool fHelp)
 {
-    if (fHelp || params.size() != 2)
+    if (fHelp || parELP.size() != 2)
         throw runtime_error(
             "signmessage \"elleriumaddress\" \"message\"\n"
             "\nSign a message with the private key of an address" +
@@ -466,8 +466,8 @@ Value signmessage(const Array& params, bool fHelp)
 
     EnsureWalletIsUnlocked();
 
-    string strAddress = params[0].get_str();
-    string strMessage = params[1].get_str();
+    string strAddress = parELP[0].get_str();
+    string strMessage = parELP[1].get_str();
 
     CBitcoinAddress addr(strAddress);
     if (!addr.IsValid())
@@ -492,9 +492,9 @@ Value signmessage(const Array& params, bool fHelp)
     return EncodeBase64(&vchSig[0], vchSig.size());
 }
 
-Value getreceivedbyaddress(const Array& params, bool fHelp)
+Value getreceivedbyaddress(const Array& parELP, bool fHelp)
 {
-    if (fHelp || params.size() < 1 || params.size() > 2)
+    if (fHelp || parELP.size() < 1 || parELP.size() > 2)
         throw runtime_error(
             "getreceivedbyaddress \"elleriumaddress\" ( minconf )\n"
             "\nReturns the total amount received by the given elleriumaddress in transactions with at least minconf confirmations.\n"
@@ -511,7 +511,7 @@ Value getreceivedbyaddress(const Array& params, bool fHelp)
             "\nAs a json rpc call\n" + HelpExampleRpc("getreceivedbyaddress", "\"XwnLY9Tf7Zsef8gMGL2fhWA9ZmMjt4KPwg\", 6"));
 
     // ellerium address
-    CBitcoinAddress address = CBitcoinAddress(params[0].get_str());
+    CBitcoinAddress address = CBitcoinAddress(parELP[0].get_str());
     if (!address.IsValid())
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid Ellerium address");
     CScript scriptPubKey = GetScriptForDestination(address.Get());
@@ -520,8 +520,8 @@ Value getreceivedbyaddress(const Array& params, bool fHelp)
 
     // Minimum confirmations
     int nMinDepth = 1;
-    if (params.size() > 1)
-        nMinDepth = params[1].get_int();
+    if (parELP.size() > 1)
+        nMinDepth = parELP[1].get_int();
 
     // Tally
     CAmount nAmount = 0;
@@ -540,9 +540,9 @@ Value getreceivedbyaddress(const Array& params, bool fHelp)
 }
 
 
-Value getreceivedbyaccount(const Array& params, bool fHelp)
+Value getreceivedbyaccount(const Array& parELP, bool fHelp)
 {
-    if (fHelp || params.size() < 1 || params.size() > 2)
+    if (fHelp || parELP.size() < 1 || parELP.size() > 2)
         throw runtime_error(
             "getreceivedbyaccount \"account\" ( minconf )\n"
             "\nReturns the total amount received by addresses with <account> in transactions with at least [minconf] confirmations.\n"
@@ -560,11 +560,11 @@ Value getreceivedbyaccount(const Array& params, bool fHelp)
 
     // Minimum confirmations
     int nMinDepth = 1;
-    if (params.size() > 1)
-        nMinDepth = params[1].get_int();
+    if (parELP.size() > 1)
+        nMinDepth = parELP[1].get_int();
 
     // Get the set of pub keys assigned to account
-    string strAccount = AccountFromValue(params[0]);
+    string strAccount = AccountFromValue(parELP[0]);
     set<CTxDestination> setAddress = pwalletMain->GetAccountAddresses(strAccount);
 
     // Tally
@@ -617,9 +617,9 @@ CAmount GetAccountBalance(const string& strAccount, int nMinDepth, const isminef
 }
 
 
-Value getbalance(const Array& params, bool fHelp)
+Value getbalance(const Array& parELP, bool fHelp)
 {
-    if (fHelp || params.size() > 3)
+    if (fHelp || parELP.size() > 3)
         throw runtime_error(
             "getbalance ( \"account\" minconf includeWatchonly )\n"
             "\nIf account is not specified, returns the server's total available balance.\n"
@@ -640,18 +640,18 @@ Value getbalance(const Array& params, bool fHelp)
             "\nThe total amount in the account named tabby with at least 6 confirmations\n" + HelpExampleCli("getbalance", "\"tabby\" 6") +
             "\nAs a json rpc call\n" + HelpExampleRpc("getbalance", "\"tabby\", 6"));
 
-    if (params.size() == 0)
+    if (parELP.size() == 0)
         return ValueFromAmount(pwalletMain->GetBalance());
 
     int nMinDepth = 1;
-    if (params.size() > 1)
-        nMinDepth = params[1].get_int();
+    if (parELP.size() > 1)
+        nMinDepth = parELP[1].get_int();
     isminefilter filter = ISMINE_SPENDABLE;
-    if (params.size() > 2)
-        if (params[2].get_bool())
+    if (parELP.size() > 2)
+        if (parELP[2].get_bool())
             filter = filter | ISMINE_WATCH_ONLY;
 
-    if (params[0].get_str() == "*") {
+    if (parELP[0].get_str() == "*") {
         // Calculate total balance a different way from GetBalance()
         // (GetBalance() sums up all unspent TxOuts)
         // getbalance and "getbalance * 1 true" should return the same number
@@ -677,16 +677,16 @@ Value getbalance(const Array& params, bool fHelp)
         return ValueFromAmount(nBalance);
     }
 
-    string strAccount = AccountFromValue(params[0]);
+    string strAccount = AccountFromValue(parELP[0]);
 
     CAmount nBalance = GetAccountBalance(strAccount, nMinDepth, filter);
 
     return ValueFromAmount(nBalance);
 }
 
-Value getunconfirmedbalance(const Array& params, bool fHelp)
+Value getunconfirmedbalance(const Array& parELP, bool fHelp)
 {
-    if (fHelp || params.size() > 0)
+    if (fHelp || parELP.size() > 0)
         throw runtime_error(
             "getunconfirmedbalance\n"
             "Returns the server's total unconfirmed balance\n");
@@ -694,9 +694,9 @@ Value getunconfirmedbalance(const Array& params, bool fHelp)
 }
 
 
-Value movecmd(const Array& params, bool fHelp)
+Value movecmd(const Array& parELP, bool fHelp)
 {
-    if (fHelp || params.size() < 3 || params.size() > 5)
+    if (fHelp || parELP.size() < 3 || parELP.size() > 5)
         throw runtime_error(
             "move \"fromaccount\" \"toaccount\" amount ( minconf \"comment\" )\n"
             "\nMove a specified amount from one account in your wallet to another.\n"
@@ -713,15 +713,15 @@ Value movecmd(const Array& params, bool fHelp)
             "\nMove 0.01 btc timotei to akiko with a comment and funds have 6 confirmations\n" + HelpExampleCli("move", "\"timotei\" \"akiko\" 0.01 6 \"happy birthday!\"") +
             "\nAs a json rpc call\n" + HelpExampleRpc("move", "\"timotei\", \"akiko\", 0.01, 6, \"happy birthday!\""));
 
-    string strFrom = AccountFromValue(params[0]);
-    string strTo = AccountFromValue(params[1]);
-    CAmount nAmount = AmountFromValue(params[2]);
-    if (params.size() > 3)
+    string strFrom = AccountFromValue(parELP[0]);
+    string strTo = AccountFromValue(parELP[1]);
+    CAmount nAmount = AmountFromValue(parELP[2]);
+    if (parELP.size() > 3)
         // unused parameter, used to be nMinDepth, keep type-checking it though
-        (void)params[3].get_int();
+        (void)parELP[3].get_int();
     string strComment;
-    if (params.size() > 4)
-        strComment = params[4].get_str();
+    if (parELP.size() > 4)
+        strComment = parELP[4].get_str();
 
     CWalletDB walletdb(pwalletMain->strWalletFile);
     if (!walletdb.TxnBegin())
@@ -756,9 +756,9 @@ Value movecmd(const Array& params, bool fHelp)
 }
 
 
-Value sendfrom(const Array& params, bool fHelp)
+Value sendfrom(const Array& parELP, bool fHelp)
 {
-    if (fHelp || params.size() < 3 || params.size() > 6)
+    if (fHelp || parELP.size() < 3 || parELP.size() > 6)
         throw runtime_error(
             "sendfrom \"fromaccount\" \"toelleriumaddress\" amount ( minconf \"comment\" \"comment-to\" )\n"
             "\nSent an amount from an account to a ellerium address.\n"
@@ -782,21 +782,21 @@ Value sendfrom(const Array& params, bool fHelp)
             "\nSend 0.01 from the tabby account to the given address, funds must have at least 6 confirmations\n" + HelpExampleCli("sendfrom", "\"tabby\" \"XwnLY9Tf7Zsef8gMGL2fhWA9ZmMjt4KPwg\" 0.01 6 \"donation\" \"seans outpost\"") +
             "\nAs a json rpc call\n" + HelpExampleRpc("sendfrom", "\"tabby\", \"XwnLY9Tf7Zsef8gMGL2fhWA9ZmMjt4KPwg\", 0.01, 6, \"donation\", \"seans outpost\""));
 
-    string strAccount = AccountFromValue(params[0]);
-    CBitcoinAddress address(params[1].get_str());
+    string strAccount = AccountFromValue(parELP[0]);
+    CBitcoinAddress address(parELP[1].get_str());
     if (!address.IsValid())
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid Ellerium address");
-    CAmount nAmount = AmountFromValue(params[2]);
+    CAmount nAmount = AmountFromValue(parELP[2]);
     int nMinDepth = 1;
-    if (params.size() > 3)
-        nMinDepth = params[3].get_int();
+    if (parELP.size() > 3)
+        nMinDepth = parELP[3].get_int();
 
     CWalletTx wtx;
     wtx.strFromAccount = strAccount;
-    if (params.size() > 4 && params[4].type() != null_type && !params[4].get_str().empty())
-        wtx.mapValue["comment"] = params[4].get_str();
-    if (params.size() > 5 && params[5].type() != null_type && !params[5].get_str().empty())
-        wtx.mapValue["to"] = params[5].get_str();
+    if (parELP.size() > 4 && parELP[4].type() != null_type && !parELP[4].get_str().empty())
+        wtx.mapValue["comment"] = parELP[4].get_str();
+    if (parELP.size() > 5 && parELP[5].type() != null_type && !parELP[5].get_str().empty())
+        wtx.mapValue["to"] = parELP[5].get_str();
 
     EnsureWalletIsUnlocked();
 
@@ -811,9 +811,9 @@ Value sendfrom(const Array& params, bool fHelp)
 }
 
 
-Value sendmany(const Array& params, bool fHelp)
+Value sendmany(const Array& parELP, bool fHelp)
 {
-    if (fHelp || params.size() < 2 || params.size() > 4)
+    if (fHelp || parELP.size() < 2 || parELP.size() > 4)
         throw runtime_error(
             "sendmany \"fromaccount\" {\"address\":amount,...} ( minconf \"comment\" )\n"
             "\nSend multiple times. Amounts are double-precision floating point numbers." +
@@ -836,16 +836,16 @@ Value sendmany(const Array& params, bool fHelp)
             "\nSend two amounts to two different addresses setting the confirmation and comment:\n" + HelpExampleCli("sendmany", "\"tabby\" \"{\\\"XwnLY9Tf7Zsef8gMGL2fhWA9ZmMjt4KPwg\\\":0.01,\\\"XuQQkwA4FYkq2XERzMY2CiAZhJTEDAbtcg\\\":0.02}\" 6 \"testing\"") +
             "\nAs a json rpc call\n" + HelpExampleRpc("sendmany", "\"tabby\", \"{\\\"XwnLY9Tf7Zsef8gMGL2fhWA9ZmMjt4KPwg\\\":0.01,\\\"XuQQkwA4FYkq2XERzMY2CiAZhJTEDAbtcg\\\":0.02}\", 6, \"testing\""));
 
-    string strAccount = AccountFromValue(params[0]);
-    Object sendTo = params[1].get_obj();
+    string strAccount = AccountFromValue(parELP[0]);
+    Object sendTo = parELP[1].get_obj();
     int nMinDepth = 1;
-    if (params.size() > 2)
-        nMinDepth = params[2].get_int();
+    if (parELP.size() > 2)
+        nMinDepth = parELP[2].get_int();
 
     CWalletTx wtx;
     wtx.strFromAccount = strAccount;
-    if (params.size() > 3 && params[3].type() != null_type && !params[3].get_str().empty())
-        wtx.mapValue["comment"] = params[3].get_str();
+    if (parELP.size() > 3 && parELP[3].type() != null_type && !parELP[3].get_str().empty())
+        wtx.mapValue["comment"] = parELP[3].get_str();
 
     set<CBitcoinAddress> setAddress;
     vector<pair<CScript, CAmount> > vecSend;
@@ -888,11 +888,11 @@ Value sendmany(const Array& params, bool fHelp)
 }
 
 // Defined in rpcmisc.cpp
-extern CScript _createmultisig_redeemScript(const Array& params);
+extern CScript _createmultisig_redeemScript(const Array& parELP);
 
-Value addmultisigaddress(const Array& params, bool fHelp)
+Value addmultisigaddress(const Array& parELP, bool fHelp)
 {
-    if (fHelp || params.size() < 2 || params.size() > 3) {
+    if (fHelp || parELP.size() < 2 || parELP.size() > 3) {
         string msg = "addmultisigaddress nrequired [\"key\",...] ( \"account\" )\n"
                      "\nAdd a nrequired-to-sign multisignature address to the wallet.\n"
                      "Each key is a Ellerium address or hex-encoded public key.\n"
@@ -918,11 +918,11 @@ Value addmultisigaddress(const Array& params, bool fHelp)
     }
 
     string strAccount;
-    if (params.size() > 2)
-        strAccount = AccountFromValue(params[2]);
+    if (parELP.size() > 2)
+        strAccount = AccountFromValue(parELP[2]);
 
     // Construct using pay-to-script-hash:
-    CScript inner = _createmultisig_redeemScript(params);
+    CScript inner = _createmultisig_redeemScript(parELP);
     CScriptID innerID(inner);
     pwalletMain->AddCScript(inner);
 
@@ -946,21 +946,21 @@ struct tallyitem {
     }
 };
 
-Value ListReceived(const Array& params, bool fByAccounts)
+Value ListReceived(const Array& parELP, bool fByAccounts)
 {
     // Minimum confirmations
     int nMinDepth = 1;
-    if (params.size() > 0)
-        nMinDepth = params[0].get_int();
+    if (parELP.size() > 0)
+        nMinDepth = parELP[0].get_int();
 
     // Whether to include empty accounts
     bool fIncludeEmpty = false;
-    if (params.size() > 1)
-        fIncludeEmpty = params[1].get_bool();
+    if (parELP.size() > 1)
+        fIncludeEmpty = parELP[1].get_bool();
 
     isminefilter filter = ISMINE_SPENDABLE;
-    if (params.size() > 2)
-        if (params[2].get_bool())
+    if (parELP.size() > 2)
+        if (parELP[2].get_bool())
             filter = filter | ISMINE_WATCH_ONLY;
 
     // Tally
@@ -1061,9 +1061,9 @@ Value ListReceived(const Array& params, bool fByAccounts)
     return ret;
 }
 
-Value listreceivedbyaddress(const Array& params, bool fHelp)
+Value listreceivedbyaddress(const Array& parELP, bool fHelp)
 {
-    if (fHelp || params.size() > 3)
+    if (fHelp || parELP.size() > 3)
         throw runtime_error(
             "listreceivedbyaddress ( minconf includeempty includeWatchonly)\n"
             "\nList balances by receiving address.\n"
@@ -1088,12 +1088,12 @@ Value listreceivedbyaddress(const Array& params, bool fHelp)
             "\nExamples:\n" +
             HelpExampleCli("listreceivedbyaddress", "") + HelpExampleCli("listreceivedbyaddress", "6 true") + HelpExampleRpc("listreceivedbyaddress", "6, true, true"));
 
-    return ListReceived(params, false);
+    return ListReceived(parELP, false);
 }
 
-Value listreceivedbyaccount(const Array& params, bool fHelp)
+Value listreceivedbyaccount(const Array& parELP, bool fHelp)
 {
-    if (fHelp || params.size() > 3)
+    if (fHelp || parELP.size() > 3)
         throw runtime_error(
             "listreceivedbyaccount ( minconf includeempty includeWatchonly)\n"
             "\nList balances by account.\n"
@@ -1117,7 +1117,7 @@ Value listreceivedbyaccount(const Array& params, bool fHelp)
             "\nExamples:\n" +
             HelpExampleCli("listreceivedbyaccount", "") + HelpExampleCli("listreceivedbyaccount", "6 true") + HelpExampleRpc("listreceivedbyaccount", "6, true, true"));
 
-    return ListReceived(params, true);
+    return ListReceived(parELP, true);
 }
 
 static void MaybePushAddress(Object& entry, const CTxDestination& dest)
@@ -1206,9 +1206,9 @@ void AcentryToJSON(const CAccountingEntry& acentry, const string& strAccount, Ar
     }
 }
 
-Value listtransactions(const Array& params, bool fHelp)
+Value listtransactions(const Array& parELP, bool fHelp)
 {
-    if (fHelp || params.size() > 4)
+    if (fHelp || parELP.size() > 4)
         throw runtime_error(
             "listtransactions ( \"account\" count from includeWatchonly)\n"
             "\nReturns up to 'count' most recent transactions skipping the first 'from' transactions for account 'account'.\n"
@@ -1262,17 +1262,17 @@ Value listtransactions(const Array& params, bool fHelp)
             "\nAs a json rpc call\n" + HelpExampleRpc("listtransactions", "\"tabby\", 20, 100"));
 
     string strAccount = "*";
-    if (params.size() > 0)
-        strAccount = params[0].get_str();
+    if (parELP.size() > 0)
+        strAccount = parELP[0].get_str();
     int nCount = 10;
-    if (params.size() > 1)
-        nCount = params[1].get_int();
+    if (parELP.size() > 1)
+        nCount = parELP[1].get_int();
     int nFrom = 0;
-    if (params.size() > 2)
-        nFrom = params[2].get_int();
+    if (parELP.size() > 2)
+        nFrom = parELP[2].get_int();
     isminefilter filter = ISMINE_SPENDABLE;
-    if (params.size() > 3)
-        if (params[3].get_bool())
+    if (parELP.size() > 3)
+        if (parELP[3].get_bool())
             filter = filter | ISMINE_WATCH_ONLY;
 
     if (nCount < 0)
@@ -1315,9 +1315,9 @@ Value listtransactions(const Array& params, bool fHelp)
     return ret;
 }
 
-Value listaccounts(const Array& params, bool fHelp)
+Value listaccounts(const Array& parELP, bool fHelp)
 {
-    if (fHelp || params.size() > 2)
+    if (fHelp || parELP.size() > 2)
         throw runtime_error(
             "listaccounts ( minconf includeWatchonly)\n"
             "\nReturns Object that has account names as keys, account balances as values.\n"
@@ -1337,11 +1337,11 @@ Value listaccounts(const Array& params, bool fHelp)
             "\nAs json rpc call\n" + HelpExampleRpc("listaccounts", "6"));
 
     int nMinDepth = 1;
-    if (params.size() > 0)
-        nMinDepth = params[0].get_int();
+    if (parELP.size() > 0)
+        nMinDepth = parELP[0].get_int();
     isminefilter includeWatchonly = ISMINE_SPENDABLE;
-    if (params.size() > 1)
-        if (params[1].get_bool())
+    if (parELP.size() > 1)
+        if (parELP[1].get_bool())
             includeWatchonly = includeWatchonly | ISMINE_WATCH_ONLY;
 
     map<string, CAmount> mapAccountBalances;
@@ -1384,7 +1384,7 @@ Value listaccounts(const Array& params, bool fHelp)
     return ret;
 }
 
-Value listsinceblock(const Array& params, bool fHelp)
+Value listsinceblock(const Array& parELP, bool fHelp)
 {
     if (fHelp)
         throw runtime_error(
@@ -1424,24 +1424,24 @@ Value listsinceblock(const Array& params, bool fHelp)
     int target_confirms = 1;
     isminefilter filter = ISMINE_SPENDABLE;
 
-    if (params.size() > 0) {
+    if (parELP.size() > 0) {
         uint256 blockId = 0;
 
-        blockId.SetHex(params[0].get_str());
+        blockId.SetHex(parELP[0].get_str());
         BlockMap::iterator it = mapBlockIndex.find(blockId);
         if (it != mapBlockIndex.end())
             pindex = it->second;
     }
 
-    if (params.size() > 1) {
-        target_confirms = params[1].get_int();
+    if (parELP.size() > 1) {
+        target_confirms = parELP[1].get_int();
 
         if (target_confirms < 1)
             throw JSONRPCError(RPC_INVALID_PARAMETER, "Invalid parameter");
     }
 
-    if (params.size() > 2)
-        if (params[2].get_bool())
+    if (parELP.size() > 2)
+        if (parELP[2].get_bool())
             filter = filter | ISMINE_WATCH_ONLY;
 
     int depth = pindex ? (1 + chainActive.Height() - pindex->nHeight) : -1;
@@ -1465,9 +1465,9 @@ Value listsinceblock(const Array& params, bool fHelp)
     return ret;
 }
 
-Value gettransaction(const Array& params, bool fHelp)
+Value gettransaction(const Array& parELP, bool fHelp)
 {
-    if (fHelp || params.size() < 1 || params.size() > 2)
+    if (fHelp || parELP.size() < 1 || parELP.size() > 2)
         throw runtime_error(
             "gettransaction \"txid\" ( includeWatchonly )\n"
             "\nGet detailed information about in-wallet transaction <txid>\n"
@@ -1502,11 +1502,11 @@ Value gettransaction(const Array& params, bool fHelp)
             HelpExampleCli("gettransaction", "\"1075db55d416d3ca199f55b6084e2115b9345e16c5cf302fc80e9d5fbf5d48d\"") + HelpExampleCli("gettransaction", "\"1075db55d416d3ca199f55b6084e2115b9345e16c5cf302fc80e9d5fbf5d48d\" true") + HelpExampleRpc("gettransaction", "\"1075db55d416d3ca199f55b6084e2115b9345e16c5cf302fc80e9d5fbf5d48d\""));
 
     uint256 hash;
-    hash.SetHex(params[0].get_str());
+    hash.SetHex(parELP[0].get_str());
 
     isminefilter filter = ISMINE_SPENDABLE;
-    if (params.size() > 1)
-        if (params[1].get_bool())
+    if (parELP.size() > 1)
+        if (parELP[1].get_bool())
             filter = filter | ISMINE_WATCH_ONLY;
 
     Object entry;
@@ -1536,9 +1536,9 @@ Value gettransaction(const Array& params, bool fHelp)
 }
 
 
-Value backupwallet(const Array& params, bool fHelp)
+Value backupwallet(const Array& parELP, bool fHelp)
 {
-    if (fHelp || params.size() != 1)
+    if (fHelp || parELP.size() != 1)
         throw runtime_error(
             "backupwallet \"destination\"\n"
             "\nSafely copies wallet.dat to destination, which can be a directory or a path with filename.\n"
@@ -1547,7 +1547,7 @@ Value backupwallet(const Array& params, bool fHelp)
             "\nExamples:\n" +
             HelpExampleCli("backupwallet", "\"backup.dat\"") + HelpExampleRpc("backupwallet", "\"backup.dat\""));
 
-    string strDest = params[0].get_str();
+    string strDest = parELP[0].get_str();
     if (!BackupWallet(*pwalletMain, strDest))
         throw JSONRPCError(RPC_WALLET_ERROR, "Error: Wallet backup failed!");
 
@@ -1555,9 +1555,9 @@ Value backupwallet(const Array& params, bool fHelp)
 }
 
 
-Value keypoolrefill(const Array& params, bool fHelp)
+Value keypoolrefill(const Array& parELP, bool fHelp)
 {
-    if (fHelp || params.size() > 1)
+    if (fHelp || parELP.size() > 1)
         throw runtime_error(
             "keypoolrefill ( newsize )\n"
             "\nFills the keypool." +
@@ -1569,10 +1569,10 @@ Value keypoolrefill(const Array& params, bool fHelp)
 
     // 0 is interpreted by TopUpKeyPool() as the default keypool size given by -keypool
     unsigned int kpSize = 0;
-    if (params.size() > 0) {
-        if (params[0].get_int() < 0)
+    if (parELP.size() > 0) {
+        if (parELP[0].get_int() < 0)
             throw JSONRPCError(RPC_INVALID_PARAMETER, "Invalid parameter, expected valid size.");
-        kpSize = (unsigned int)params[0].get_int();
+        kpSize = (unsigned int)parELP[0].get_int();
     }
 
     EnsureWalletIsUnlocked();
@@ -1593,13 +1593,13 @@ static void LockWallet(CWallet* pWallet)
     pWallet->Lock();
 }
 
-Value walletpassphrase(const Array& params, bool fHelp)
+Value walletpassphrase(const Array& parELP, bool fHelp)
 {
-    if (pwalletMain->IsCrypted() && (fHelp || params.size() < 2 || params.size() > 3))
+    if (pwalletMain->IsCrypted() && (fHelp || parELP.size() < 2 || parELP.size() > 3))
         throw runtime_error(
             "walletpassphrase \"passphrase\" timeout ( anonymizeonly )\n"
             "\nStores the wallet decryption key in memory for 'timeout' seconds.\n"
-            "This is needed prior to performing transactions related to private keys such as sending AMSs\n"
+            "This is needed prior to performing transactions related to private keys such as sending ELPs\n"
             "\nArguments:\n"
             "1. \"passphrase\"     (string, required) The wallet passphrase\n"
             "2. timeout            (numeric, required) The time to keep the decryption key in seconds.\n"
@@ -1619,16 +1619,16 @@ Value walletpassphrase(const Array& params, bool fHelp)
     if (!pwalletMain->IsCrypted())
         throw JSONRPCError(RPC_WALLET_WRONG_ENC_STATE, "Error: running with an unencrypted wallet, but walletpassphrase was called.");
 
-    // Note that the walletpassphrase is stored in params[0] which is not mlock()ed
+    // Note that the walletpassphrase is stored in parELP[0] which is not mlock()ed
     SecureString strWalletPass;
     strWalletPass.reserve(100);
     // TODO: get rid of this .c_str() by implementing SecureString::operator=(std::string)
-    // Alternately, find a way to make params[0] mlock()'d to begin with.
-    strWalletPass = params[0].get_str().c_str();
+    // Alternately, find a way to make parELP[0] mlock()'d to begin with.
+    strWalletPass = parELP[0].get_str().c_str();
 
     bool anonymizeOnly = false;
-    if (params.size() == 3)
-        anonymizeOnly = params[2].get_bool();
+    if (parELP.size() == 3)
+        anonymizeOnly = parELP[2].get_bool();
 
     if (!pwalletMain->IsLocked() && pwalletMain->fWalletUnlockAnonymizeOnly && anonymizeOnly)
         throw JSONRPCError(RPC_WALLET_ALREADY_UNLOCKED, "Error: Wallet is already unlocked.");
@@ -1638,7 +1638,7 @@ Value walletpassphrase(const Array& params, bool fHelp)
 
     pwalletMain->TopUpKeyPool();
 
-    int64_t nSleepTime = params[1].get_int64();
+    int64_t nSleepTime = parELP[1].get_int64();
     LOCK(cs_nWalletUnlockTime);
     nWalletUnlockTime = GetTime() + nSleepTime;
     RPCRunLater("lockwallet", boost::bind(LockWallet, pwalletMain), nSleepTime);
@@ -1647,9 +1647,9 @@ Value walletpassphrase(const Array& params, bool fHelp)
 }
 
 
-Value walletpassphrasechange(const Array& params, bool fHelp)
+Value walletpassphrasechange(const Array& parELP, bool fHelp)
 {
-    if (pwalletMain->IsCrypted() && (fHelp || params.size() != 2))
+    if (pwalletMain->IsCrypted() && (fHelp || parELP.size() != 2))
         throw runtime_error(
             "walletpassphrasechange \"oldpassphrase\" \"newpassphrase\"\n"
             "\nChanges the wallet passphrase from 'oldpassphrase' to 'newpassphrase'.\n"
@@ -1665,14 +1665,14 @@ Value walletpassphrasechange(const Array& params, bool fHelp)
         throw JSONRPCError(RPC_WALLET_WRONG_ENC_STATE, "Error: running with an unencrypted wallet, but walletpassphrasechange was called.");
 
     // TODO: get rid of these .c_str() calls by implementing SecureString::operator=(std::string)
-    // Alternately, find a way to make params[0] mlock()'d to begin with.
+    // Alternately, find a way to make parELP[0] mlock()'d to begin with.
     SecureString strOldWalletPass;
     strOldWalletPass.reserve(100);
-    strOldWalletPass = params[0].get_str().c_str();
+    strOldWalletPass = parELP[0].get_str().c_str();
 
     SecureString strNewWalletPass;
     strNewWalletPass.reserve(100);
-    strNewWalletPass = params[1].get_str().c_str();
+    strNewWalletPass = parELP[1].get_str().c_str();
 
     if (strOldWalletPass.length() < 1 || strNewWalletPass.length() < 1)
         throw runtime_error(
@@ -1686,9 +1686,9 @@ Value walletpassphrasechange(const Array& params, bool fHelp)
 }
 
 
-Value walletlock(const Array& params, bool fHelp)
+Value walletlock(const Array& parELP, bool fHelp)
 {
-    if (pwalletMain->IsCrypted() && (fHelp || params.size() != 0))
+    if (pwalletMain->IsCrypted() && (fHelp || parELP.size() != 0))
         throw runtime_error(
             "walletlock\n"
             "\nRemoves the wallet encryption key from memory, locking the wallet.\n"
@@ -1716,9 +1716,9 @@ Value walletlock(const Array& params, bool fHelp)
 }
 
 
-Value encryptwallet(const Array& params, bool fHelp)
+Value encryptwallet(const Array& parELP, bool fHelp)
 {
-    if (!pwalletMain->IsCrypted() && (fHelp || params.size() != 1))
+    if (!pwalletMain->IsCrypted() && (fHelp || parELP.size() != 1))
         throw runtime_error(
             "encryptwallet \"passphrase\"\n"
             "\nEncrypts the wallet with 'passphrase'. This is for first time encryption.\n"
@@ -1732,7 +1732,7 @@ Value encryptwallet(const Array& params, bool fHelp)
             "\nExamples:\n"
             "\nEncrypt you wallet\n" +
             HelpExampleCli("encryptwallet", "\"my pass phrase\"") +
-            "\nNow set the passphrase to use the wallet, such as for signing or sending AMSs\n" + HelpExampleCli("walletpassphrase", "\"my pass phrase\"") +
+            "\nNow set the passphrase to use the wallet, such as for signing or sending ELPs\n" + HelpExampleCli("walletpassphrase", "\"my pass phrase\"") +
             "\nNow we can so something like sign\n" + HelpExampleCli("signmessage", "\"elleriumaddress\" \"test message\"") +
             "\nNow lock the wallet again by removing the passphrase\n" + HelpExampleCli("walletlock", "") +
             "\nAs a json rpc call\n" + HelpExampleRpc("encryptwallet", "\"my pass phrase\""));
@@ -1743,10 +1743,10 @@ Value encryptwallet(const Array& params, bool fHelp)
         throw JSONRPCError(RPC_WALLET_WRONG_ENC_STATE, "Error: running with an encrypted wallet, but encryptwallet was called.");
 
     // TODO: get rid of this .c_str() by implementing SecureString::operator=(std::string)
-    // Alternately, find a way to make params[0] mlock()'d to begin with.
+    // Alternately, find a way to make parELP[0] mlock()'d to begin with.
     SecureString strWalletPass;
     strWalletPass.reserve(100);
-    strWalletPass = params[0].get_str().c_str();
+    strWalletPass = parELP[0].get_str().c_str();
 
     if (strWalletPass.length() < 1)
         throw runtime_error(
@@ -1763,14 +1763,14 @@ Value encryptwallet(const Array& params, bool fHelp)
     return "wallet encrypted; ellerium server stopping, restart to run with encrypted wallet. The keypool has been flushed, you need to make a new backup.";
 }
 
-Value lockunspent(const Array& params, bool fHelp)
+Value lockunspent(const Array& parELP, bool fHelp)
 {
-    if (fHelp || params.size() < 1 || params.size() > 2)
+    if (fHelp || parELP.size() < 1 || parELP.size() > 2)
         throw runtime_error(
             "lockunspent unlock [{\"txid\":\"txid\",\"vout\":n},...]\n"
             "\nUpdates list of temporarily unspendable outputs.\n"
             "Temporarily lock (unlock=false) or unlock (unlock=true) specified transaction outputs.\n"
-            "A locked transaction output will not be chosen by automatic coin selection, when spending AMSs.\n"
+            "A locked transaction output will not be chosen by automatic coin selection, when spending ELPs.\n"
             "Locks are stored in memory only. Nodes start with zero locked outputs, and the locked output list\n"
             "is always cleared (by virtue of process exit) when a node stops or fails.\n"
             "Also see the listunspent call\n"
@@ -1796,20 +1796,20 @@ Value lockunspent(const Array& params, bool fHelp)
             "\nUnlock the transaction again\n" + HelpExampleCli("lockunspent", "true \"[{\\\"txid\\\":\\\"a08e6907dbbd3d809776dbfc5d82e371b764ed838b5655e72f463568df1aadf0\\\",\\\"vout\\\":1}]\"") +
             "\nAs a json rpc call\n" + HelpExampleRpc("lockunspent", "false, \"[{\\\"txid\\\":\\\"a08e6907dbbd3d809776dbfc5d82e371b764ed838b5655e72f463568df1aadf0\\\",\\\"vout\\\":1}]\""));
 
-    if (params.size() == 1)
-        RPCTypeCheck(params, list_of(bool_type));
+    if (parELP.size() == 1)
+        RPCTypeCheck(parELP, list_of(bool_type));
     else
-        RPCTypeCheck(params, list_of(bool_type)(array_type));
+        RPCTypeCheck(parELP, list_of(bool_type)(array_type));
 
-    bool fUnlock = params[0].get_bool();
+    bool fUnlock = parELP[0].get_bool();
 
-    if (params.size() == 1) {
+    if (parELP.size() == 1) {
         if (fUnlock)
             pwalletMain->UnlockAllCoins();
         return true;
     }
 
-    Array outputs = params[1].get_array();
+    Array outputs = parELP[1].get_array();
     BOOST_FOREACH (Value& output, outputs) {
         if (output.type() != obj_type)
             throw JSONRPCError(RPC_INVALID_PARAMETER, "Invalid parameter, expected object");
@@ -1836,9 +1836,9 @@ Value lockunspent(const Array& params, bool fHelp)
     return true;
 }
 
-Value listlockunspent(const Array& params, bool fHelp)
+Value listlockunspent(const Array& parELP, bool fHelp)
 {
-    if (fHelp || params.size() > 0)
+    if (fHelp || parELP.size() > 0)
         throw runtime_error(
             "listlockunspent\n"
             "\nReturns list of temporarily unspendable outputs.\n"
@@ -1875,14 +1875,14 @@ Value listlockunspent(const Array& params, bool fHelp)
     return ret;
 }
 
-Value settxfee(const Array& params, bool fHelp)
+Value settxfee(const Array& parELP, bool fHelp)
 {
-    if (fHelp || params.size() < 1 || params.size() > 1)
+    if (fHelp || parELP.size() < 1 || parELP.size() > 1)
         throw runtime_error(
             "settxfee amount\n"
             "\nSet the transaction fee per kB.\n"
             "\nArguments:\n"
-            "1. amount         (numeric, required) The transaction fee in AMS/kB rounded to the nearest 0.00000001\n"
+            "1. amount         (numeric, required) The transaction fee in ELP/kB rounded to the nearest 0.00000001\n"
             "\nResult\n"
             "true|false        (boolean) Returns true if successful\n"
             "\nExamples:\n" +
@@ -1890,23 +1890,23 @@ Value settxfee(const Array& params, bool fHelp)
 
     // Amount
     CAmount nAmount = 0;
-    if (params[0].get_real() != 0.0)
-        nAmount = AmountFromValue(params[0]); // rejects 0.0 amounts
+    if (parELP[0].get_real() != 0.0)
+        nAmount = AmountFromValue(parELP[0]); // rejects 0.0 amounts
 
     payTxFee = CFeeRate(nAmount, 1000);
     return true;
 }
 
-Value getwalletinfo(const Array& params, bool fHelp)
+Value getwalletinfo(const Array& parELP, bool fHelp)
 {
-    if (fHelp || params.size() != 0)
+    if (fHelp || parELP.size() != 0)
         throw runtime_error(
             "getwalletinfo\n"
             "Returns an object containing various wallet state info.\n"
             "\nResult:\n"
             "{\n"
             "  \"walletversion\": xxxxx,     (numeric) the wallet version\n"
-            "  \"balance\": xxxxxxx,         (numeric) the total AMS balance of the wallet\n"
+            "  \"balance\": xxxxxxx,         (numeric) the total ELP balance of the wallet\n"
             "  \"txcount\": xxxxxxx,         (numeric) the total number of transactions in the wallet\n"
             "  \"keypoololdest\": xxxxxx,    (numeric) the timestamp (seconds since GMT epoch) of the oldest pre-generated key in the key pool\n"
             "  \"keypoolsize\": xxxx,        (numeric) how many new keys are pre-generated\n"
@@ -1927,9 +1927,9 @@ Value getwalletinfo(const Array& params, bool fHelp)
 }
 
 // ppcoin: reserve balance from being staked for network protection
-Value reservebalance(const Array& params, bool fHelp)
+Value reservebalance(const Array& parELP, bool fHelp)
 {
-    if (fHelp || params.size() > 2)
+    if (fHelp || parELP.size() > 2)
         throw runtime_error(
             "reservebalance [<reserve> [amount]]\n"
             "<reserve> is true or false to turn balance reserve on or off.\n"
@@ -1937,18 +1937,18 @@ Value reservebalance(const Array& params, bool fHelp)
             "Set reserve amount not participating in network protection.\n"
             "If no parameters provided current setting is printed.\n");
 
-    if (params.size() > 0) {
-        bool fReserve = params[0].get_bool();
+    if (parELP.size() > 0) {
+        bool fReserve = parELP[0].get_bool();
         if (fReserve) {
-            if (params.size() == 1)
+            if (parELP.size() == 1)
                 throw runtime_error("must provide amount to reserve balance.\n");
-            int64_t nAmount = AmountFromValue(params[1]);
+            int64_t nAmount = AmountFromValue(parELP[1]);
             nAmount = (nAmount / CENT) * CENT; // round to cent
             if (nAmount < 0)
                 throw runtime_error("amount cannot be negative.\n");
             nReserveBalance = nAmount;
         } else {
-            if (params.size() > 1)
+            if (parELP.size() > 1)
                 throw runtime_error("cannot specify amount to turn off reserve.\n");
             nReserveBalance = 0;
         }
@@ -1961,13 +1961,13 @@ Value reservebalance(const Array& params, bool fHelp)
 }
 
 // presstab HyperStake
-Value setstakesplitthreshold(const Array& params, bool fHelp)
+Value setstakesplitthreshold(const Array& parELP, bool fHelp)
 {
-    if (fHelp || params.size() != 1)
+    if (fHelp || parELP.size() != 1)
         throw runtime_error(
             "setstakesplitthreshold <1 - 999,999>\n"
             "This will set the output size of your stakes to never be below this number\n");
-    uint64_t nStakeSplitThreshold = params[0].get_int();
+    uint64_t nStakeSplitThreshold = parELP[0].get_int();
     if (pwalletMain->IsLocked())
         throw JSONRPCError(RPC_WALLET_UNLOCK_NEEDED, "Error: Unlock wallet to use this feature");
     if (nStakeSplitThreshold > 999999)
@@ -1992,9 +1992,9 @@ Value setstakesplitthreshold(const Array& params, bool fHelp)
 }
 
 // presstab HyperStake
-Value getstakesplitthreshold(const Array& params, bool fHelp)
+Value getstakesplitthreshold(const Array& parELP, bool fHelp)
 {
-    if (fHelp || params.size() != 0)
+    if (fHelp || parELP.size() != 0)
         throw runtime_error(
             "getstakesplitthreshold\n"
             "Returns the set splitstakethreshold\n");
@@ -2004,23 +2004,23 @@ Value getstakesplitthreshold(const Array& params, bool fHelp)
     return result;
 }
 
-Value autocombinerewards(const Array& params, bool fHelp)
+Value autocombinerewards(const Array& parELP, bool fHelp)
 {
-    if (fHelp || params.size() < 1)
+    if (fHelp || parELP.size() < 1)
         throw runtime_error(
             "autocombinerewards <true/false> threshold\n"
             "Wallet will automatically monitor for any coins with value below the threshold amount, and combine them if they reside with the same Ellerium address\n"
             "When autocombinerewards runs it will create a transaction, and therefore will be subject to transaction fees.\n");
 
     CWalletDB walletdb(pwalletMain->strWalletFile);
-    bool fEnable = params[0].get_bool();
+    bool fEnable = parELP[0].get_bool();
     CAmount nThreshold = 0;
 
     if (fEnable) {
-        if (params.size() != 2)
+        if (parELP.size() != 2)
             throw runtime_error("Input Error: use format: autocombinerewards <true/false> threshold\n");
 
-        nThreshold = params[1].get_int();
+        nThreshold = parELP[1].get_int();
     }
 
     pwalletMain->fCombineDust = fEnable;
@@ -2097,13 +2097,13 @@ unsigned int sumMultiSend()
     return sum;
 }
 
-Value multisend(const Array& params, bool fHelp)
+Value multisend(const Array& parELP, bool fHelp)
 {
     CWalletDB walletdb(pwalletMain->strWalletFile);
     bool fFileBacked;
     //MultiSend Commands
-    if (params.size() == 1) {
-        string strCommand = params[0].get_str();
+    if (parELP.size() == 1) {
+        string strCommand = parELP[0].get_str();
         Object ret;
         if (strCommand == "print") {
             return printMultiSend();
@@ -2179,8 +2179,8 @@ Value multisend(const Array& params, bool fHelp)
             }
         }
     }
-    if (params.size() == 2 && params[0].get_str() == "delete") {
-        int del = boost::lexical_cast<int>(params[1].get_str());
+    if (parELP.size() == 2 && parELP[0].get_str() == "delete") {
+        int del = boost::lexical_cast<int>(parELP[1].get_str());
         if (!walletdb.EraseMultiSend(pwalletMain->vMultiSend))
             throw JSONRPCError(RPC_DATABASE_ERROR, "failed to delete old MultiSend vector from database");
 
@@ -2190,8 +2190,8 @@ Value multisend(const Array& params, bool fHelp)
 
         return printMultiSend();
     }
-    if (params.size() == 2 && params[0].get_str() == "disable") {
-        std::string disAddress = params[1].get_str();
+    if (parELP.size() == 2 && parELP[0].get_str() == "disable") {
+        std::string disAddress = parELP[1].get_str();
         if (!CBitcoinAddress(disAddress).IsValid())
             throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "address you want to disable is not valid");
         else {
@@ -2207,7 +2207,7 @@ Value multisend(const Array& params, bool fHelp)
     }
 
     //if no commands are used
-    if (fHelp || params.size() != 2)
+    if (fHelp || parELP.size() != 2)
         throw runtime_error(
             "multisend <command>\n"
             "****************************************************************\n"
@@ -2232,15 +2232,15 @@ Value multisend(const Array& params, bool fHelp)
             "****************************************************************\n");
 
     //if the user is entering a new MultiSend item
-    string strAddress = params[0].get_str();
+    string strAddress = parELP[0].get_str();
     CBitcoinAddress address(strAddress);
     if (!address.IsValid())
-        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid AMS address");
-    if (boost::lexical_cast<int>(params[1].get_str()) < 0)
+        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid ELP address");
+    if (boost::lexical_cast<int>(parELP[1].get_str()) < 0)
         throw JSONRPCError(RPC_INVALID_PARAMETER, "Invalid parameter, expected valid percentage");
     if (pwalletMain->IsLocked())
         throw JSONRPCError(RPC_WALLET_UNLOCK_NEEDED, "Error: Please enter the wallet passphrase with walletpassphrase first.");
-    unsigned int nPercent = boost::lexical_cast<unsigned int>(params[1].get_str());
+    unsigned int nPercent = boost::lexical_cast<unsigned int>(parELP[1].get_str());
 
     LOCK(pwalletMain->cs_wallet);
     {

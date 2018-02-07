@@ -3,10 +3,10 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef BITCOIN_CHAINPARAMS_H
-#define BITCOIN_CHAINPARAMS_H
+#ifndef BITCOIN_CHAINPARELP_H
+#define BITCOIN_CHAINPARELP_H
 
-#include "chainparamsbase.h"
+#include "chainparELPbase.h"
 #include "checkpoints.h"
 #include "primitives/block.h"
 #include "protocol.h"
@@ -22,13 +22,13 @@ struct CDNSSeedData {
 };
 
 /**
- * CChainParams defines various tweakable parameters of a given instance of the
+ * CChainParELP defines various tweakable parameters of a given instance of the
  * Ellerium system. There are three: the main network on which people trade goods
  * and services, the public test network which gets reset from time to time and
  * a regression test mode which is intended for private networks only. It has
  * minimal difficulty to ensure that blocks can be found instantly.
  */
-class CChainParams
+class CChainParELP
 {
 public:
     enum Base58Type {
@@ -89,10 +89,10 @@ public:
     std::string SporkKey() const { return strSporkKey; }
     std::string ObfuscationPoolDummyAddress() const { return strObfuscationPoolDummyAddress; }
     int64_t StartMasternodePayments() const { return nStartMasternodePayments; }
-    CBaseChainParams::Network NetworkID() const { return networkID; }
+    CBaseChainParELP::Network NetworkID() const { return networkID; }
 
 protected:
-    CChainParams() {}
+    CChainParELP() {}
 
     uint256 hashGenesisBlock;
     MessageStartChars pchMessageStart;
@@ -111,7 +111,7 @@ protected:
     int nMinerThreads;
     std::vector<CDNSSeedData> vSeeds;
     std::vector<unsigned char> base58Prefixes[MAX_BASE58_TYPES];
-    CBaseChainParams::Network networkID;
+    CBaseChainParELP::Network networkID;
     std::string strNetworkID;
     CBlock genesis;
     std::vector<CAddress> vFixedSeeds;
@@ -136,7 +136,7 @@ protected:
  * values after finalization.
  */
 
-class CModifiableParams
+class CModifiableParELP
 {
 public:
     //! Published setters to allow changing values in unit test cases
@@ -151,21 +151,21 @@ public:
  * Return the currently selected parameters. This won't change after app startup
  * outside of the unit tests.
  */
-const CChainParams& Params();
+const CChainParELP& ParELP();
 
 /** Return parameters for the given network. */
-CChainParams& Params(CBaseChainParams::Network network);
+CChainParELP& ParELP(CBaseChainParELP::Network network);
 
 /** Get modifiable network parameters (UNITTEST only) */
-CModifiableParams* ModifiableParams();
+CModifiableParELP* ModifiableParELP();
 
-/** Sets the params returned by Params() to those for the given network. */
-void SelectParams(CBaseChainParams::Network network);
+/** Sets the parELP returned by ParELP() to those for the given network. */
+void SelectParELP(CBaseChainParELP::Network network);
 
 /**
- * Looks for -regtest or -testnet and then calls SelectParams as appropriate.
+ * Looks for -regtest or -testnet and then calls SelectParELP as appropriate.
  * Returns false if an invalid combination is given.
  */
-bool SelectParamsFromCommandLine();
+bool SelectParELPFromCommandLine();
 
-#endif // BITCOIN_CHAINPARAMS_H
+#endif // BITCOIN_CHAINPARELP_H

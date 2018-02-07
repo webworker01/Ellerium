@@ -41,7 +41,7 @@ bool CMasternodePaymentDB::Write(const CMasternodePayments& objToSave)
     // serialize, checksum data up to that point, then append checksum
     CDataStream ssObj(SER_DISK, CLIENT_VERSION);
     ssObj << strMagicMessage;                   // masternode cache file specific magic message
-    ssObj << FLATDATA(Params().MessageStart()); // network specific magic number
+    ssObj << FLATDATA(ParELP().MessageStart()); // network specific magic number
     ssObj << objToSave;
     uint256 hash = Hash(ssObj.begin(), ssObj.end());
     ssObj << hash;
@@ -122,7 +122,7 @@ CMasternodePaymentDB::ReadResult CMasternodePaymentDB::Read(CMasternodePayments&
         ssObj >> FLATDATA(pchMsgTmp);
 
         // ... verify the network matches ours
-        if (memcmp(pchMsgTmp, Params().MessageStart(), sizeof(pchMsgTmp))) {
+        if (memcmp(pchMsgTmp, ParELP().MessageStart(), sizeof(pchMsgTmp))) {
             error("%s : Invalid network magic number", __func__);
             return IncorrectMagicNumber;
         }
@@ -224,7 +224,7 @@ bool IsBlockPayeeValid(const CBlock& block, int nBlockHeight)
         return true;
     }
 
-    const CTransaction& txNew = (nBlockHeight > Params().LAST_POW_BLOCK() ? block.vtx[1] : block.vtx[0]);
+    const CTransaction& txNew = (nBlockHeight > ParELP().LAST_POW_BLOCK() ? block.vtx[1] : block.vtx[0]);
 
     //check if it's a budget block
     if (IsSporkActive(SPORK_13_ENABLE_SUPERBLOCKS)) {
@@ -347,7 +347,7 @@ void CMasternodePayments::ProcessMessageMasternodePayments(CNode* pfrom, std::st
         int nCountNeeded;
         vRecv >> nCountNeeded;
 
-        if (Params().NetworkID() == CBaseChainParams::MAIN) {
+        if (ParELP().NetworkID() == CBaseChainParELP::MAIN) {
             if (pfrom->HasFulfilledRequest("mnget")) {
                 LogPrintf("mnget - peer already asked me for the list\n");
                 Misbehaving(pfrom->GetId(), 20);
@@ -517,7 +517,7 @@ bool CMasternodeBlockPayees::IsTransactionValid(const CTransaction& txNew)
     //account for the fact that all peers do not see the same masternode count. A allowance of being off our masternode count is given
     //we only need to look at an increased masternode count because as count increases, the reward decreases. This code only checks
     //for mnPayment >= required, so it only makes sense to check the max node count allowed.
-    CAmount requiredMasternodePayment = GetMasternodePayment(nBlockHeight, nReward, mnodeman.size() + Params().MasternodeCountDrift());
+    CAmount requiredMasternodePayment = GetMasternodePayment(nBlockHeight, nReward, mnodeman.size() + ParELP().MasternodeCountDrift());
 
     //require at least 6 signatures
     BOOST_FOREACH (CMasternodePayee& payee, vecPayments)

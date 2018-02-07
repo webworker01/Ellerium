@@ -13,7 +13,7 @@
 #include "net.h"
 
 #include "addrman.h"
-#include "chainparams.h"
+#include "chainparELP.h"
 #include "clientversion.h"
 #include "miner.h"
 #include "obfuscation.h"
@@ -121,7 +121,7 @@ void AddOneShot(string strDest)
 
 unsigned short GetListenPort()
 {
-    return (unsigned short)(GetArg("-port", Params().GetDefaultPort()));
+    return (unsigned short)(GetArg("-port", ParELP().GetDefaultPort()));
 }
 
 // find 'best' local address for a particular peer
@@ -365,7 +365,7 @@ CNode* FindNode(const CService& addr)
 {
     LOCK(cs_vNodes);
     BOOST_FOREACH (CNode* pnode, vNodes) {
-        if (Params().NetworkID() == CBaseChainParams::REGTEST) {
+        if (ParELP().NetworkID() == CBaseChainParELP::REGTEST) {
             //if using regtest, just check the IP
             if ((CNetAddr)pnode->addr == (CNetAddr)addr)
                 return (pnode);
@@ -403,7 +403,7 @@ CNode* ConnectNode(CAddress addrConnect, const char* pszDest, bool obfuScationMa
     // Connect
     SOCKET hSocket;
     bool proxyConnectionFailed = false;
-    if (pszDest ? ConnectSocketByName(addrConnect, hSocket, pszDest, Params().GetDefaultPort(), nConnectTimeout, &proxyConnectionFailed) :
+    if (pszDest ? ConnectSocketByName(addrConnect, hSocket, pszDest, ParELP().GetDefaultPort(), nConnectTimeout, &proxyConnectionFailed) :
                   ConnectSocket(addrConnect, hSocket, nConnectTimeout, &proxyConnectionFailed)) {
         if (!IsSelectableSocket(hSocket)) {
             LogPrintf("Cannot create connection: non-selectable socket created (fd >= FD_SETSIZE ?)\n");
@@ -1088,7 +1088,7 @@ void ThreadDNSAddressSeed()
         }
     }
 
-    const vector<CDNSSeedData>& vSeeds = Params().DNSSeeds();
+    const vector<CDNSSeedData>& vSeeds = ParELP().DNSSeeds();
     int found = 0;
 
     LogPrintf("Loading addresses from DNS seeds (could take a while)\n");
@@ -1102,7 +1102,7 @@ void ThreadDNSAddressSeed()
             if (LookupHost(seed.host.c_str(), vIPs)) {
                 BOOST_FOREACH (CNetAddr& ip, vIPs) {
                     int nOneDay = 24 * 3600;
-                    CAddress addr = CAddress(CService(ip, Params().GetDefaultPort()));
+                    CAddress addr = CAddress(CService(ip, ParELP().GetDefaultPort()));
                     addr.nTime = GetTime() - 3 * nOneDay - GetRand(4 * nOneDay); // use a random age between 3 and 7 days old
                     vAdd.push_back(addr);
                     found++;
@@ -1177,7 +1177,7 @@ void ThreadOpenConnections()
             static bool done = false;
             if (!done) {
                 LogPrintf("Adding fixed seed nodes as DNS doesn't seem to be available.\n");
-                addrman.Add(Params().FixedSeeds(), CNetAddr("127.0.0.1"));
+                addrman.Add(ParELP().FixedSeeds(), CNetAddr("127.0.0.1"));
                 done = true;
             }
         }
@@ -1226,7 +1226,7 @@ void ThreadOpenConnections()
                 continue;
 
             // do not allow non-default ports, unless after 50 invalid addresses selected already
-            if (addr.GetPort() != Params().GetDefaultPort() && nTries < 50)
+            if (addr.GetPort() != ParELP().GetDefaultPort() && nTries < 50)
                 continue;
 
             addrConnect = addr;
@@ -1274,7 +1274,7 @@ void ThreadOpenAddedConnections()
         list<vector<CService> > lservAddressesToAdd(0);
         BOOST_FOREACH (string& strAddNode, lAddresses) {
             vector<CService> vservNode(0);
-            if (Lookup(strAddNode.c_str(), vservNode, Params().GetDefaultPort(), fNameLookup, 0)) {
+            if (Lookup(strAddNode.c_str(), vservNode, ParELP().GetDefaultPort(), fNameLookup, 0)) {
                 lservAddressesToAdd.push_back(vservNode);
                 {
                     LOCK(cs_setservAddNodeAddresses);
@@ -1798,7 +1798,7 @@ bool CAddrDB::Write(const CAddrMan& addr)
 
     // serialize addresses, checksum data up to that point, then append csum
     CDataStream ssPeers(SER_DISK, CLIENT_VERSION);
-    ssPeers << FLATDATA(Params().MessageStart());
+    ssPeers << FLATDATA(ParELP().MessageStart());
     ssPeers << addr;
     uint256 hash = Hash(ssPeers.begin(), ssPeers.end());
     ssPeers << hash;
@@ -1862,7 +1862,7 @@ bool CAddrDB::Read(CAddrMan& addr)
         ssPeers >> FLATDATA(pchMsgTmp);
 
         // ... verify the network matches ours
-        if (memcmp(pchMsgTmp, Params().MessageStart(), sizeof(pchMsgTmp)))
+        if (memcmp(pchMsgTmp, ParELP().MessageStart(), sizeof(pchMsgTmp)))
             return error("%s : Invalid network magic number", __func__);
 
         // de-serialize address data into one CAddrMan object
