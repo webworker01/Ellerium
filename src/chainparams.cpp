@@ -45,7 +45,7 @@ static void convertSeed6(std::vector<CAddress>& vSeedsOut, const SeedSpec6* data
 
 static Checkpoints::MapCheckpoints mapCheckpoints =
     boost::assign::map_list_of
-	(0, uint256("0x0000016c5074e3a3d7df0c9b9cdc38ef6a72be36c4a3a0233a564533120957f5"));
+	(0, uint256("0x00000911e7fcd78c934c41e71ae90247e0b6f8c10091fa19b34570e5ecd77f98"));
 
 static const Checkpoints::CCheckpointData data = {
     &mapCheckpoints,
@@ -95,7 +95,7 @@ public:
         nLastPOWBlock = 2000000;
         nMaturity = 101;
         nModifierUpdateBlock = 1;
-        const char* pszTimestamp = "Car Elon Musk's Falcon rocket soars to space";
+        const char* pszTimestamp = "Car Elon Musks Falcon rocket soars to space";
         CMutableTransaction txNew;
         txNew.vin.resize(1);
         txNew.vout.resize(1);
@@ -108,10 +108,10 @@ public:
         genesis.nVersion = 1;
         genesis.nTime = 1518000370;
         genesis.nBits = 0x1e0ffff0;
-        genesis.nNonce = 20897306;
+        genesis.nNonce = 23878348;
         hashGenesisBlock = genesis.GetHash();
-        assert(hashGenesisBlock == uint256("0x00000026bf85c659a81c7e76d3a619e450d6ef2b2e76d39a68c0f29e8e2ae997"));
-        assert(genesis.hashMerkleRoot == uint256("0xb65d20871693857fd3bd47b169d49a2642066381f6aaa61d0acc47611fc13a88"));
+        assert(hashGenesisBlock == uint256("0x00000911e7fcd78c934c41e71ae90247e0b6f8c10091fa19b34570e5ecd77f98"));
+        assert(genesis.hashMerkleRoot == uint256("0x68cf475ba762d3c3e9edcffe8532f43334de44db0d8301b8aeec647d2b034aa8"));
 
         //vSeeds.push_back(CDNSSeedData("nl-1.ellerium.com", "nl-1.ellerium.com"));
 
@@ -171,7 +171,7 @@ public:
         genesis.nNonce = 21800777;
         hashGenesisBlock = genesis.GetHash();
 
-        assert(hashGenesisBlock == uint256("0x0000001cade8761bd0fb7b7112173fea3c4bcaf2af7a4d4c1fca39e1a0dc7c7c"));
+        //assert(hashGenesisBlock == uint256("0x0000001cade8761bd0fb7b7112173fea3c4bcaf2af7a4d4c1fca39e1a0dc7c7c"));
 
         vFixedSeeds.clear();
         vSeeds.clear();
@@ -229,7 +229,7 @@ public:
         genesis.nNonce = 20542302;
         hashGenesisBlock = genesis.GetHash();
         nDefaultPort = 6310;
-        assert(hashGenesisBlock == uint256("0x240d5f85d19d393348f8d1a8324a69c84a2d755fc8507ef8519619cd87c87782"));
+        //assert(hashGenesisBlock == uint256("0x240d5f85d19d393348f8d1a8324a69c84a2d755fc8507ef8519619cd87c87782"));
         vFixedSeeds.clear(); //! Testnet mode doesn't have any fixed seeds.
         vSeeds.clear();      //! Testnet mode doesn't have any DNS seeds.
         fRequireRPCPassword = false;
