@@ -93,7 +93,7 @@ public:
         nTargetTimespan = 1 * 60; // Ellerium: 1 minute
         nTargetSpacing = 1 * 60;  // Ellerium: 1 minute
         nLastPOWBlock = 2000000;
-        nMaturity = 10;
+        nMaturity = 100;
         nModifierUpdateBlock = 1;
         const char* pszTimestamp = "Car Elon Musks Falcon rocket soars to space";
         CMutableTransaction txNew;
