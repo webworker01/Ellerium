@@ -1608,21 +1608,26 @@ double ConvertBitsToDouble(unsigned int nBits)
 
 int64_t GetBlockValue(int nHeight)
 {
-    int64_t nSubsidy = 3;
+    int64_t nSubsidy = 0;
 
     if (Params().NetworkID() == CBaseChainParams::TESTNET) {
         if (nHeight < 200 && nHeight > 0)
             return 250000 * COIN;
     }
 
-    if (nHeight == 0 && nHeight == 1) {
+    if (nHeight == 0) {
         nSubsidy = 60001 * COIN;
-    } else if (nHeight < Params().LAST_POW_BLOCK() && nHeight > 1) {
+    } else if (nHeight < 86400 && nHeight > 0) {
         nSubsidy = 3 * COIN;
-    } else if (nHeight >= Params().LAST_POW_BLOCK()) {
-        nSubsidy = 2.6 * COIN;
+    } else if (nHeight < (Params().NetworkID() == CBaseChainParams::TESTNET ? 145000 : 151200) && nHeight >= 86400) {
+        nSubsidy = 3 * COIN;
+    } else if (nHeight <= Params().LAST_POW_BLOCK() && nHeight >= 151200) {
+        nSubsidy = 3 * COIN;
+    } else if (nHeight <= 302399 && nHeight > Params().LAST_POW_BLOCK()) {
+        nSubsidy = 3 * COIN;
+    } else {
+        nSubsidy = 0 * COIN;
     }
-
     return nSubsidy;
 }
 
