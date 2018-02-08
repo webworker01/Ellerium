@@ -202,7 +202,7 @@ void RPCExecutor::request(const QString& command)
         else
             strPrint = write_string(result, true);
 
-        emit reply(RPCConsole::CMD_REPLY, QString::fromStdString(strPrint));
+        emit reply(RPCConsole::CMD_RELPY, QString::fromStdString(strPrint));
     } catch (json_spirit::Object& objError) {
         try // Nice formatting for standard-format error
         {
@@ -383,7 +383,7 @@ static QString categoryClass(int category)
     case RPCConsole::CMD_REQUEST:
         return "cmd-request";
         break;
-    case RPCConsole::CMD_REPLY:
+    case RPCConsole::CMD_RELPY:
         return "cmd-reply";
         break;
     case RPCConsole::CMD_ERROR:
@@ -478,7 +478,7 @@ void RPCConsole::clear()
         "td.cmd-error { color: red; } "
         "b { color: #006060; } ");
 
-    message(CMD_REPLY, (tr("Welcome to the Ellerium RPC console.") + "<br>" +
+    message(CMD_RELPY, (tr("Welcome to the Ellerium RPC console.") + "<br>" +
                            tr("Use up and down arrows to navigate history, and <b>Ctrl-L</b> to clear screen.") + "<br>" +
                            tr("Type <b>help</b> for an overview of available commands.")),
         true);

@@ -39,7 +39,7 @@ public:
         MC_ERROR,
         MC_DEBUG,
         CMD_REQUEST,
-        CMD_REPLY,
+        CMD_RELPY,
         CMD_ERROR
     };
 

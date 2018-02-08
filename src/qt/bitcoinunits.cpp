@@ -20,18 +20,18 @@ BitcoinUnits::BitcoinUnits(QObject* parent) : QAbstractListModel(parent),
 QList<BitcoinUnits::Unit> BitcoinUnits::availableUnits()
 {
     QList<BitcoinUnits::Unit> unitlist;
-    unitlist.append(EPL);
-    unitlist.append(mEPL);
-    unitlist.append(uEPL);
+    unitlist.append(ELP);
+    unitlist.append(mELP);
+    unitlist.append(uELP);
     return unitlist;
 }
 
 bool BitcoinUnits::valid(int unit)
 {
     switch (unit) {
-    case EPL:
-    case mEPL:
-    case uEPL:
+    case ELP:
+    case mELP:
+    case uELP:
         return true;
     default:
         return false;
@@ -41,11 +41,11 @@ bool BitcoinUnits::valid(int unit)
 QString BitcoinUnits::id(int unit)
 {
     switch (unit) {
-    case EPL:
+    case ELP:
         return QString("ellerium");
-    case mEPL:
+    case mELP:
         return QString("mellerium");
-    case uEPL:
+    case uELP:
         return QString::fromUtf8("uellerium");
     default:
         return QString("???");
@@ -56,23 +56,23 @@ QString BitcoinUnits::name(int unit)
 {
     if (Params().NetworkID() == CBaseChainParams::MAIN) {
         switch (unit) {
-        case EPL:
-            return QString("EPL");
-        case mEPL:
-            return QString("mEPL");
-        case uEPL:
-            return QString::fromUtf8("μEPL");
+        case ELP:
+            return QString("ELP");
+        case mELP:
+            return QString("mELP");
+        case uELP:
+            return QString::fromUtf8("μELP");
         default:
             return QString("???");
         }
     } else {
         switch (unit) {
-        case EPL:
-            return QString("tEPL");
-        case mEPL:
-            return QString("mtEPL");
-        case uEPL:
-            return QString::fromUtf8("μtEPL");
+        case ELP:
+            return QString("tELP");
+        case mELP:
+            return QString("mtELP");
+        case uELP:
+            return QString::fromUtf8("μtELP");
         default:
             return QString("???");
         }
@@ -83,23 +83,23 @@ QString BitcoinUnits::description(int unit)
 {
     if (Params().NetworkID() == CBaseChainParams::MAIN) {
         switch (unit) {
-        case EPL:
-            return QString("EPL");
-        case mEPL:
-            return QString("Milli-EPL (1 / 1" THIN_SP_UTF8 "000)");
-        case uEPL:
-            return QString("Micro-EPL (1 / 1" THIN_SP_UTF8 "000" THIN_SP_UTF8 "000)");
+        case ELP:
+            return QString("ELP");
+        case mELP:
+            return QString("Milli-ELP (1 / 1" THIN_SP_UTF8 "000)");
+        case uELP:
+            return QString("Micro-ELP (1 / 1" THIN_SP_UTF8 "000" THIN_SP_UTF8 "000)");
         default:
             return QString("???");
         }
     } else {
         switch (unit) {
-        case EPL:
-            return QString("TestEPLs");
-        case mEPL:
-            return QString("Milli-TestEPL (1 / 1" THIN_SP_UTF8 "000)");
-        case uEPL:
-            return QString("Micro-TestEPL (1 / 1" THIN_SP_UTF8 "000" THIN_SP_UTF8 "000)");
+        case ELP:
+            return QString("TestELPs");
+        case mELP:
+            return QString("Milli-TestELP (1 / 1" THIN_SP_UTF8 "000)");
+        case uELP:
+            return QString("Micro-TestELP (1 / 1" THIN_SP_UTF8 "000" THIN_SP_UTF8 "000)");
         default:
             return QString("???");
         }
@@ -109,11 +109,11 @@ QString BitcoinUnits::description(int unit)
 qint64 BitcoinUnits::factor(int unit)
 {
     switch (unit) {
-    case EPL:
+    case ELP:
         return 100000000;
-    case mEPL:
+    case mELP:
         return 100000;
-    case uEPL:
+    case uELP:
         return 100;
     default:
         return 100000000;
@@ -123,11 +123,11 @@ qint64 BitcoinUnits::factor(int unit)
 int BitcoinUnits::decimals(int unit)
 {
     switch (unit) {
-    case EPL:
+    case ELP:
         return 8;
-    case mEPL:
+    case mELP:
         return 5;
-    case uEPL:
+    case uELP:
         return 2;
     default:
         return 0;
